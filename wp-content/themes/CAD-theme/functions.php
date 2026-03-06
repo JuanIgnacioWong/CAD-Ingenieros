@@ -69,7 +69,7 @@ function cad_theme_default_business_cards()
             'description' => __('Hemos edificado importantes obras, de gran impacto para el pais, las empresas y sus comunidades.', 'cad-theme'),
             'url'         => home_url('/proyectos/construccion/'),
             'cta'         => __('Ver proyectos', 'cad-theme'),
-            'image'       => 'https://cad.cl/assets/pages/home/cad-areas-negocio-construccion-v3.jpg',
+            'image'       => 'https://ebco.cl/assets/pages/home/ebco-areas-negocio-construccion-v3.jpg',
             'tone'        => 'is-blue',
         ),
         array(
@@ -77,7 +77,7 @@ function cad_theme_default_business_cards()
             'description' => __('Proyectos inmobiliarios destinados a comercializacion de casas y edificacion para viviendas, oficinas comerciales y renta.', 'cad-theme'),
             'url'         => home_url('/proyectos/inmobiliaria/'),
             'cta'         => __('Ver proyectos', 'cad-theme'),
-            'image'       => 'https://cad.cl/assets/pages/home/cad-bg-area-negocio-inmobiliaria-v2.jpg',
+            'image'       => 'https://ebco.cl/assets/pages/home/ebco-bg-area-negocio-inmobiliaria-v2.jpg',
             'tone'        => 'is-indigo',
         ),
         array(
@@ -85,7 +85,7 @@ function cad_theme_default_business_cards()
             'description' => __('Orientados a entregar servicios vinculados al sector, buscando maximizar la eficiencia en la gestion de proyectos.', 'cad-theme'),
             'url'         => home_url('/proyectos/servicios/'),
             'cta'         => __('Ver servicios', 'cad-theme'),
-            'image'       => 'https://cad.cl/assets/pages/home/cad-areas-negocio-servicios.jpg',
+            'image'       => 'https://ebco.cl/assets/pages/home/ebco-areas-negocio-servicios.jpg',
             'tone'        => 'is-slate',
         ),
     );
