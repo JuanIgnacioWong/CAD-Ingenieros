@@ -69,7 +69,7 @@ function cad_theme_default_business_cards()
             'description' => __('Hemos edificado importantes obras, de gran impacto para el pais, las empresas y sus comunidades.', 'cad-theme'),
             'url'         => home_url('/proyectos/construccion/'),
             'cta'         => __('Ver proyectos', 'cad-theme'),
-            'image'       => 'https://ebco.cl/assets/pages/home/ebco-areas-negocio-construccion-v3.jpg',
+            'image'       => 'https://cad.cl/assets/pages/home/cad-areas-negocio-construccion-v3.jpg',
             'tone'        => 'is-blue',
         ),
         array(
@@ -77,7 +77,7 @@ function cad_theme_default_business_cards()
             'description' => __('Proyectos inmobiliarios destinados a comercializacion de casas y edificacion para viviendas, oficinas comerciales y renta.', 'cad-theme'),
             'url'         => home_url('/proyectos/inmobiliaria/'),
             'cta'         => __('Ver proyectos', 'cad-theme'),
-            'image'       => 'https://ebco.cl/assets/pages/home/ebco-bg-area-negocio-inmobiliaria-v2.jpg',
+            'image'       => 'https://cad.cl/assets/pages/home/cad-bg-area-negocio-inmobiliaria-v2.jpg',
             'tone'        => 'is-indigo',
         ),
         array(
@@ -85,7 +85,7 @@ function cad_theme_default_business_cards()
             'description' => __('Orientados a entregar servicios vinculados al sector, buscando maximizar la eficiencia en la gestion de proyectos.', 'cad-theme'),
             'url'         => home_url('/proyectos/servicios/'),
             'cta'         => __('Ver servicios', 'cad-theme'),
-            'image'       => 'https://ebco.cl/assets/pages/home/ebco-areas-negocio-servicios.jpg',
+            'image'       => 'https://cad.cl/assets/pages/home/cad-areas-negocio-servicios.jpg',
             'tone'        => 'is-slate',
         ),
     );
@@ -156,7 +156,7 @@ function cad_theme_default_footer_links()
         ),
         array(
             'label' => __('Acceso proveedores', 'cad-theme'),
-            'url'   => 'http://proveedores.ebco.cl/',
+            'url'   => 'http://proveedores.cad.cl/',
             'new'   => true,
         ),
     );
@@ -167,13 +167,13 @@ function cad_theme_render_default_primary_menu($args = array())
     unset($args);
     $items = cad_theme_default_main_menu();
 
-    echo '<ul class="ebco-menu">';
+    echo '<ul class="cad-menu">';
     foreach ($items as $item) {
         $url = isset($item['url']) ? (string) $item['url'] : '#';
         $label = isset($item['label']) ? (string) $item['label'] : '';
 
-        echo '<li class="ebco-menu__item">';
-        echo '<a class="ebco-menu__link" href="' . esc_url($url) . '">' . esc_html($label) . '</a>';
+        echo '<li class="cad-menu__item">';
+        echo '<a class="cad-menu__link" href="' . esc_url($url) . '">' . esc_html($label) . '</a>';
         echo '</li>';
     }
     echo '</ul>';
@@ -184,15 +184,15 @@ function cad_theme_render_default_footer_menu($args = array())
     unset($args);
     $items = cad_theme_default_footer_links();
 
-    echo '<ul class="ebco-footer-links">';
+    echo '<ul class="cad-footer-links">';
     foreach ($items as $item) {
         $url = isset($item['url']) ? (string) $item['url'] : '#';
         $label = isset($item['label']) ? (string) $item['label'] : '';
         $new = !empty($item['new']);
         $target = $new ? ' target="_blank" rel="noopener noreferrer"' : '';
 
-        echo '<li class="ebco-footer-links__item">';
-        echo '<a class="ebco-footer-links__link" href="' . esc_url($url) . '"' . $target . '>' . esc_html($label) . '</a>';
+        echo '<li class="cad-footer-links__item">';
+        echo '<a class="cad-footer-links__link" href="' . esc_url($url) . '"' . $target . '>' . esc_html($label) . '</a>';
         echo '</li>';
     }
     echo '</ul>';
