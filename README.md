@@ -10,7 +10,13 @@ Este proyecto contiene una instalacion independiente de WordPress para `CAD Them
 
 - `.env`
 - `docker-compose.yml`
-- `wp-content/themes/CAD-theme/`
+- `database/backups/`
+- `wordpress/themes/cad-theme/`
+- `wordpress/plugins/`
+- `wordpress/mu-plugins/`
+- `wordpress/uploads/`
+
+Nota: el tema local esta normalizado como `wordpress/themes/cad-theme`, y Docker lo monta dentro de WordPress como `wp-content/themes/CAD-theme` para mantener compatibilidad.
 
 ## Variables de entorno
 

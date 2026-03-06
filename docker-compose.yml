@@ -32,7 +32,7 @@ services:
       WORDPRESS_DEBUG: ${WORDPRESS_DEBUG}
     volumes:
       - wordpress_data:/var/www/html
-      - ./wp-content/themes/CAD-theme:/var/www/html/wp-content/themes/CAD-theme
+      - ./wordpress/themes/cad-theme:/var/www/html/wp-content/themes/CAD-theme
 
 volumes:
   db_data:
