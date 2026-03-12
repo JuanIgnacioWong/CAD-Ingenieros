@@ -24,7 +24,7 @@
         <div class="cad-sidebar__brand-wrap">
             <a class="cad-sidebar__brand" href="<?php echo esc_url(home_url('/')); ?>" aria-label="<?php esc_attr_e('Inicio', 'cad-theme'); ?>">
                 <span class="cad-sidebar__brand-mark">CAD</span>
-                <span class="cad-sidebar__brand-sub"><?php esc_html_e('Grupo', 'cad-theme'); ?></span>
+                <span class="cad-sidebar__brand-sub"><?php esc_html_e('Ingenieros', 'cad-theme'); ?></span>
             </a>
         </div>
 
