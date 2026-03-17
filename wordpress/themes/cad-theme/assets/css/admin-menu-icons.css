@@ -1,0 +1,94 @@
+.cad-menu-icon-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.cad-menu-icon-field .button {
+    align-self: flex-start;
+}
+
+.cad-icon-modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100000;
+}
+
+.cad-icon-modal.is-open {
+    display: flex;
+}
+
+.cad-icon-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.cad-icon-modal__panel {
+    position: relative;
+    z-index: 1;
+    width: min(720px, 92vw);
+    max-height: 80vh;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.2);
+    padding: 1rem 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.cad-icon-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 600;
+}
+
+.cad-icon-modal__search {
+    display: flex;
+}
+
+.cad-icon-modal__input {
+    width: 100%;
+    padding: 0.5rem 0.65rem;
+}
+
+.cad-icon-modal__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.75rem;
+    overflow: auto;
+    padding-right: 0.25rem;
+}
+
+.cad-icon-modal__item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid #dcdcde;
+    border-radius: 8px;
+    background: #fff;
+    padding: 0.5rem 0.6rem;
+    cursor: pointer;
+    text-align: left;
+}
+
+.cad-icon-modal__item:hover,
+.cad-icon-modal__item:focus {
+    border-color: #2271b1;
+    box-shadow: 0 0 0 2px rgba(34, 113, 177, 0.15);
+}
+
+.cad-icon-modal__item .material-symbols-outlined {
+    font-size: 24px;
+    color: #1d2327;
+}
+
+.cad-icon-modal__label {
+    font-size: 0.85rem;
+    color: #3c434a;
+}

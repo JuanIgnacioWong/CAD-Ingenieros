@@ -103,6 +103,20 @@ p {
     gap: 0.2rem;
 }
 
+.cad-sidebar__brand--logo .custom-logo-link {
+    display: inline-flex;
+    align-items: center;
+    max-width: 200px;
+}
+
+.cad-sidebar__brand--logo .custom-logo {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 768 / 427;
+    object-fit: contain;
+    display: block;
+}
+
 .cad-sidebar__brand-mark {
     font-family: 'Archivo', sans-serif;
     font-size: 2.1rem;
@@ -132,11 +146,13 @@ p {
     gap: 0.5rem;
 }
 
-.cad-menu__item {
+.cad-menu__item,
+.cad-menu li {
     margin: 0;
 }
 
-.cad-menu__link {
+.cad-menu__link,
+.cad-menu > li > a {
     display: block;
     padding: 0.7rem 1rem;
     font-family: 'Archivo', sans-serif;
@@ -150,57 +166,118 @@ p {
     transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
+.cad-menu .menu-item-has-children > a {
+    position: relative;
+    padding-right: 2.4rem;
+}
+
+.cad-menu .menu-item-has-children > a::after {
+    content: '';
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    width: 0.4rem;
+    height: 0.4rem;
+    border-right: 2px solid #c8d1de;
+    border-bottom: 2px solid #c8d1de;
+    transform: translateY(-50%) rotate(45deg);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.cad-menu .menu-item-has-children.is-open > a::after {
+    transform: translateY(-50%) rotate(225deg);
+    border-color: #fff;
+}
+
 .cad-menu__link:hover,
-.cad-menu__link:focus-visible {
+.cad-menu__link:focus-visible,
+.cad-menu > li > a:hover,
+.cad-menu > li > a:focus-visible {
     background: rgba(255, 255, 255, 0.08);
     border-color: var(--color-lime);
 }
 
-.cad-sidebar__business {
-    margin-top: 1.5rem;
-    padding: 0 1.75rem;
-}
-
-.cad-sidebar__business h2 {
-    margin-bottom: 0.8rem;
-    font-size: 0.92rem;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    color: #e3e9f1;
-}
-
-.cad-submenu {
+.cad-submenu,
+.cad-menu .sub-menu {
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 0 0 0.25rem 1.1rem;
     display: grid;
     gap: 0.35rem;
 }
 
-.cad-submenu__link {
-    display: inline-flex;
+.cad-menu .cad-submenu {
+    display: none;
+}
+
+.cad-menu .menu-item-has-children.is-open > .cad-submenu {
+    display: grid;
+}
+
+.cad-menu .sub-menu {
+    display: none;
+}
+
+.cad-menu .menu-item-has-children.is-open > .sub-menu {
+    display: grid;
+}
+
+.cad-submenu__link,
+.cad-submenu a,
+.cad-menu .sub-menu a {
+    display: flex;
     align-items: center;
+    gap: 0.6rem;
     color: #d4dce7;
     font-size: 0.87rem;
     font-weight: 500;
 }
 
 .cad-submenu__link:hover,
-.cad-submenu__link:focus-visible {
+.cad-submenu__link:focus-visible,
+.cad-submenu a:hover,
+.cad-submenu a:focus-visible,
+.cad-menu .sub-menu a:hover,
+.cad-menu .sub-menu a:focus-visible {
     color: #fff;
     text-decoration: underline;
     text-underline-offset: 0.2rem;
+}
+
+.cad-menu__label {
+    flex: 1;
+}
+
+.cad-menu__icon {
+    font-size: 1rem;
+    color: #c8d1de;
+    transition: color 0.2s ease;
+    order: -1;
+}
+
+.cad-submenu a:hover .cad-menu__icon,
+.cad-submenu a:focus-visible .cad-menu__icon,
+.cad-menu .sub-menu a:hover .cad-menu__icon,
+.cad-menu .sub-menu a:focus-visible .cad-menu__icon {
+    color: #fff;
 }
 
 .cad-sidebar__quick-links {
     margin-top: auto;
     padding: 1.25rem 1.75rem;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cad-sidebar__quick-links-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: grid;
     gap: 0.3rem;
 }
 
-.cad-sidebar__quick-link {
+.cad-sidebar__quick-link,
+.cad-sidebar__quick-links-list a {
     display: inline-flex;
     font-size: 0.82rem;
     font-weight: 600;
@@ -211,7 +288,9 @@ p {
 }
 
 .cad-sidebar__quick-link:hover,
-.cad-sidebar__quick-link:focus-visible {
+.cad-sidebar__quick-link:focus-visible,
+.cad-sidebar__quick-links-list a:hover,
+.cad-sidebar__quick-links-list a:focus-visible {
     color: #fff;
 }
 
@@ -219,7 +298,14 @@ p {
     padding: 0 1.75rem 1.5rem;
 }
 
-.cad-join-btn {
+.cad-join-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.cad-join-btn,
+.cad-join-menu a {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -237,7 +323,9 @@ p {
 }
 
 .cad-join-btn:hover,
-.cad-join-btn:focus-visible {
+.cad-join-btn:focus-visible,
+.cad-join-menu a:hover,
+.cad-join-menu a:focus-visible {
     background: rgba(255, 255, 255, 0.16);
 }
 
@@ -285,6 +373,10 @@ p {
     object-fit: cover;
 }
 
+.cad-hero__video--embed {
+    border: 0;
+}
+
 .cad-hero__fallback {
     background-size: cover;
     background-position: center;
@@ -292,7 +384,8 @@ p {
     transition: opacity 0.25s ease;
 }
 
-.is-video-paused .cad-hero__fallback {
+.is-video-paused .cad-hero__fallback,
+.cad-hero.is-video-paused .cad-hero__fallback {
     opacity: 1;
 }
 

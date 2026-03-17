@@ -4,26 +4,55 @@ get_header();
 $business_cards = cad_theme_default_business_cards();
 $indicator_cards = cad_theme_default_indicators();
 $offices = cad_theme_default_offices();
+$video_banner = cad_theme_get_video_banner();
+$youtube_embed = $video_banner['show_video'] ? cad_theme_get_youtube_embed_url($video_banner['youtube']) : '';
+$mp4_src = $video_banner['show_mp4'] ? $video_banner['mp4'] : '';
+$webm_src = $video_banner['show_webm'] ? $video_banner['webm'] : '';
+$has_video = $video_banner['show_video'] && (!empty($youtube_embed) || !empty($mp4_src) || !empty($webm_src));
+$hero_class = $has_video ? 'cad-hero' : 'cad-hero is-video-paused';
 ?>
 
 <main id="main-content" class="cad-main">
-    <section class="cad-hero">
-        <video class="cad-hero__video" autoplay muted loop playsinline data-hero-video>
-            <source src="https://ebco.cl/assets/ebco-final-2022-720.mp4" type="video/mp4">
-            <source src="https://ebco.cl/assets/ebco-final-2022-720.webm" type="video/webm">
-        </video>
-        <div class="cad-hero__fallback" style="background-image:url('https://ebco.cl/assets/pages/home/bg-static-video-home.jpg');"></div>
+    <section class="<?php echo esc_attr($hero_class); ?>">
+        <?php if ($has_video && !empty($youtube_embed)) : ?>
+            <iframe
+                class="cad-hero__video cad-hero__video--embed"
+                src="<?php echo esc_url($youtube_embed); ?>"
+                data-hero-video
+                data-video-src="<?php echo esc_url($youtube_embed); ?>"
+                title="<?php esc_attr_e('Video principal', 'cad-theme'); ?>"
+                frameborder="0"
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowfullscreen
+            ></iframe>
+        <?php elseif ($has_video) : ?>
+            <video class="cad-hero__video" autoplay muted loop playsinline data-hero-video>
+                <?php if (!empty($mp4_src)) : ?>
+                    <source src="<?php echo esc_url($mp4_src); ?>" type="video/mp4">
+                <?php endif; ?>
+                <?php if (!empty($webm_src)) : ?>
+                    <source src="<?php echo esc_url($webm_src); ?>" type="video/webm">
+                <?php endif; ?>
+            </video>
+        <?php endif; ?>
+        <?php if (!empty($video_banner['show_fallback'])) : ?>
+            <div class="cad-hero__fallback" style="background-image:url('<?php echo esc_url($video_banner['fallback']); ?>');"></div>
+        <?php endif; ?>
         <div class="cad-hero__overlay"></div>
 
         <div class="cad-hero__content">
-            <h1>
-                <span><?php esc_html_e('Creamos espacios para', 'cad-theme'); ?></span>
-                <strong><?php esc_html_e('toda una vida', 'cad-theme'); ?></strong>
-            </h1>
+            <?php if (!empty($video_banner['show_headline'])) : ?>
+                <h1>
+                    <span><?php echo esc_html($video_banner['headline_1']); ?></span>
+                    <strong><?php echo esc_html($video_banner['headline_2']); ?></strong>
+                </h1>
+            <?php endif; ?>
 
-            <button type="button" class="cad-hero__video-btn" data-video-toggle>
-                <?php esc_html_e('Pausar video', 'cad-theme'); ?>
-            </button>
+            <?php if (!empty($video_banner['show_button']) && $has_video) : ?>
+                <button type="button" class="cad-hero__video-btn" data-video-toggle data-label-play="<?php echo esc_attr($video_banner['label_play']); ?>" data-label-pause="<?php echo esc_attr($video_banner['label_pause']); ?>">
+                    <?php echo esc_html($video_banner['label_pause']); ?>
+                </button>
+            <?php endif; ?>
         </div>
     </section>
 

@@ -22,10 +22,16 @@
 
     <aside id="cad-sidebar" class="cad-sidebar" data-menu-panel>
         <div class="cad-sidebar__brand-wrap">
-            <a class="cad-sidebar__brand" href="<?php echo esc_url(home_url('/')); ?>" aria-label="<?php esc_attr_e('Inicio', 'cad-theme'); ?>">
-                <span class="cad-sidebar__brand-mark">CAD</span>
-                <span class="cad-sidebar__brand-sub"><?php esc_html_e('Ingenieros', 'cad-theme'); ?></span>
-            </a>
+            <?php if (has_custom_logo()) : ?>
+                <div class="cad-sidebar__brand cad-sidebar__brand--logo">
+                    <?php the_custom_logo(); ?>
+                </div>
+            <?php else : ?>
+                <a class="cad-sidebar__brand" href="<?php echo esc_url(home_url('/')); ?>" aria-label="<?php esc_attr_e('Inicio', 'cad-theme'); ?>">
+                    <span class="cad-sidebar__brand-mark">CAD</span>
+                    <span class="cad-sidebar__brand-sub"><?php esc_html_e('Ingenieros', 'cad-theme'); ?></span>
+                </a>
+            <?php endif; ?>
         </div>
 
         <nav class="cad-sidebar__nav" aria-label="<?php esc_attr_e('Menu principal', 'cad-theme'); ?>">
@@ -35,41 +41,40 @@
                     'theme_location' => 'primary',
                     'container'      => false,
                     'menu_class'     => 'cad-menu',
+                    'submenu_class'  => 'cad-submenu',
+                    'depth'          => 2,
                     'fallback_cb'    => 'cad_theme_render_default_primary_menu',
                 )
             );
             ?>
         </nav>
 
-        <section class="cad-sidebar__business" aria-label="<?php esc_attr_e('Areas de negocio', 'cad-theme'); ?>">
-            <h2><?php esc_html_e('Areas de Negocio', 'cad-theme'); ?></h2>
-            <ul class="cad-submenu">
-                <?php foreach (cad_theme_default_business_cards() as $business_item) : ?>
-                    <li class="cad-submenu__item">
-                        <a class="cad-submenu__link" href="<?php echo esc_url((string) $business_item['url']); ?>">
-                            <?php echo esc_html((string) $business_item['title']); ?>
-                        </a>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        </section>
-
-        <div class="cad-sidebar__quick-links">
-            <?php foreach (cad_theme_default_footer_links() as $footer_link) : ?>
-                <?php
-                $new_tab = !empty($footer_link['new']);
-                $new_tab_attr = $new_tab ? ' target="_blank" rel="noopener noreferrer"' : '';
-                ?>
-                <a class="cad-sidebar__quick-link" href="<?php echo esc_url((string) $footer_link['url']); ?>"<?php echo $new_tab_attr; ?>>
-                    <?php echo esc_html((string) $footer_link['label']); ?>
-                </a>
-            <?php endforeach; ?>
-        </div>
+        <nav class="cad-sidebar__quick-links" aria-label="<?php esc_attr_e('Menu secundario', 'cad-theme'); ?>">
+            <?php
+            wp_nav_menu(
+                array(
+                    'theme_location' => 'secondary',
+                    'container'      => false,
+                    'menu_class'     => 'cad-sidebar__quick-links-list',
+                    'depth'          => 1,
+                    'fallback_cb'    => 'cad_theme_render_default_secondary_menu',
+                )
+            );
+            ?>
+        </nav>
 
         <div class="cad-sidebar__bottom">
-            <a class="cad-join-btn" href="<?php echo esc_url(home_url('/sumate-a-cad/')); ?>">
-                <span><?php esc_html_e('Sumate a CAD', 'cad-theme'); ?></span>
-            </a>
+            <?php
+            wp_nav_menu(
+                array(
+                    'theme_location' => 'cta',
+                    'container'      => false,
+                    'menu_class'     => 'cad-join-menu',
+                    'depth'          => 1,
+                    'fallback_cb'    => 'cad_theme_render_default_cta_menu',
+                )
+            );
+            ?>
         </div>
     </aside>
 

@@ -1,0 +1,17 @@
+.cad-video-banner-field {
+    margin-bottom: 1rem;
+}
+
+.cad-video-banner-field__row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.cad-video-banner-field__row .button {
+    white-space: nowrap;
+}
+
+.cad-video-banner-field--inline {
+    max-width: 480px;
+}
