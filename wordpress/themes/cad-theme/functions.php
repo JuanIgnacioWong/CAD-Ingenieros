@@ -15,7 +15,7 @@ function cad_theme_setup()
         array(
             'primary'   => __('Main menu', 'cad-theme'),
             'secondary' => __('Secondary menu', 'cad-theme'),
-            'cta'       => __('Sidebar CTA menu', 'cad-theme'),
+            'page_nav'  => __('Page section menu', 'cad-theme'),
             'footer'    => __('Footer menu', 'cad-theme'),
         )
     );
@@ -27,14 +27,14 @@ function cad_theme_register_video_banner_cpt()
     $labels = array(
         'name'               => __('Video Banner', 'cad-theme'),
         'singular_name'      => __('Video Banner', 'cad-theme'),
-        'add_new'            => __('Agregar nuevo', 'cad-theme'),
-        'add_new_item'       => __('Agregar nuevo Video Banner', 'cad-theme'),
-        'edit_item'          => __('Editar Video Banner', 'cad-theme'),
-        'new_item'           => __('Nuevo Video Banner', 'cad-theme'),
-        'view_item'          => __('Ver Video Banner', 'cad-theme'),
-        'search_items'       => __('Buscar Video Banner', 'cad-theme'),
-        'not_found'          => __('No se encontraron Video Banner', 'cad-theme'),
-        'not_found_in_trash' => __('No hay Video Banner en la papelera', 'cad-theme'),
+        'add_new'            => __('Agregar', 'cad-theme'),
+        'add_new_item'       => __('Agregar banner', 'cad-theme'),
+        'edit_item'          => __('Editar banner', 'cad-theme'),
+        'new_item'           => __('Nuevo banner', 'cad-theme'),
+        'view_item'          => __('Ver banner', 'cad-theme'),
+        'search_items'       => __('Buscar banner', 'cad-theme'),
+        'not_found'          => __('Sin banners', 'cad-theme'),
+        'not_found_in_trash' => __('Sin banners', 'cad-theme'),
         'menu_name'          => __('Video Banner', 'cad-theme'),
     );
 
@@ -55,6 +55,343 @@ function cad_theme_register_video_banner_cpt()
     );
 }
 add_action('init', 'cad_theme_register_video_banner_cpt');
+
+function cad_theme_register_home_intro_cpt()
+{
+    $labels = array(
+        'name'               => __('Texto Somos', 'cad-theme'),
+        'singular_name'      => __('Texto Somos', 'cad-theme'),
+        'add_new'            => __('Agregar', 'cad-theme'),
+        'add_new_item'       => __('Agregar texto', 'cad-theme'),
+        'edit_item'          => __('Editar texto', 'cad-theme'),
+        'new_item'           => __('Nuevo texto', 'cad-theme'),
+        'view_item'          => __('Ver texto', 'cad-theme'),
+        'search_items'       => __('Buscar texto', 'cad-theme'),
+        'not_found'          => __('Sin textos', 'cad-theme'),
+        'not_found_in_trash' => __('Sin textos', 'cad-theme'),
+        'menu_name'          => __('Texto Somos', 'cad-theme'),
+    );
+
+    register_post_type(
+        'cad_home_intro',
+        array(
+            'labels'             => $labels,
+            'public'             => false,
+            'show_ui'            => true,
+            'show_in_menu'       => true,
+            'menu_position'      => 21,
+            'menu_icon'          => 'dashicons-edit',
+            'supports'           => array('title', 'editor', 'revisions'),
+            'has_archive'        => false,
+            'exclude_from_search'=> true,
+            'publicly_queryable' => false,
+            'rewrite'            => false,
+            'show_in_rest'       => true,
+        )
+    );
+}
+add_action('init', 'cad_theme_register_home_intro_cpt');
+
+function cad_theme_register_business_areas_cpt()
+{
+    $labels = array(
+        'name'               => __('Areas negocio', 'cad-theme'),
+        'singular_name'      => __('Area negocio', 'cad-theme'),
+        'add_new'            => __('Agregar', 'cad-theme'),
+        'add_new_item'       => __('Agregar area', 'cad-theme'),
+        'edit_item'          => __('Editar area', 'cad-theme'),
+        'new_item'           => __('Nueva area', 'cad-theme'),
+        'view_item'          => __('Ver area', 'cad-theme'),
+        'search_items'       => __('Buscar areas', 'cad-theme'),
+        'not_found'          => __('Sin areas', 'cad-theme'),
+        'not_found_in_trash' => __('Sin areas', 'cad-theme'),
+        'menu_name'          => __('Areas negocio', 'cad-theme'),
+    );
+
+    register_post_type(
+        'cad_business_area',
+        array(
+            'labels'             => $labels,
+            'public'             => false,
+            'show_ui'            => true,
+            'show_in_menu'       => true,
+            'menu_position'      => 22,
+            'menu_icon'          => 'dashicons-portfolio',
+            'supports'           => array('title', 'editor', 'thumbnail', 'page-attributes', 'revisions'),
+            'has_archive'        => false,
+            'exclude_from_search'=> true,
+            'publicly_queryable' => false,
+            'rewrite'            => false,
+            'show_in_rest'       => true,
+        )
+    );
+}
+add_action('init', 'cad_theme_register_business_areas_cpt');
+
+function cad_theme_register_business_section_cpt()
+{
+    $labels = array(
+        'name'               => __('Seccion areas', 'cad-theme'),
+        'singular_name'      => __('Seccion area', 'cad-theme'),
+        'add_new'            => __('Agregar', 'cad-theme'),
+        'add_new_item'       => __('Agregar seccion', 'cad-theme'),
+        'edit_item'          => __('Editar seccion', 'cad-theme'),
+        'new_item'           => __('Nueva seccion', 'cad-theme'),
+        'view_item'          => __('Ver seccion', 'cad-theme'),
+        'search_items'       => __('Buscar seccion', 'cad-theme'),
+        'not_found'          => __('Sin seccion', 'cad-theme'),
+        'not_found_in_trash' => __('Sin seccion', 'cad-theme'),
+        'menu_name'          => __('Seccion areas', 'cad-theme'),
+    );
+
+    register_post_type(
+        'cad_business_section',
+        array(
+            'labels'             => $labels,
+            'public'             => false,
+            'show_ui'            => true,
+            'show_in_menu'       => true,
+            'menu_position'      => 23,
+            'menu_icon'          => 'dashicons-editor-textcolor',
+            'supports'           => array('title', 'editor', 'revisions'),
+            'has_archive'        => false,
+            'exclude_from_search'=> true,
+            'publicly_queryable' => false,
+            'rewrite'            => false,
+            'show_in_rest'       => true,
+        )
+    );
+}
+add_action('init', 'cad_theme_register_business_section_cpt');
+
+function cad_theme_register_indicator_section_cpt()
+{
+    $labels = array(
+        'name'               => __('Seccion indicadores', 'cad-theme'),
+        'singular_name'      => __('Seccion indicador', 'cad-theme'),
+        'add_new'            => __('Agregar', 'cad-theme'),
+        'add_new_item'       => __('Agregar seccion', 'cad-theme'),
+        'edit_item'          => __('Editar seccion', 'cad-theme'),
+        'new_item'           => __('Nueva seccion', 'cad-theme'),
+        'view_item'          => __('Ver seccion', 'cad-theme'),
+        'search_items'       => __('Buscar seccion', 'cad-theme'),
+        'not_found'          => __('Sin seccion', 'cad-theme'),
+        'not_found_in_trash' => __('Sin seccion', 'cad-theme'),
+        'menu_name'          => __('Seccion indicadores', 'cad-theme'),
+    );
+
+    register_post_type(
+        'cad_indicator_sec',
+        array(
+            'labels'             => $labels,
+            'public'             => false,
+            'show_ui'            => true,
+            'show_in_menu'       => true,
+            'menu_position'      => 24,
+            'menu_icon'          => 'dashicons-chart-area',
+            'supports'           => array('title', 'editor', 'revisions'),
+            'has_archive'        => false,
+            'exclude_from_search'=> true,
+            'publicly_queryable' => false,
+            'rewrite'            => false,
+            'show_in_rest'       => true,
+        )
+    );
+}
+add_action('init', 'cad_theme_register_indicator_section_cpt');
+
+function cad_theme_migrate_indicator_section_post_type()
+{
+    $old_migrated = get_option('cad_indicator_section_migrated');
+    if ($old_migrated && !get_option('cad_indicator_sec_migrated')) {
+        update_option('cad_indicator_sec_migrated', 1);
+        delete_option('cad_indicator_section_migrated');
+    }
+
+    if (get_option('cad_indicator_sec_migrated')) {
+        return;
+    }
+
+    global $wpdb;
+
+    $old_type = 'cad_indicator_section';
+    $new_type = 'cad_indicator_sec';
+
+    if ($old_type === $new_type) {
+        update_option('cad_indicator_sec_migrated', 1);
+        return;
+    }
+
+    $ids = $wpdb->get_col(
+        $wpdb->prepare(
+            "SELECT ID FROM {$wpdb->posts} WHERE post_type = %s",
+            $old_type
+        )
+    );
+
+    if (!empty($ids)) {
+        $wpdb->update(
+            $wpdb->posts,
+            array('post_type' => $new_type),
+            array('post_type' => $old_type)
+        );
+
+        foreach ($ids as $id) {
+            clean_post_cache((int) $id);
+        }
+    }
+
+    update_option('cad_indicator_sec_migrated', 1);
+}
+add_action('admin_init', 'cad_theme_migrate_indicator_section_post_type');
+
+function cad_theme_migrate_indicator_section_options()
+{
+    $old_seeded = get_option('cad_indicator_section_seeded');
+    if ($old_seeded && !get_option('cad_indicator_sec_seeded')) {
+        update_option('cad_indicator_sec_seeded', 1);
+        delete_option('cad_indicator_section_seeded');
+    }
+}
+add_action('admin_init', 'cad_theme_migrate_indicator_section_options');
+
+function cad_theme_register_indicator_cpt()
+{
+    $labels = array(
+        'name'               => __('Indicadores', 'cad-theme'),
+        'singular_name'      => __('Indicador', 'cad-theme'),
+        'add_new'            => __('Agregar', 'cad-theme'),
+        'add_new_item'       => __('Agregar indicador', 'cad-theme'),
+        'edit_item'          => __('Editar indicador', 'cad-theme'),
+        'new_item'           => __('Nuevo indicador', 'cad-theme'),
+        'view_item'          => __('Ver indicador', 'cad-theme'),
+        'search_items'       => __('Buscar indicador', 'cad-theme'),
+        'not_found'          => __('Sin indicadores', 'cad-theme'),
+        'not_found_in_trash' => __('Sin indicadores', 'cad-theme'),
+        'menu_name'          => __('Indicadores', 'cad-theme'),
+    );
+
+    register_post_type(
+        'cad_indicator',
+        array(
+            'labels'             => $labels,
+            'public'             => false,
+            'show_ui'            => true,
+            'show_in_menu'       => true,
+            'menu_position'      => 25,
+            'menu_icon'          => 'dashicons-chart-bar',
+            'supports'           => array('title', 'page-attributes', 'revisions'),
+            'has_archive'        => false,
+            'exclude_from_search'=> true,
+            'publicly_queryable' => false,
+            'rewrite'            => false,
+            'show_in_rest'       => true,
+        )
+    );
+}
+add_action('init', 'cad_theme_register_indicator_cpt');
+
+function cad_theme_register_project_cpt()
+{
+    $labels = array(
+        'name'               => __('Proyectos', 'cad-theme'),
+        'singular_name'      => __('Proyecto', 'cad-theme'),
+        'add_new'            => __('Agregar', 'cad-theme'),
+        'add_new_item'       => __('Agregar proyecto', 'cad-theme'),
+        'edit_item'          => __('Editar proyecto', 'cad-theme'),
+        'new_item'           => __('Nuevo proyecto', 'cad-theme'),
+        'view_item'          => __('Ver proyecto', 'cad-theme'),
+        'search_items'       => __('Buscar proyectos', 'cad-theme'),
+        'not_found'          => __('Sin proyectos', 'cad-theme'),
+        'not_found_in_trash' => __('Sin proyectos', 'cad-theme'),
+        'menu_name'          => __('Proyectos', 'cad-theme'),
+    );
+
+    register_post_type(
+        'cad_project',
+        array(
+            'labels'             => $labels,
+            'public'             => true,
+            'show_ui'            => true,
+            'show_in_menu'       => true,
+            'menu_position'      => 26,
+            'menu_icon'          => 'dashicons-portfolio',
+            'supports'           => array('title', 'editor', 'thumbnail', 'excerpt', 'page-attributes', 'revisions'),
+            'has_archive'        => false,
+            'exclude_from_search'=> false,
+            'publicly_queryable' => true,
+            'rewrite'            => array('slug' => 'proyectos'),
+            'show_in_rest'       => true,
+        )
+    );
+}
+add_action('init', 'cad_theme_register_project_cpt');
+
+function cad_theme_register_client_cpt()
+{
+    $labels = array(
+        'name'               => __('Clientes', 'cad-theme'),
+        'singular_name'      => __('Cliente', 'cad-theme'),
+        'add_new'            => __('Agregar', 'cad-theme'),
+        'add_new_item'       => __('Agregar cliente', 'cad-theme'),
+        'edit_item'          => __('Editar cliente', 'cad-theme'),
+        'new_item'           => __('Nuevo cliente', 'cad-theme'),
+        'view_item'          => __('Ver cliente', 'cad-theme'),
+        'search_items'       => __('Buscar clientes', 'cad-theme'),
+        'not_found'          => __('Sin clientes', 'cad-theme'),
+        'not_found_in_trash' => __('Sin clientes', 'cad-theme'),
+        'menu_name'          => __('Clientes', 'cad-theme'),
+    );
+
+    register_post_type(
+        'cad_client',
+        array(
+            'labels'             => $labels,
+            'public'             => false,
+            'show_ui'            => true,
+            'show_in_menu'       => true,
+            'menu_position'      => 27,
+            'menu_icon'          => 'dashicons-groups',
+            'supports'           => array('title', 'thumbnail', 'page-attributes', 'revisions'),
+            'has_archive'        => false,
+            'exclude_from_search'=> true,
+            'publicly_queryable' => false,
+            'rewrite'            => false,
+            'show_in_rest'       => true,
+        )
+    );
+}
+add_action('init', 'cad_theme_register_client_cpt');
+
+function cad_theme_register_project_taxonomy()
+{
+    $labels = array(
+        'name'              => __('Categorias de proyecto', 'cad-theme'),
+        'singular_name'     => __('Categoria de proyecto', 'cad-theme'),
+        'search_items'      => __('Buscar categorias', 'cad-theme'),
+        'all_items'         => __('Todas las categorias', 'cad-theme'),
+        'edit_item'         => __('Editar categoria', 'cad-theme'),
+        'update_item'       => __('Actualizar categoria', 'cad-theme'),
+        'add_new_item'      => __('Agregar categoria', 'cad-theme'),
+        'new_item_name'     => __('Nueva categoria', 'cad-theme'),
+        'menu_name'         => __('Categorias', 'cad-theme'),
+    );
+
+    register_taxonomy(
+        'cad_project_category',
+        array('cad_project'),
+        array(
+            'labels'            => $labels,
+            'public'            => true,
+            'show_ui'           => true,
+            'show_in_rest'      => true,
+            'show_admin_column' => true,
+            'hierarchical'      => false,
+            'rewrite'           => array('slug' => 'categoria-proyecto'),
+        )
+    );
+}
+add_action('init', 'cad_theme_register_project_taxonomy');
 
 function cad_theme_assets()
 {
@@ -354,6 +691,166 @@ function cad_theme_admin_video_banner_assets($hook)
 }
 add_action('admin_enqueue_scripts', 'cad_theme_admin_video_banner_assets');
 
+function cad_theme_admin_project_assets($hook)
+{
+    if ('post.php' !== $hook && 'post-new.php' !== $hook) {
+        return;
+    }
+
+    $screen = get_current_screen();
+    if (!$screen || 'cad_project' !== $screen->post_type) {
+        return;
+    }
+
+    wp_enqueue_media();
+    wp_enqueue_style(
+        'cad-theme-icons-admin',
+        'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0,0',
+        array(),
+        null
+    );
+    wp_enqueue_style(
+        'cad-theme-project-admin',
+        get_template_directory_uri() . '/assets/css/admin-projects.css',
+        array('cad-theme-icons-admin'),
+        wp_get_theme()->get('Version')
+    );
+    wp_enqueue_script(
+        'cad-theme-project-admin',
+        get_template_directory_uri() . '/assets/js/admin-projects.js',
+        array(),
+        wp_get_theme()->get('Version'),
+        true
+    );
+}
+add_action('admin_enqueue_scripts', 'cad_theme_admin_project_assets');
+
+function cad_theme_client_logo_requirement_message()
+{
+    return __('Subir únicamente logos en PNG o imágenes con fondo transparente para asegurar una correcta visualización en blanco y hover a color.', 'cad-theme');
+}
+
+function cad_theme_client_logo_invalid_notice_message()
+{
+    return __('Se quitó el logo seleccionado porque no es un PNG válido para la sección Clientes.', 'cad-theme');
+}
+
+function cad_theme_client_logo_notice_transient_key()
+{
+    $user_id = get_current_user_id();
+    return 'cad_client_logo_invalid_notice_' . absint($user_id);
+}
+
+function cad_theme_is_client_admin_screen()
+{
+    if (!is_admin() || !function_exists('get_current_screen')) {
+        return false;
+    }
+
+    $screen = get_current_screen();
+    if (!$screen) {
+        return false;
+    }
+
+    if ('cad_client' === $screen->post_type) {
+        return true;
+    }
+
+    return false;
+}
+
+function cad_theme_client_admin_notices()
+{
+    if (!cad_theme_is_client_admin_screen()) {
+        return;
+    }
+    ?>
+    <div class="notice notice-info">
+        <p><strong><?php echo esc_html(cad_theme_client_logo_requirement_message()); ?></strong></p>
+    </div>
+    <?php
+
+    $notice_key = cad_theme_client_logo_notice_transient_key();
+    if (!get_transient($notice_key)) {
+        return;
+    }
+
+    delete_transient($notice_key);
+    ?>
+    <div class="notice notice-error">
+        <p><?php echo esc_html(cad_theme_client_logo_invalid_notice_message()); ?></p>
+    </div>
+    <?php
+}
+add_action('admin_notices', 'cad_theme_client_admin_notices');
+
+function cad_theme_client_featured_image_hint($content, $post_id, $thumbnail_id)
+{
+    unset($thumbnail_id);
+    if ('cad_client' !== get_post_type($post_id)) {
+        return $content;
+    }
+
+    $hint = '<p style="margin-top:8px;font-weight:600;">' . esc_html(cad_theme_client_logo_requirement_message()) . '</p>';
+    return $content . $hint;
+}
+add_filter('admin_post_thumbnail_html', 'cad_theme_client_featured_image_hint', 10, 3);
+
+function cad_theme_validate_client_logo_upload($file)
+{
+    if (empty($_REQUEST['post_id'])) {
+        return $file;
+    }
+
+    $post_id = absint($_REQUEST['post_id']);
+    if (!$post_id || 'cad_client' !== get_post_type($post_id)) {
+        return $file;
+    }
+
+    $type = wp_check_filetype_and_ext($file['tmp_name'], $file['name']);
+    $mime = isset($type['type']) ? (string) $type['type'] : '';
+    if ('image/png' !== $mime) {
+        $file['error'] = esc_html__('Solo se permiten archivos PNG para los logos de clientes.', 'cad-theme');
+    }
+
+    return $file;
+}
+add_filter('wp_handle_upload_prefilter', 'cad_theme_validate_client_logo_upload');
+
+function cad_theme_validate_client_featured_logo_on_save($post_id, $post, $update)
+{
+    unset($update);
+    if (!$post || 'cad_client' !== $post->post_type) {
+        return;
+    }
+
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    if (wp_is_post_revision($post_id)) {
+        return;
+    }
+
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+
+    $thumbnail_id = (int) get_post_thumbnail_id($post_id);
+    if (!$thumbnail_id) {
+        return;
+    }
+
+    $mime = (string) get_post_mime_type($thumbnail_id);
+    if ('image/png' === $mime) {
+        return;
+    }
+
+    delete_post_thumbnail($post_id);
+    set_transient(cad_theme_client_logo_notice_transient_key(), 1, MINUTE_IN_SECONDS);
+}
+add_action('save_post_cad_client', 'cad_theme_validate_client_featured_logo_on_save', 20, 3);
+
 function cad_theme_get_video_banner()
 {
     $defaults = cad_theme_video_banner_defaults();
@@ -516,6 +1013,144 @@ function cad_theme_default_business_cards()
     );
 }
 
+function cad_theme_business_section_defaults()
+{
+    return array(
+        'title'   => __('Areas de Negocio', 'cad-theme'),
+        'content' => __('Construccion, Inmobiliaria y Servicios.', 'cad-theme'),
+    );
+}
+
+function cad_theme_business_area_tones()
+{
+    return array(
+        'is-blue'   => __('Azul', 'cad-theme'),
+        'is-indigo' => __('Indigo', 'cad-theme'),
+        'is-slate'  => __('Grafito', 'cad-theme'),
+    );
+}
+
+function cad_theme_get_business_cards()
+{
+    $posts = get_posts(
+        array(
+            'post_type'      => 'cad_business_area',
+            'posts_per_page' => -1,
+            'post_status'    => 'publish',
+            'orderby'        => 'menu_order',
+            'order'          => 'ASC',
+        )
+    );
+
+    if (empty($posts)) {
+        $defaults = cad_theme_default_business_cards();
+        $cards = array();
+
+        foreach ($defaults as $default) {
+            $description = isset($default['description']) ? (string) $default['description'] : '';
+            $cards[] = array(
+                'title'       => isset($default['title']) ? (string) $default['title'] : '',
+                'description' => $description ? wpautop(esc_html($description)) : '',
+                'url'         => isset($default['url']) ? (string) $default['url'] : '#',
+                'cta'         => isset($default['cta']) ? (string) $default['cta'] : __('Ver proyectos', 'cad-theme'),
+                'image'       => isset($default['image']) ? (string) $default['image'] : '',
+                'tone'        => isset($default['tone']) ? (string) $default['tone'] : '',
+            );
+        }
+
+        return $cards;
+    }
+
+    $tones = cad_theme_business_area_tones();
+    $defaults = cad_theme_default_business_cards();
+    $cards = array();
+
+    foreach ($posts as $index => $post) {
+        setup_postdata($post);
+        $cta_label = get_post_meta($post->ID, '_cad_business_cta_label', true);
+        if (!$cta_label) {
+            $cta_label = __('Ver proyectos', 'cad-theme');
+        }
+
+        $cta_url = get_post_meta($post->ID, '_cad_business_cta_url', true);
+        $cta_url = $cta_url ? $cta_url : '#';
+
+        $tone = get_post_meta($post->ID, '_cad_business_tone', true);
+        if (empty($tone) || !isset($tones[$tone])) {
+            $tone = 'is-blue';
+        }
+
+        $image = get_the_post_thumbnail_url($post->ID, 'full');
+        if (!$image && isset($defaults[$index]['image'])) {
+            $image = (string) $defaults[$index]['image'];
+        }
+
+        $content = '';
+        if (!empty($post->post_content)) {
+            $content = apply_filters('the_content', $post->post_content);
+        }
+
+        $cards[] = array(
+            'title'       => get_the_title($post),
+            'description' => $content,
+            'url'         => (string) $cta_url,
+            'cta'         => (string) $cta_label,
+            'image'       => (string) $image,
+            'tone'        => (string) $tone,
+        );
+    }
+
+    wp_reset_postdata();
+
+    return $cards;
+}
+
+function cad_theme_get_business_section_title()
+{
+    $posts = get_posts(
+        array(
+            'post_type'      => 'cad_business_section',
+            'posts_per_page' => 1,
+            'post_status'    => 'publish',
+        )
+    );
+
+    if (!empty($posts)) {
+        return get_the_title($posts[0]);
+    }
+
+    $defaults = cad_theme_business_section_defaults();
+    return isset($defaults['title']) ? (string) $defaults['title'] : '';
+}
+
+function cad_theme_get_business_section_content()
+{
+    $posts = get_posts(
+        array(
+            'post_type'      => 'cad_business_section',
+            'posts_per_page' => 1,
+            'post_status'    => 'publish',
+        )
+    );
+
+    if (!empty($posts)) {
+        $content = (string) $posts[0]->post_content;
+        if ('' !== trim($content)) {
+            return apply_filters('the_content', $content);
+        }
+
+        return '';
+    }
+
+    $defaults = cad_theme_business_section_defaults();
+    $fallback = isset($defaults['content']) ? (string) $defaults['content'] : '';
+    if (!$fallback) {
+        return '';
+    }
+
+    return wpautop(esc_html($fallback));
+}
+
 function cad_theme_default_indicators()
 {
     return array(
@@ -532,39 +1167,54 @@ function cad_theme_default_indicators()
     );
 }
 
-function cad_theme_default_offices()
+function cad_theme_indicator_section_defaults()
+{
+    return array(
+        'title' => __('Indicadores', 'cad-theme'),
+    );
+}
+
+function cad_theme_default_clients()
 {
     return array(
         array(
-            'city'    => 'Iquique',
-            'address' => array('Santiago Polanco 2075', 'Iquique'),
-            'phone'   => '',
+            'name'  => 'Google',
+            'logo'  => 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/640px-Google_2015_logo.svg.png',
+            'color' => '#4285F4',
         ),
         array(
-            'city'    => 'Antofagasta',
-            'address' => array('Eduardo Orchard 1438', 'Antofagasta'),
-            'phone'   => '224596586',
+            'name'  => 'Amazon',
+            'logo'  => 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/640px-Amazon_logo.svg.png',
+            'color' => '#111111',
         ),
         array(
-            'city'    => 'Santiago',
-            'address' => array('Av. Santa Maria 2450 Providencia'),
-            'phone'   => '+56 2 24644700',
+            'name'  => 'Microsoft',
+            'logo'  => 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/640px-Microsoft_logo.svg.png',
+            'color' => '#00A4EF',
         ),
         array(
-            'city'    => 'Concepcion',
-            'address' => array('Camino a Coronel Km 10 Numero 5580', 'San Pedro de La Paz'),
-            'phone'   => '+56 41 2738421',
+            'name'  => 'Samsung',
+            'logo'  => 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Samsung_Logo.svg/640px-Samsung_Logo.svg.png',
+            'color' => '#1428A0',
         ),
         array(
-            'city'    => 'Puerto Montt',
-            'address' => array('Ruta 5 Sur Km 1025', 'Megacentro 2 Bodega 1'),
-            'phone'   => '+56 65 2636868',
+            'name'  => 'Adidas',
+            'logo'  => 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Adidas_Logo.svg/640px-Adidas_Logo.svg.png',
+            'color' => '#000000',
         ),
         array(
-            'city'    => 'Punta Arenas',
-            'address' => array('Calle Mapuche 440'),
-            'phone'   => '+56 9 3230 5260',
+            'name'  => 'Coca-Cola',
+            'logo'  => 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Coca-Cola_logo.svg/640px-Coca-Cola_logo.svg.png',
+            'color' => '#F40009',
         ),
+    );
+}
+
+function cad_theme_home_intro_defaults()
+{
+    return array(
+        'title'   => __('Somos', 'cad-theme'),
+        'content' => __('El respeto a las personas, a la sociedad y al medioambiente es el pilar sobre el cual se cimenta la empresa. En base a esto desarrollamos proyectos y construimos relaciones de largo plazo.', 'cad-theme'),
     );
 }
 
@@ -585,6 +1235,1070 @@ function cad_theme_default_footer_links()
             'new'   => true,
         ),
     );
+}
+
+function cad_theme_default_page_nav()
+{
+    return array(
+        array(
+            'label' => __('CAD', 'cad-theme'),
+            'url'   => '#somos',
+        ),
+        array(
+            'label' => __('Areas de Negocio', 'cad-theme'),
+            'url'   => '#business-areas',
+        ),
+        array(
+            'label' => __('Indicadores', 'cad-theme'),
+            'url'   => '#indicadores',
+        ),
+        array(
+            'label' => __('Proyectos', 'cad-theme'),
+            'url'   => '#proyectos',
+        ),
+    );
+}
+
+function cad_theme_get_home_intro_post()
+{
+    $posts = get_posts(
+        array(
+            'post_type'      => 'cad_home_intro',
+            'posts_per_page' => 1,
+            'post_status'    => 'publish',
+        )
+    );
+
+    return !empty($posts) ? $posts[0] : null;
+}
+
+function cad_theme_get_home_intro_content()
+{
+    $post = cad_theme_get_home_intro_post();
+    if ($post && !empty($post->post_content)) {
+        return apply_filters('the_content', $post->post_content);
+    }
+
+    $defaults = cad_theme_home_intro_defaults();
+    $fallback = isset($defaults['content']) ? (string) $defaults['content'] : '';
+    if (!$fallback) {
+        return '';
+    }
+
+    return wpautop(esc_html($fallback));
+}
+
+function cad_theme_get_indicator_section_title()
+{
+    $posts = get_posts(
+        array(
+            'post_type'      => 'cad_indicator_sec',
+            'posts_per_page' => 1,
+            'post_status'    => 'publish',
+        )
+    );
+
+    if (!empty($posts)) {
+        return get_the_title($posts[0]);
+    }
+
+    $defaults = cad_theme_indicator_section_defaults();
+    return isset($defaults['title']) ? (string) $defaults['title'] : '';
+}
+
+function cad_theme_get_indicator_cards()
+{
+    $posts = get_posts(
+        array(
+            'post_type'      => 'cad_indicator',
+            'posts_per_page' => -1,
+            'post_status'    => 'publish',
+            'orderby'        => 'menu_order',
+            'order'          => 'ASC',
+        )
+    );
+
+    if (empty($posts)) {
+        $defaults = cad_theme_default_indicators();
+        $cards = array();
+
+        foreach ($defaults as $default) {
+            $cards[] = array(
+                'label'  => isset($default['label']) ? (string) $default['label'] : '',
+                'value'  => isset($default['value']) ? (string) $default['value'] : '',
+                'period' => isset($default['period']) ? (string) $default['period'] : '',
+            );
+        }
+
+        return $cards;
+    }
+
+    $defaults = cad_theme_default_indicators();
+    $cards = array();
+
+    foreach ($posts as $index => $post) {
+        setup_postdata($post);
+
+        $label = get_the_title($post);
+        $value = get_post_meta($post->ID, '_cad_indicator_value', true);
+        $period = get_post_meta($post->ID, '_cad_indicator_period', true);
+
+        if (!$label && isset($defaults[$index]['label'])) {
+            $label = (string) $defaults[$index]['label'];
+        }
+
+        if (!$value && isset($defaults[$index]['value'])) {
+            $value = (string) $defaults[$index]['value'];
+        }
+
+        $cards[] = array(
+            'label'  => (string) $label,
+            'value'  => (string) $value,
+            'period' => (string) $period,
+        );
+    }
+
+    wp_reset_postdata();
+
+    return $cards;
+}
+
+function cad_theme_get_clients()
+{
+    $posts = get_posts(
+        array(
+            'post_type'      => 'cad_client',
+            'posts_per_page' => -1,
+            'post_status'    => 'publish',
+            'orderby'        => array(
+                'menu_order' => 'ASC',
+                'date'       => 'DESC',
+            ),
+        )
+    );
+
+    if (empty($posts)) {
+        return array();
+    }
+
+    $clients = array();
+    foreach ($posts as $post) {
+        $post_id = (int) $post->ID;
+        $logo_id = (int) get_post_thumbnail_id($post_id);
+        if (!$logo_id) {
+            continue;
+        }
+
+        $name = get_the_title($post_id);
+        $alt = get_post_meta($logo_id, '_wp_attachment_image_alt', true);
+        if (!$alt) {
+            $alt = $name;
+        }
+
+        $clients[] = array(
+            'id'      => $post_id,
+            'name'    => (string) $name,
+            'logo_id' => $logo_id,
+            'alt'     => (string) $alt,
+        );
+    }
+
+    return $clients;
+}
+
+function cad_theme_business_area_meta_boxes()
+{
+    add_meta_box(
+        'cad-business-area-settings',
+        __('Boton y enlace', 'cad-theme'),
+        'cad_theme_business_area_settings_box',
+        'cad_business_area',
+        'normal',
+        'default'
+    );
+
+    add_meta_box(
+        'cad-business-area-style',
+        __('Estilo', 'cad-theme'),
+        'cad_theme_business_area_style_box',
+        'cad_business_area',
+        'side',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'cad_theme_business_area_meta_boxes');
+
+function cad_theme_indicator_meta_boxes()
+{
+    add_meta_box(
+        'cad-indicator-settings',
+        __('Datos del indicador', 'cad-theme'),
+        'cad_theme_indicator_settings_box',
+        'cad_indicator',
+        'normal',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'cad_theme_indicator_meta_boxes');
+
+function cad_theme_project_meta_boxes()
+{
+    add_meta_box(
+        'cad-project-assets',
+        __('Contenido del proyecto', 'cad-theme'),
+        'cad_theme_project_assets_box',
+        'cad_project',
+        'normal',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'cad_theme_project_meta_boxes');
+
+function cad_theme_project_meta_icon_options()
+{
+    return array(
+        'category'      => __('Categoria', 'cad-theme'),
+        'sell'          => __('Etiqueta', 'cad-theme'),
+        'apartment'     => __('Edificio', 'cad-theme'),
+        'business'      => __('Empresa', 'cad-theme'),
+        'engineering'   => __('Ingenieria', 'cad-theme'),
+        'construction'  => __('Construccion', 'cad-theme'),
+        'location_on'   => __('Ubicacion', 'cad-theme'),
+        'pin_drop'      => __('Pin', 'cad-theme'),
+        'public'        => __('Mundo', 'cad-theme'),
+        'square_foot'   => __('Superficie', 'cad-theme'),
+        'straighten'    => __('Regla', 'cad-theme'),
+        'open_in_full'  => __('Dimension', 'cad-theme'),
+        'architecture'  => __('Arquitectura', 'cad-theme'),
+        'domain'        => __('Dominio', 'cad-theme'),
+        'corporate_fare'=> __('Corporativo', 'cad-theme'),
+        'account_balance' => __('Institucion', 'cad-theme'),
+        'home_work'     => __('Complejo', 'cad-theme'),
+        'condo'         => __('Condominio', 'cad-theme'),
+        'factory'       => __('Fabrica', 'cad-theme'),
+        'warehouse'     => __('Bodega', 'cad-theme'),
+        'store'         => __('Tienda', 'cad-theme'),
+        'business_center' => __('Centro negocio', 'cad-theme'),
+        'precision_manufacturing' => __('Manufactura', 'cad-theme'),
+        'handyman'      => __('Mantenimiento', 'cad-theme'),
+        'build'         => __('Herramientas', 'cad-theme'),
+        'bolt'          => __('Energia', 'cad-theme'),
+        'electric_bolt' => __('Electrico', 'cad-theme'),
+        'solar_power'   => __('Solar', 'cad-theme'),
+        'hvac'          => __('Climatizacion', 'cad-theme'),
+        'plumbing'      => __('Sanitario', 'cad-theme'),
+        'settings'      => __('Ajustes', 'cad-theme'),
+        'tune'          => __('Calibracion', 'cad-theme'),
+        'settings_suggest' => __('Optimizacion', 'cad-theme'),
+        'rule'          => __('Normativa', 'cad-theme'),
+        'map'           => __('Mapa', 'cad-theme'),
+        'place'         => __('Lugar', 'cad-theme'),
+        'near_me'       => __('Cercania', 'cad-theme'),
+        'route'         => __('Ruta', 'cad-theme'),
+        'alt_route'     => __('Ruta alterna', 'cad-theme'),
+        'my_location'   => __('Posicion', 'cad-theme'),
+        'terrain'       => __('Terreno', 'cad-theme'),
+        'landscape'     => __('Paisaje', 'cad-theme'),
+        'forest'        => __('Bosque', 'cad-theme'),
+        'park'          => __('Parque', 'cad-theme'),
+        'water'         => __('Agua', 'cad-theme'),
+        'local_shipping' => __('Logistica', 'cad-theme'),
+        'directions_car' => __('Vehiculo', 'cad-theme'),
+        'train'         => __('Tren', 'cad-theme'),
+        'flight'        => __('Aereo', 'cad-theme'),
+        'hub'           => __('Red', 'cad-theme'),
+        'lan'           => __('LAN', 'cad-theme'),
+        'router'        => __('Router', 'cad-theme'),
+        'memory'        => __('Memoria', 'cad-theme'),
+        'dns'           => __('Servidor', 'cad-theme'),
+        'cloud'         => __('Nube', 'cad-theme'),
+        'cloud_upload'  => __('Subir nube', 'cad-theme'),
+        'cloud_download' => __('Bajar nube', 'cad-theme'),
+        'calendar_month' => __('Calendario', 'cad-theme'),
+        'schedule'      => __('Horario', 'cad-theme'),
+        'event_available' => __('Disponible', 'cad-theme'),
+        'pending_actions' => __('Pendientes', 'cad-theme'),
+        'checklist'     => __('Checklist', 'cad-theme'),
+        'task_alt'      => __('Tarea', 'cad-theme'),
+        'verified'      => __('Verificado', 'cad-theme'),
+        'fact_check'    => __('Revision', 'cad-theme'),
+        'assignment'    => __('Asignacion', 'cad-theme'),
+        'description'   => __('Descripcion', 'cad-theme'),
+        'article'       => __('Articulo', 'cad-theme'),
+        'insert_drive_file' => __('Archivo', 'cad-theme'),
+        'folder'        => __('Carpeta', 'cad-theme'),
+        'folder_open'   => __('Carpeta abierta', 'cad-theme'),
+        'attach_file'   => __('Adjunto', 'cad-theme'),
+        'image'         => __('Imagen', 'cad-theme'),
+        'photo_library' => __('Galeria foto', 'cad-theme'),
+        'video_library' => __('Galeria video', 'cad-theme'),
+        'play_circle'   => __('Reproducir', 'cad-theme'),
+        'smart_display' => __('Pantalla', 'cad-theme'),
+        'link'          => __('Enlace', 'cad-theme'),
+        'share'         => __('Compartir', 'cad-theme'),
+        'groups'        => __('Equipo', 'cad-theme'),
+    );
+}
+
+function cad_theme_project_meta_icon_defaults()
+{
+    return array(
+        'category' => 'category',
+        'client'   => 'business',
+        'location' => 'location_on',
+        'surface'  => 'square_foot',
+    );
+}
+
+function cad_theme_project_meta_icon_resolve($icon, $slot)
+{
+    $options = cad_theme_project_meta_icon_options();
+    $defaults = cad_theme_project_meta_icon_defaults();
+    $fallback = isset($defaults[$slot]) ? (string) $defaults[$slot] : 'category';
+
+    $icon = sanitize_key((string) $icon);
+    if ($icon && isset($options[$icon])) {
+        return $icon;
+    }
+
+    return $fallback;
+}
+
+function cad_theme_get_external_video_embed_url($url)
+{
+    $url = trim((string) $url);
+    if ('' === $url) {
+        return '';
+    }
+
+    $parts = wp_parse_url($url);
+    if (!is_array($parts) || empty($parts['host'])) {
+        return '';
+    }
+
+    $host = strtolower((string) $parts['host']);
+    $path = isset($parts['path']) ? trim((string) $parts['path'], '/') : '';
+
+    if (false !== strpos($host, 'youtu.be')) {
+        $segments = array_values(array_filter(explode('/', $path)));
+        $video_id = isset($segments[0]) ? (string) $segments[0] : '';
+        if ($video_id && preg_match('/^[A-Za-z0-9_-]{6,64}$/', $video_id)) {
+            return 'https://www.youtube.com/embed/' . rawurlencode($video_id) . '?rel=0&modestbranding=1';
+        }
+    }
+
+    if (false !== strpos($host, 'youtube.com') || false !== strpos($host, 'youtube-nocookie.com')) {
+        $video_id = '';
+        if (!empty($parts['query'])) {
+            parse_str((string) $parts['query'], $query_args);
+            if (!empty($query_args['v'])) {
+                $video_id = (string) $query_args['v'];
+            }
+        }
+
+        if (!$video_id) {
+            $segments = array_values(array_filter(explode('/', $path)));
+            if (isset($segments[0], $segments[1]) && in_array($segments[0], array('embed', 'shorts', 'live'), true)) {
+                $video_id = (string) $segments[1];
+            }
+        }
+
+        if ($video_id && preg_match('/^[A-Za-z0-9_-]{6,64}$/', $video_id)) {
+            return 'https://www.youtube.com/embed/' . rawurlencode($video_id) . '?rel=0&modestbranding=1';
+        }
+    }
+
+    if (false !== strpos($host, 'vimeo.com')) {
+        $segments = array_values(array_filter(explode('/', $path)));
+        $video_id = '';
+
+        if (isset($segments[0]) && 'video' === $segments[0] && isset($segments[1])) {
+            $video_id = (string) $segments[1];
+        } elseif (!empty($segments)) {
+            $video_id = (string) end($segments);
+        }
+
+        if ($video_id && preg_match('/^\d+$/', $video_id)) {
+            return 'https://player.vimeo.com/video/' . rawurlencode($video_id);
+        }
+    }
+
+    return '';
+}
+
+function cad_theme_get_external_video_embed_html($url)
+{
+    $embed_url = cad_theme_get_external_video_embed_url($url);
+    if (!$embed_url) {
+        return '';
+    }
+
+    return '<iframe src="' . esc_url($embed_url) . '" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="' . esc_attr__('Video del proyecto', 'cad-theme') . '"></iframe>';
+}
+
+function cad_theme_allowed_video_embed_html()
+{
+    $allowed = wp_kses_allowed_html('post');
+    $allowed['iframe'] = array(
+        'src'             => true,
+        'width'           => true,
+        'height'          => true,
+        'frameborder'     => true,
+        'allow'           => true,
+        'allowfullscreen' => true,
+        'title'           => true,
+        'loading'         => true,
+        'referrerpolicy'  => true,
+    );
+
+    return $allowed;
+}
+
+function cad_theme_sanitize_video_embed_html($html)
+{
+    return wp_kses((string) $html, cad_theme_allowed_video_embed_html());
+}
+
+function cad_theme_render_project_icon_picker($field_id, $field_name, $selected_icon, $label, $options = array())
+{
+    if (empty($options) || !is_array($options)) {
+        return;
+    }
+
+    $selected_icon = sanitize_key((string) $selected_icon);
+    if (!isset($options[$selected_icon])) {
+        reset($options);
+        $selected_icon = (string) key($options);
+    }
+    $selected_label = isset($options[$selected_icon]) ? (string) $options[$selected_icon] : '';
+    ?>
+    <div class="cad-project-icon-picker-field" data-icon-picker-field>
+        <label for="<?php echo esc_attr($field_id); ?>"><strong><?php echo esc_html($label); ?></strong></label><br>
+        <input type="hidden" id="<?php echo esc_attr($field_id); ?>" name="<?php echo esc_attr($field_name); ?>" value="<?php echo esc_attr($selected_icon); ?>" data-icon-picker-input>
+        <button type="button" class="button cad-project-icon-picker__trigger" data-icon-picker-open aria-haspopup="dialog" aria-controls="cad-project-icon-modal" aria-expanded="false">
+            <span class="material-symbols-outlined cad-project-icon-picker__preview-icon" aria-hidden="true" data-icon-picker-preview-icon><?php echo esc_html($selected_icon); ?></span>
+            <span class="cad-project-icon-picker__preview-text" data-icon-picker-preview-text><?php echo esc_html($selected_label); ?></span>
+            <span class="cad-project-icon-picker__hint"><?php esc_html_e('Cambiar', 'cad-theme'); ?></span>
+        </button>
+    </div>
+    <?php
+}
+
+function cad_theme_render_project_icon_modal($options = array())
+{
+    if (empty($options) || !is_array($options)) {
+        return;
+    }
+    ?>
+    <div class="cad-project-icon-modal" id="cad-project-icon-modal" hidden>
+        <div class="cad-project-icon-modal__backdrop" data-icon-picker-close></div>
+        <div class="cad-project-icon-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="cad-project-icon-modal-title">
+            <div class="cad-project-icon-modal__header">
+                <h3 id="cad-project-icon-modal-title"><?php esc_html_e('Selecciona un icono', 'cad-theme'); ?></h3>
+                <button type="button" class="button-link cad-project-icon-modal__close" data-icon-picker-close aria-label="<?php esc_attr_e('Cerrar', 'cad-theme'); ?>">&times;</button>
+            </div>
+            <div class="cad-project-icon-modal__body">
+                <div class="cad-project-icon-modal__grid" role="listbox" aria-label="<?php esc_attr_e('Iconos disponibles', 'cad-theme'); ?>">
+                    <?php foreach ($options as $icon_key => $icon_label) : ?>
+                        <button
+                            type="button"
+                            class="cad-project-icon-modal__option"
+                            data-icon-option
+                            data-icon-value="<?php echo esc_attr((string) $icon_key); ?>"
+                            data-icon-label="<?php echo esc_attr((string) $icon_label); ?>"
+                        >
+                            <span class="material-symbols-outlined cad-project-icon-modal__icon" aria-hidden="true"><?php echo esc_html((string) $icon_key); ?></span>
+                            <span class="cad-project-icon-modal__label"><?php echo esc_html((string) $icon_label); ?></span>
+                        </button>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php
+}
+
+function cad_theme_project_assets_box($post)
+{
+    wp_nonce_field('cad_project_meta', 'cad_project_meta_nonce');
+
+    $category = get_post_meta($post->ID, '_cad_project_category', true);
+    $category_icon = get_post_meta($post->ID, '_cad_project_category_icon', true);
+    $client = get_post_meta($post->ID, '_cad_project_client', true);
+    $client_icon = get_post_meta($post->ID, '_cad_project_client_icon', true);
+    $location = get_post_meta($post->ID, '_cad_project_location', true);
+    $location_icon = get_post_meta($post->ID, '_cad_project_location_icon', true);
+    $surface = get_post_meta($post->ID, '_cad_project_surface', true);
+    $surface_icon = get_post_meta($post->ID, '_cad_project_surface_icon', true);
+
+    $icon_options = cad_theme_project_meta_icon_options();
+    $category_icon = cad_theme_project_meta_icon_resolve($category_icon, 'category');
+    $client_icon = cad_theme_project_meta_icon_resolve($client_icon, 'client');
+    $location_icon = cad_theme_project_meta_icon_resolve($location_icon, 'location');
+    $surface_icon = cad_theme_project_meta_icon_resolve($surface_icon, 'surface');
+
+    $documents = get_post_meta($post->ID, '_cad_project_documents', true);
+    if (!is_array($documents)) {
+        $documents = array();
+    }
+    $documents_title = get_post_meta($post->ID, '_cad_project_documents_title', true);
+    if (!is_string($documents_title)) {
+        $documents_title = '';
+    }
+
+    $videos = get_post_meta($post->ID, '_cad_project_videos', true);
+    if (!is_array($videos)) {
+        $videos = array();
+    }
+    $videos_title = get_post_meta($post->ID, '_cad_project_videos_title', true);
+    if (!is_string($videos_title)) {
+        $videos_title = '';
+    }
+
+    $gallery_ids = get_post_meta($post->ID, '_cad_project_gallery', true);
+    if (!is_array($gallery_ids)) {
+        $gallery_ids = array();
+    }
+    $gallery_ids = array_values(array_filter(array_map('absint', $gallery_ids)));
+    $gallery_value = implode(',', $gallery_ids);
+    $gallery_title = get_post_meta($post->ID, '_cad_project_gallery_title', true);
+    if (!is_string($gallery_title)) {
+        $gallery_title = '';
+    }
+    ?>
+    <div class="cad-project-meta">
+        <div class="cad-project-meta__section">
+            <h4><?php esc_html_e('Ficha del proyecto', 'cad-theme'); ?></h4>
+            <p class="description"><?php esc_html_e('Datos principales que se muestran en el detalle del proyecto. Puedes usar categorias del panel (taxonomia) y/o escribir una categoria manual aqui.', 'cad-theme'); ?></p>
+            <p>
+                <label for="cad-project-category"><strong><?php esc_html_e('Categoria', 'cad-theme'); ?></strong></label><br>
+                <input type="text" id="cad-project-category" name="cad_project_category" class="widefat" value="<?php echo esc_attr($category); ?>" placeholder="<?php esc_attr_e('Ej: Construccion industrial', 'cad-theme'); ?>">
+            </p>
+            <?php
+            cad_theme_render_project_icon_picker(
+                'cad-project-category-icon',
+                'cad_project_category_icon',
+                $category_icon,
+                __('Icono categoria', 'cad-theme'),
+                $icon_options
+            );
+            ?>
+            <p>
+                <label for="cad-project-client"><strong><?php esc_html_e('Mandante', 'cad-theme'); ?></strong></label><br>
+                <input type="text" id="cad-project-client" name="cad_project_client" class="widefat" value="<?php echo esc_attr($client); ?>" placeholder="<?php esc_attr_e('Ej: Consorcio mecanico', 'cad-theme'); ?>">
+            </p>
+            <?php
+            cad_theme_render_project_icon_picker(
+                'cad-project-client-icon',
+                'cad_project_client_icon',
+                $client_icon,
+                __('Icono mandante', 'cad-theme'),
+                $icon_options
+            );
+            ?>
+            <p>
+                <label for="cad-project-location"><strong><?php esc_html_e('Ubicacion', 'cad-theme'); ?></strong></label><br>
+                <input type="text" id="cad-project-location" name="cad_project_location" class="widefat" value="<?php echo esc_attr($location); ?>" placeholder="<?php esc_attr_e('Ej: Santiago, Chile', 'cad-theme'); ?>">
+            </p>
+            <?php
+            cad_theme_render_project_icon_picker(
+                'cad-project-location-icon',
+                'cad_project_location_icon',
+                $location_icon,
+                __('Icono ubicacion', 'cad-theme'),
+                $icon_options
+            );
+            ?>
+            <p>
+                <label for="cad-project-surface"><strong><?php esc_html_e('Superficie', 'cad-theme'); ?></strong></label><br>
+                <input type="text" id="cad-project-surface" name="cad_project_surface" class="widefat" value="<?php echo esc_attr($surface); ?>" placeholder="<?php esc_attr_e('Ej: 18.500 m2', 'cad-theme'); ?>">
+            </p>
+            <?php
+            cad_theme_render_project_icon_picker(
+                'cad-project-surface-icon',
+                'cad_project_surface_icon',
+                $surface_icon,
+                __('Icono superficie', 'cad-theme'),
+                $icon_options
+            );
+            ?>
+        </div>
+
+        <div class="cad-project-meta__section">
+            <h4><?php esc_html_e('Documentos relacionados', 'cad-theme'); ?></h4>
+            <p class="description"><?php esc_html_e('Agrega documentos descargables asociados al proyecto.', 'cad-theme'); ?></p>
+            <p>
+                <label for="cad-project-documents-title"><strong><?php esc_html_e('Titulo bloque de documentos', 'cad-theme'); ?></strong></label><br>
+                <input type="text" id="cad-project-documents-title" name="cad_project_documents_title" class="widefat" value="<?php echo esc_attr($documents_title); ?>" placeholder="<?php esc_attr_e('Documentos destacados', 'cad-theme'); ?>">
+            </p>
+            <div class="cad-repeatable" data-repeatable="documents">
+                <div class="cad-repeatable__list">
+                    <?php foreach ($documents as $index => $document) : ?>
+                        <?php
+                        $label = isset($document['label']) ? (string) $document['label'] : '';
+                        $url = isset($document['url']) ? (string) $document['url'] : '';
+                        ?>
+                        <div class="cad-repeatable__item" data-index="<?php echo esc_attr($index); ?>">
+                            <div class="cad-repeatable__fields">
+                                <label for="cad-project-doc-label-<?php echo esc_attr($index); ?>"><strong><?php esc_html_e('Etiqueta', 'cad-theme'); ?></strong></label>
+                                <input type="text" id="cad-project-doc-label-<?php echo esc_attr($index); ?>" name="cad_project_documents[<?php echo esc_attr($index); ?>][label]" class="widefat" value="<?php echo esc_attr($label); ?>">
+                            </div>
+                            <div class="cad-repeatable__fields">
+                                <label for="cad-project-doc-url-<?php echo esc_attr($index); ?>"><strong><?php esc_html_e('URL del documento', 'cad-theme'); ?></strong></label>
+                                <div class="cad-repeatable__row">
+                                    <input type="url" id="cad-project-doc-url-<?php echo esc_attr($index); ?>" name="cad_project_documents[<?php echo esc_attr($index); ?>][url]" class="widefat" value="<?php echo esc_attr($url); ?>" placeholder="https://">
+                                    <button type="button" class="button cad-media-select" data-media-target="cad-project-doc-url-<?php echo esc_attr($index); ?>" data-media-type="application"><?php esc_html_e('Biblioteca', 'cad-theme'); ?></button>
+                                </div>
+                            </div>
+                            <button type="button" class="button-link cad-repeatable__remove"><?php esc_html_e('Quitar', 'cad-theme'); ?></button>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+                <button type="button" class="button cad-repeatable__add" data-repeatable-add="documents"><?php esc_html_e('Agregar documento', 'cad-theme'); ?></button>
+                <template class="cad-repeatable__template" data-repeatable-template="documents">
+                    <div class="cad-repeatable__item" data-index="__INDEX__">
+                        <div class="cad-repeatable__fields">
+                            <label for="cad-project-doc-label-__INDEX__"><strong><?php esc_html_e('Etiqueta', 'cad-theme'); ?></strong></label>
+                            <input type="text" id="cad-project-doc-label-__INDEX__" name="cad_project_documents[__INDEX__][label]" class="widefat" value="">
+                        </div>
+                        <div class="cad-repeatable__fields">
+                            <label for="cad-project-doc-url-__INDEX__"><strong><?php esc_html_e('URL del documento', 'cad-theme'); ?></strong></label>
+                            <div class="cad-repeatable__row">
+                                <input type="url" id="cad-project-doc-url-__INDEX__" name="cad_project_documents[__INDEX__][url]" class="widefat" value="" placeholder="https://">
+                                <button type="button" class="button cad-media-select" data-media-target="cad-project-doc-url-__INDEX__" data-media-type="application"><?php esc_html_e('Biblioteca', 'cad-theme'); ?></button>
+                            </div>
+                        </div>
+                        <button type="button" class="button-link cad-repeatable__remove"><?php esc_html_e('Quitar', 'cad-theme'); ?></button>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <div class="cad-project-meta__section">
+            <h4><?php esc_html_e('Galeria de imagenes', 'cad-theme'); ?></h4>
+            <p class="description"><?php esc_html_e('Selecciona multiples imagenes para la galeria del proyecto.', 'cad-theme'); ?></p>
+            <p>
+                <label for="cad-project-gallery-title"><strong><?php esc_html_e('Titulo bloque de galeria', 'cad-theme'); ?></strong></label><br>
+                <input type="text" id="cad-project-gallery-title" name="cad_project_gallery_title" class="widefat" value="<?php echo esc_attr($gallery_title); ?>" placeholder="<?php esc_attr_e('Imagenes del proyecto', 'cad-theme'); ?>">
+            </p>
+            <div class="cad-project-gallery" data-project-gallery>
+                <input type="hidden" id="cad-project-gallery-ids" name="cad_project_gallery_ids" value="<?php echo esc_attr($gallery_value); ?>">
+                <div class="cad-project-gallery__preview" data-project-gallery-preview>
+                    <?php foreach ($gallery_ids as $image_id) : ?>
+                        <div class="cad-project-gallery__item">
+                            <?php echo wp_get_attachment_image($image_id, 'thumbnail'); ?>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+                <div class="cad-project-gallery__actions">
+                    <button type="button" class="button cad-project-gallery__select"><?php esc_html_e('Seleccionar imagenes', 'cad-theme'); ?></button>
+                    <button type="button" class="button cad-project-gallery__clear"><?php esc_html_e('Limpiar galeria', 'cad-theme'); ?></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="cad-project-meta__section">
+            <h4><?php esc_html_e('Videos relacionados', 'cad-theme'); ?></h4>
+            <p class="description"><?php esc_html_e('Agrega enlaces a videos (YouTube, Vimeo, etc.).', 'cad-theme'); ?></p>
+            <p>
+                <label for="cad-project-videos-title"><strong><?php esc_html_e('Titulo bloque de videos', 'cad-theme'); ?></strong></label><br>
+                <input type="text" id="cad-project-videos-title" name="cad_project_videos_title" class="widefat" value="<?php echo esc_attr($videos_title); ?>" placeholder="<?php esc_attr_e('Videos relacionados', 'cad-theme'); ?>">
+            </p>
+            <div class="cad-repeatable" data-repeatable="videos">
+                <div class="cad-repeatable__list">
+                    <?php foreach ($videos as $index => $video) : ?>
+                        <?php
+                        $label = isset($video['label']) ? (string) $video['label'] : '';
+                        $url = isset($video['url']) ? (string) $video['url'] : '';
+                        ?>
+                        <div class="cad-repeatable__item" data-index="<?php echo esc_attr($index); ?>">
+                            <div class="cad-repeatable__fields">
+                                <label for="cad-project-video-label-<?php echo esc_attr($index); ?>"><strong><?php esc_html_e('Etiqueta', 'cad-theme'); ?></strong></label>
+                                <input type="text" id="cad-project-video-label-<?php echo esc_attr($index); ?>" name="cad_project_videos[<?php echo esc_attr($index); ?>][label]" class="widefat" value="<?php echo esc_attr($label); ?>">
+                            </div>
+                            <div class="cad-repeatable__fields">
+                                <label for="cad-project-video-url-<?php echo esc_attr($index); ?>"><strong><?php esc_html_e('URL del video', 'cad-theme'); ?></strong></label>
+                                <input type="url" id="cad-project-video-url-<?php echo esc_attr($index); ?>" name="cad_project_videos[<?php echo esc_attr($index); ?>][url]" class="widefat" value="<?php echo esc_attr($url); ?>" placeholder="https://">
+                            </div>
+                            <button type="button" class="button-link cad-repeatable__remove"><?php esc_html_e('Quitar', 'cad-theme'); ?></button>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+                <button type="button" class="button cad-repeatable__add" data-repeatable-add="videos"><?php esc_html_e('Agregar video', 'cad-theme'); ?></button>
+                <template class="cad-repeatable__template" data-repeatable-template="videos">
+                    <div class="cad-repeatable__item" data-index="__INDEX__">
+                        <div class="cad-repeatable__fields">
+                            <label for="cad-project-video-label-__INDEX__"><strong><?php esc_html_e('Etiqueta', 'cad-theme'); ?></strong></label>
+                            <input type="text" id="cad-project-video-label-__INDEX__" name="cad_project_videos[__INDEX__][label]" class="widefat" value="">
+                        </div>
+                        <div class="cad-repeatable__fields">
+                            <label for="cad-project-video-url-__INDEX__"><strong><?php esc_html_e('URL del video', 'cad-theme'); ?></strong></label>
+                            <input type="url" id="cad-project-video-url-__INDEX__" name="cad_project_videos[__INDEX__][url]" class="widefat" value="" placeholder="https://">
+                        </div>
+                        <button type="button" class="button-link cad-repeatable__remove"><?php esc_html_e('Quitar', 'cad-theme'); ?></button>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <?php cad_theme_render_project_icon_modal($icon_options); ?>
+    </div>
+    <?php
+}
+
+function cad_theme_indicator_settings_box($post)
+{
+    wp_nonce_field('cad_indicator_meta', 'cad_indicator_meta_nonce');
+
+    $value = get_post_meta($post->ID, '_cad_indicator_value', true);
+    $period = get_post_meta($post->ID, '_cad_indicator_period', true);
+    ?>
+    <p class="description"><?php esc_html_e('El titulo del indicador se edita en el titulo de la entrada.', 'cad-theme'); ?></p>
+    <p>
+        <label for="cad-indicator-value"><strong><?php esc_html_e('Valor', 'cad-theme'); ?></strong></label><br>
+        <input type="text" id="cad-indicator-value" name="cad_indicator_value" class="widefat" value="<?php echo esc_attr($value); ?>" placeholder="<?php esc_attr_e('119', 'cad-theme'); ?>">
+    </p>
+    <p>
+        <label for="cad-indicator-period"><strong><?php esc_html_e('Periodo', 'cad-theme'); ?></strong></label><br>
+        <input type="text" id="cad-indicator-period" name="cad_indicator_period" class="widefat" value="<?php echo esc_attr($period); ?>" placeholder="<?php esc_attr_e('Abril 2025', 'cad-theme'); ?>">
+    </p>
+    <?php
+}
+
+function cad_theme_business_area_settings_box($post)
+{
+    wp_nonce_field('cad_business_area_meta', 'cad_business_area_meta_nonce');
+
+    $cta_label = get_post_meta($post->ID, '_cad_business_cta_label', true);
+    $cta_url = get_post_meta($post->ID, '_cad_business_cta_url', true);
+    ?>
+    <p class="description"><?php esc_html_e('Edita el texto del boton y el enlace de destino.', 'cad-theme'); ?></p>
+    <p>
+        <label for="cad-business-cta-label"><strong><?php esc_html_e('Texto del boton', 'cad-theme'); ?></strong></label><br>
+        <input type="text" id="cad-business-cta-label" name="cad_business_cta_label" class="widefat" value="<?php echo esc_attr($cta_label); ?>" placeholder="<?php esc_attr_e('Ver proyectos', 'cad-theme'); ?>">
+    </p>
+    <p>
+        <label for="cad-business-cta-url"><strong><?php esc_html_e('URL del boton', 'cad-theme'); ?></strong></label><br>
+        <input type="url" id="cad-business-cta-url" name="cad_business_cta_url" class="widefat" value="<?php echo esc_url($cta_url); ?>" placeholder="https://">
+    </p>
+    <?php
+}
+
+function cad_theme_business_area_style_box($post)
+{
+    $tones = cad_theme_business_area_tones();
+    $tone = get_post_meta($post->ID, '_cad_business_tone', true);
+    if (empty($tone) || !isset($tones[$tone])) {
+        $tone = 'is-blue';
+    }
+    ?>
+    <p>
+        <label for="cad-business-tone"><strong><?php esc_html_e('Tono del overlay', 'cad-theme'); ?></strong></label><br>
+        <select id="cad-business-tone" name="cad_business_tone" class="widefat">
+            <?php foreach ($tones as $value => $label) : ?>
+                <option value="<?php echo esc_attr($value); ?>" <?php selected($tone, $value); ?>><?php echo esc_html($label); ?></option>
+            <?php endforeach; ?>
+        </select>
+    </p>
+    <p class="description"><?php esc_html_e('Usa la imagen destacada para el fondo de la tarjeta.', 'cad-theme'); ?></p>
+    <?php
+}
+
+function cad_theme_save_business_area_meta($post_id)
+{
+    if (!isset($_POST['cad_business_area_meta_nonce']) || !wp_verify_nonce($_POST['cad_business_area_meta_nonce'], 'cad_business_area_meta')) {
+        return;
+    }
+
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+
+    $cta_label = '';
+    if (isset($_POST['cad_business_cta_label'])) {
+        $cta_label = sanitize_text_field(wp_unslash($_POST['cad_business_cta_label']));
+    }
+
+    if ($cta_label) {
+        update_post_meta($post_id, '_cad_business_cta_label', $cta_label);
+    } else {
+        delete_post_meta($post_id, '_cad_business_cta_label');
+    }
+
+    $cta_url = '';
+    if (isset($_POST['cad_business_cta_url'])) {
+        $cta_url = esc_url_raw(wp_unslash($_POST['cad_business_cta_url']));
+    }
+
+    if ($cta_url) {
+        update_post_meta($post_id, '_cad_business_cta_url', $cta_url);
+    } else {
+        delete_post_meta($post_id, '_cad_business_cta_url');
+    }
+
+    $tone = '';
+    if (isset($_POST['cad_business_tone'])) {
+        $tone = sanitize_key(wp_unslash($_POST['cad_business_tone']));
+    }
+
+    $tones = cad_theme_business_area_tones();
+    if ($tone && isset($tones[$tone])) {
+        update_post_meta($post_id, '_cad_business_tone', $tone);
+    } else {
+        delete_post_meta($post_id, '_cad_business_tone');
+    }
+}
+add_action('save_post_cad_business_area', 'cad_theme_save_business_area_meta');
+
+function cad_theme_save_indicator_meta($post_id)
+{
+    if (!isset($_POST['cad_indicator_meta_nonce']) || !wp_verify_nonce($_POST['cad_indicator_meta_nonce'], 'cad_indicator_meta')) {
+        return;
+    }
+
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+
+    $value = '';
+    if (isset($_POST['cad_indicator_value'])) {
+        $value = sanitize_text_field(wp_unslash($_POST['cad_indicator_value']));
+    }
+
+    if ($value) {
+        update_post_meta($post_id, '_cad_indicator_value', $value);
+    } else {
+        delete_post_meta($post_id, '_cad_indicator_value');
+    }
+
+    $period = '';
+    if (isset($_POST['cad_indicator_period'])) {
+        $period = sanitize_text_field(wp_unslash($_POST['cad_indicator_period']));
+    }
+
+    if ($period) {
+        update_post_meta($post_id, '_cad_indicator_period', $period);
+    } else {
+        delete_post_meta($post_id, '_cad_indicator_period');
+    }
+}
+add_action('save_post_cad_indicator', 'cad_theme_save_indicator_meta');
+
+function cad_theme_save_project_meta($post_id)
+{
+    if (!isset($_POST['cad_project_meta_nonce']) || !wp_verify_nonce($_POST['cad_project_meta_nonce'], 'cad_project_meta')) {
+        return;
+    }
+
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+
+    $category_icon = '';
+    if (isset($_POST['cad_project_category_icon'])) {
+        $category_icon = cad_theme_project_meta_icon_resolve(wp_unslash($_POST['cad_project_category_icon']), 'category');
+    }
+    if ($category_icon) {
+        update_post_meta($post_id, '_cad_project_category_icon', $category_icon);
+    } else {
+        delete_post_meta($post_id, '_cad_project_category_icon');
+    }
+
+    $client_icon = '';
+    if (isset($_POST['cad_project_client_icon'])) {
+        $client_icon = cad_theme_project_meta_icon_resolve(wp_unslash($_POST['cad_project_client_icon']), 'client');
+    }
+    if ($client_icon) {
+        update_post_meta($post_id, '_cad_project_client_icon', $client_icon);
+    } else {
+        delete_post_meta($post_id, '_cad_project_client_icon');
+    }
+
+    $location_icon = '';
+    if (isset($_POST['cad_project_location_icon'])) {
+        $location_icon = cad_theme_project_meta_icon_resolve(wp_unslash($_POST['cad_project_location_icon']), 'location');
+    }
+    if ($location_icon) {
+        update_post_meta($post_id, '_cad_project_location_icon', $location_icon);
+    } else {
+        delete_post_meta($post_id, '_cad_project_location_icon');
+    }
+
+    $surface_icon = '';
+    if (isset($_POST['cad_project_surface_icon'])) {
+        $surface_icon = cad_theme_project_meta_icon_resolve(wp_unslash($_POST['cad_project_surface_icon']), 'surface');
+    }
+    if ($surface_icon) {
+        update_post_meta($post_id, '_cad_project_surface_icon', $surface_icon);
+    } else {
+        delete_post_meta($post_id, '_cad_project_surface_icon');
+    }
+
+    $category = '';
+    if (isset($_POST['cad_project_category'])) {
+        $category = sanitize_text_field(wp_unslash($_POST['cad_project_category']));
+    }
+    if ($category) {
+        update_post_meta($post_id, '_cad_project_category', $category);
+    } else {
+        delete_post_meta($post_id, '_cad_project_category');
+    }
+
+    $client = '';
+    if (isset($_POST['cad_project_client'])) {
+        $client = sanitize_text_field(wp_unslash($_POST['cad_project_client']));
+    }
+    if ($client) {
+        update_post_meta($post_id, '_cad_project_client', $client);
+    } else {
+        delete_post_meta($post_id, '_cad_project_client');
+    }
+
+    $location = '';
+    if (isset($_POST['cad_project_location'])) {
+        $location = sanitize_text_field(wp_unslash($_POST['cad_project_location']));
+    }
+    if ($location) {
+        update_post_meta($post_id, '_cad_project_location', $location);
+    } else {
+        delete_post_meta($post_id, '_cad_project_location');
+    }
+
+    $surface = '';
+    if (isset($_POST['cad_project_surface'])) {
+        $surface = sanitize_text_field(wp_unslash($_POST['cad_project_surface']));
+    }
+    if ($surface) {
+        update_post_meta($post_id, '_cad_project_surface', $surface);
+    } else {
+        delete_post_meta($post_id, '_cad_project_surface');
+    }
+
+    $documents_title = '';
+    if (isset($_POST['cad_project_documents_title'])) {
+        $documents_title = sanitize_text_field(wp_unslash($_POST['cad_project_documents_title']));
+    }
+    if ($documents_title) {
+        update_post_meta($post_id, '_cad_project_documents_title', $documents_title);
+    } else {
+        delete_post_meta($post_id, '_cad_project_documents_title');
+    }
+
+    $documents = array();
+    if (isset($_POST['cad_project_documents']) && is_array($_POST['cad_project_documents'])) {
+        foreach ($_POST['cad_project_documents'] as $document) {
+            $label = isset($document['label']) ? sanitize_text_field(wp_unslash($document['label'])) : '';
+            $url = isset($document['url']) ? esc_url_raw(wp_unslash($document['url'])) : '';
+
+            if (!$label && !$url) {
+                continue;
+            }
+
+            if ($url) {
+                $documents[] = array(
+                    'label' => $label,
+                    'url'   => $url,
+                );
+            }
+        }
+    }
+
+    if (!empty($documents)) {
+        update_post_meta($post_id, '_cad_project_documents', $documents);
+    } else {
+        delete_post_meta($post_id, '_cad_project_documents');
+    }
+
+    $videos_title = '';
+    if (isset($_POST['cad_project_videos_title'])) {
+        $videos_title = sanitize_text_field(wp_unslash($_POST['cad_project_videos_title']));
+    }
+    if ($videos_title) {
+        update_post_meta($post_id, '_cad_project_videos_title', $videos_title);
+    } else {
+        delete_post_meta($post_id, '_cad_project_videos_title');
+    }
+
+    $videos = array();
+    if (isset($_POST['cad_project_videos']) && is_array($_POST['cad_project_videos'])) {
+        foreach ($_POST['cad_project_videos'] as $video) {
+            $label = isset($video['label']) ? sanitize_text_field(wp_unslash($video['label'])) : '';
+            $url = isset($video['url']) ? esc_url_raw(wp_unslash($video['url'])) : '';
+
+            if (!$label && !$url) {
+                continue;
+            }
+
+            if ($url) {
+                $videos[] = array(
+                    'label' => $label,
+                    'url'   => $url,
+                );
+            }
+        }
+    }
+
+    if (!empty($videos)) {
+        update_post_meta($post_id, '_cad_project_videos', $videos);
+    } else {
+        delete_post_meta($post_id, '_cad_project_videos');
+    }
+
+    $gallery_title = '';
+    if (isset($_POST['cad_project_gallery_title'])) {
+        $gallery_title = sanitize_text_field(wp_unslash($_POST['cad_project_gallery_title']));
+    }
+    if ($gallery_title) {
+        update_post_meta($post_id, '_cad_project_gallery_title', $gallery_title);
+    } else {
+        delete_post_meta($post_id, '_cad_project_gallery_title');
+    }
+
+    $gallery_ids = array();
+    if (isset($_POST['cad_project_gallery_ids'])) {
+        $raw_ids = sanitize_text_field(wp_unslash($_POST['cad_project_gallery_ids']));
+        $raw_ids = array_filter(array_map('trim', explode(',', $raw_ids)));
+        foreach ($raw_ids as $raw_id) {
+            $id = absint($raw_id);
+            if ($id) {
+                $gallery_ids[] = $id;
+            }
+        }
+    }
+
+    if (!empty($gallery_ids)) {
+        update_post_meta($post_id, '_cad_project_gallery', $gallery_ids);
+    } else {
+        delete_post_meta($post_id, '_cad_project_gallery');
+    }
+}
+add_action('save_post_cad_project', 'cad_theme_save_project_meta');
+
+function cad_theme_page_nav_seed_items()
+{
+    $items = cad_theme_default_page_nav();
+    $seed_items = array();
+
+    foreach ($items as $item) {
+        $seed_items[] = array(
+            'title' => isset($item['label']) ? $item['label'] : '',
+            'url'   => isset($item['url']) ? $item['url'] : '#',
+        );
+    }
+
+    return $seed_items;
 }
 
 function cad_theme_render_default_primary_menu($args = array())
@@ -618,35 +2332,40 @@ function cad_theme_render_default_primary_menu($args = array())
     echo '</ul>';
 }
 
+function cad_theme_render_default_page_nav($args = array())
+{
+    unset($args);
+    $items = cad_theme_default_page_nav();
+
+    echo '<ul class="cad-page-nav__list">';
+    foreach ($items as $index => $item) {
+        $url = isset($item['url']) ? (string) $item['url'] : '#';
+        $label = isset($item['label']) ? (string) $item['label'] : '';
+        $active = 0 === $index ? ' class="is-active"' : '';
+
+        echo '<li>';
+        echo '<a href="' . esc_url($url) . '"' . $active . '>' . esc_html($label) . '</a>';
+        echo '</li>';
+    }
+    echo '</ul>';
+}
+
 function cad_theme_render_default_secondary_menu($args = array())
 {
     unset($args);
     $items = cad_theme_default_footer_links();
 
-    echo '<ul class="cad-sidebar__quick-links-list">';
+    echo '<ul class="cad-footer-links">';
     foreach ($items as $item) {
         $url = isset($item['url']) ? (string) $item['url'] : '#';
         $label = isset($item['label']) ? (string) $item['label'] : '';
         $new = !empty($item['new']);
         $target = $new ? ' target="_blank" rel="noopener noreferrer"' : '';
 
-        echo '<li class="cad-sidebar__quick-links-item">';
-        echo '<a class="cad-sidebar__quick-link" href="' . esc_url($url) . '"' . $target . '>' . esc_html($label) . '</a>';
+        echo '<li class="cad-footer-links__item">';
+        echo '<a class="cad-footer-links__link" href="' . esc_url($url) . '"' . $target . '>' . esc_html($label) . '</a>';
         echo '</li>';
     }
-    echo '</ul>';
-}
-
-function cad_theme_render_default_cta_menu($args = array())
-{
-    unset($args);
-    $url = home_url('/sumate-a-cad/');
-    $label = __('Sumate a CAD', 'cad-theme');
-
-    echo '<ul class="cad-join-menu">';
-    echo '<li class="cad-join-menu__item">';
-    echo '<a class="cad-join-btn" href="' . esc_url($url) . '"><span>' . esc_html($label) . '</span></a>';
-    echo '</li>';
     echo '</ul>';
 }
 
@@ -894,9 +2613,9 @@ function cad_theme_seed_menus()
         $updated = true;
     }
 
-    $cta_id = empty($locations['cta']) ? cad_theme_get_or_create_menu(__('CTA menu (CAD)', 'cad-theme')) : (int) $locations['cta'];
-    if (empty($locations['cta']) && $cta_id) {
-        $locations['cta'] = $cta_id;
+    $page_nav_id = empty($locations['page_nav']) ? cad_theme_get_or_create_menu(__('Page section menu (CAD)', 'cad-theme')) : (int) $locations['page_nav'];
+    if (empty($locations['page_nav']) && $page_nav_id) {
+        $locations['page_nav'] = $page_nav_id;
         $updated = true;
     }
 
@@ -963,16 +2682,981 @@ function cad_theme_seed_menus()
     );
 
     cad_theme_seed_menu_items(
-        $cta_id,
-        array(
-            array(
-                'title' => __('Sumate a CAD', 'cad-theme'),
-                'url'   => home_url('/sumate-a-cad/'),
-            ),
-        )
+        $page_nav_id,
+        cad_theme_page_nav_seed_items()
     );
 }
 add_action('after_switch_theme', 'cad_theme_seed_menus');
+
+function cad_theme_cleanup_legacy_cta_menu()
+{
+    if (get_option('cad_legacy_cta_menu_removed')) {
+        return;
+    }
+
+    $locations = get_theme_mod('nav_menu_locations');
+    if (is_array($locations) && isset($locations['cta'])) {
+        unset($locations['cta']);
+        set_theme_mod('nav_menu_locations', $locations);
+    }
+
+    $candidates = array(
+        'CTA menu (CAD)',
+        'menu-cta-menu-cad',
+        'cta-menu-cad',
+    );
+
+    foreach ($candidates as $candidate) {
+        $menu = wp_get_nav_menu_object($candidate);
+        if ($menu && !is_wp_error($menu)) {
+            wp_delete_nav_menu((int) $menu->term_id);
+        }
+    }
+
+    $menu_by_slug = get_term_by('slug', 'menu-cta-menu-cad', 'nav_menu');
+    if ($menu_by_slug && !is_wp_error($menu_by_slug)) {
+        wp_delete_nav_menu((int) $menu_by_slug->term_id);
+    }
+
+    update_option('cad_legacy_cta_menu_removed', 1);
+}
+add_action('admin_init', 'cad_theme_cleanup_legacy_cta_menu');
+
+function cad_theme_maybe_seed_page_nav_menu()
+{
+    $locations = get_nav_menu_locations();
+    $page_nav_id = !empty($locations['page_nav']) ? (int) $locations['page_nav'] : 0;
+
+    if (!$page_nav_id) {
+        $page_nav_id = cad_theme_get_or_create_menu(__('Page section menu (CAD)', 'cad-theme'));
+        if ($page_nav_id) {
+            $locations['page_nav'] = $page_nav_id;
+            set_theme_mod('nav_menu_locations', $locations);
+        }
+    }
+
+    if (!$page_nav_id) {
+        return;
+    }
+
+    cad_theme_seed_menu_items($page_nav_id, cad_theme_page_nav_seed_items());
+}
+add_action('admin_init', 'cad_theme_maybe_seed_page_nav_menu');
+
+function cad_theme_seed_business_section_if_missing()
+{
+    $existing = get_posts(
+        array(
+            'post_type'      => 'cad_business_section',
+            'posts_per_page' => 1,
+            'post_status'    => array('publish', 'draft', 'pending', 'private'),
+            'fields'         => 'ids',
+        )
+    );
+
+    if (!empty($existing)) {
+        $defaults = cad_theme_business_section_defaults();
+        $post_id = (int) $existing[0];
+        $post = get_post($post_id);
+
+        if ($post && '' === trim((string) $post->post_content)) {
+            $default_title = isset($defaults['title']) ? (string) $defaults['title'] : '';
+            $default_content = isset($defaults['content']) ? (string) $defaults['content'] : '';
+
+            if ($default_content && $post->post_title === $default_title) {
+                wp_update_post(
+                    array(
+                        'ID'           => $post_id,
+                        'post_content' => $default_content,
+                    )
+                );
+            }
+        }
+
+        update_option('cad_business_section_seeded', 1);
+        return;
+    }
+
+    $defaults = cad_theme_business_section_defaults();
+    $post_id = wp_insert_post(
+        array(
+            'post_type'    => 'cad_business_section',
+            'post_status'  => 'publish',
+            'post_title'   => $defaults['title'],
+            'post_content' => $defaults['content'],
+        )
+    );
+
+    if (is_wp_error($post_id) || !$post_id) {
+        return;
+    }
+
+    update_option('cad_business_section_seeded', 1);
+}
+
+function cad_theme_seed_business_section()
+{
+    cad_theme_seed_business_section_if_missing();
+}
+add_action('after_switch_theme', 'cad_theme_seed_business_section');
+
+function cad_theme_seed_indicator_section_if_missing()
+{
+    $existing = get_posts(
+        array(
+            'post_type'      => 'cad_indicator_sec',
+            'posts_per_page' => 1,
+            'post_status'    => array('publish', 'draft', 'pending', 'private'),
+            'fields'         => 'ids',
+        )
+    );
+
+    if (!empty($existing)) {
+        update_option('cad_indicator_sec_seeded', 1);
+        return;
+    }
+
+    $defaults = cad_theme_indicator_section_defaults();
+    $post_id = wp_insert_post(
+        array(
+            'post_type'   => 'cad_indicator_sec',
+            'post_status' => 'publish',
+            'post_title'  => $defaults['title'],
+        )
+    );
+
+    if (is_wp_error($post_id) || !$post_id) {
+        return;
+    }
+
+    update_option('cad_indicator_sec_seeded', 1);
+}
+
+function cad_theme_seed_indicator_section()
+{
+    cad_theme_seed_indicator_section_if_missing();
+}
+add_action('after_switch_theme', 'cad_theme_seed_indicator_section');
+
+function cad_theme_maybe_seed_business_section()
+{
+    if (get_option('cad_business_section_seeded')) {
+        return;
+    }
+
+    cad_theme_seed_business_section_if_missing();
+}
+add_action('admin_init', 'cad_theme_maybe_seed_business_section');
+
+function cad_theme_maybe_seed_indicator_section()
+{
+    if (get_option('cad_indicator_sec_seeded')) {
+        return;
+    }
+
+    cad_theme_seed_indicator_section_if_missing();
+}
+add_action('admin_init', 'cad_theme_maybe_seed_indicator_section');
+
+function cad_theme_maybe_sideload_image($url, $post_id)
+{
+    if (!$url || !$post_id || has_post_thumbnail($post_id)) {
+        return 0;
+    }
+
+    if (!function_exists('media_handle_sideload')) {
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        require_once ABSPATH . 'wp-admin/includes/media.php';
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+    }
+
+    $tmp = download_url($url);
+    if (is_wp_error($tmp)) {
+        return 0;
+    }
+
+    $path = wp_parse_url($url, PHP_URL_PATH);
+    $name = $path ? basename($path) : 'cad-business-area.jpg';
+    $file_array = array(
+        'name'     => $name,
+        'tmp_name' => $tmp,
+    );
+
+    $attachment_id = media_handle_sideload($file_array, $post_id);
+    if (is_wp_error($attachment_id)) {
+        @unlink($tmp);
+        return 0;
+    }
+
+    set_post_thumbnail($post_id, $attachment_id);
+
+    return (int) $attachment_id;
+}
+
+function cad_theme_generate_client_seed_logo_binary($label, $color = '#ffffff')
+{
+    if (!function_exists('imagecreatetruecolor')) {
+        return '';
+    }
+
+    $label = trim((string) $label);
+    if ('' === $label) {
+        $label = 'CLIENTE';
+    }
+
+    $safe_label = strtoupper(preg_replace('/[^A-Za-z0-9&\- ]/', '', $label));
+    if ('' === trim($safe_label)) {
+        $safe_label = 'CLIENTE';
+    }
+
+    $width = 900;
+    $height = 320;
+    $image = imagecreatetruecolor($width, $height);
+    if (!$image) {
+        return '';
+    }
+
+    imagealphablending($image, false);
+    imagesavealpha($image, true);
+    $transparent = imagecolorallocatealpha($image, 0, 0, 0, 127);
+    imagefilledrectangle($image, 0, 0, $width, $height, $transparent);
+    imagealphablending($image, true);
+
+    $rgb = cad_theme_hex_to_rgb($color);
+    $text_color = imagecolorallocate($image, $rgb[0], $rgb[1], $rgb[2]);
+    $line_color = imagecolorallocatealpha($image, $rgb[0], $rgb[1], $rgb[2], 80);
+
+    imagefilledrectangle($image, 0, $height - 20, $width, $height - 12, $line_color);
+
+    $font = 5;
+    $max_width = $width - 80;
+    $char_width = imagefontwidth($font);
+    $max_chars = (int) floor($max_width / $char_width);
+    if ($max_chars > 0 && strlen($safe_label) > $max_chars) {
+        $safe_label = substr($safe_label, 0, max(1, $max_chars - 3)) . '...';
+    }
+
+    $text_width = imagefontwidth($font) * strlen($safe_label);
+    $text_height = imagefontheight($font);
+    $x = (int) max(20, ($width - $text_width) / 2);
+    $y = (int) (($height - $text_height) / 2) - 4;
+    imagestring($image, $font, $x, $y, $safe_label, $text_color);
+
+    ob_start();
+    imagepng($image);
+    $binary = (string) ob_get_clean();
+    imagedestroy($image);
+
+    return $binary;
+}
+
+function cad_theme_create_client_seed_logo_attachment($post_id, $label, $color = '#ffffff')
+{
+    $post_id = (int) $post_id;
+    if ($post_id < 1) {
+        return 0;
+    }
+
+    if (has_post_thumbnail($post_id)) {
+        return (int) get_post_thumbnail_id($post_id);
+    }
+
+    $binary = cad_theme_generate_client_seed_logo_binary($label, $color);
+    if ('' === $binary) {
+        return 0;
+    }
+
+    if (!function_exists('wp_upload_bits')) {
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+    }
+    if (!function_exists('wp_generate_attachment_metadata')) {
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+    }
+
+    $filename_base = sanitize_title((string) $label);
+    if ('' === $filename_base) {
+        $filename_base = 'cliente';
+    }
+    $filename = sprintf('cad-client-%s.png', $filename_base);
+    $upload = wp_upload_bits($filename, null, $binary);
+    if (!empty($upload['error'])) {
+        return 0;
+    }
+
+    $attachment_id = wp_insert_attachment(
+        array(
+            'post_mime_type' => 'image/png',
+            'post_title'     => sanitize_text_field((string) $label),
+            'post_status'    => 'inherit',
+        ),
+        $upload['file'],
+        $post_id
+    );
+
+    if (is_wp_error($attachment_id) || !$attachment_id) {
+        return 0;
+    }
+
+    $metadata = wp_generate_attachment_metadata($attachment_id, $upload['file']);
+    if (!empty($metadata)) {
+        wp_update_attachment_metadata($attachment_id, $metadata);
+    }
+
+    set_post_thumbnail($post_id, $attachment_id);
+
+    return (int) $attachment_id;
+}
+
+function cad_theme_seed_clients_if_missing()
+{
+    $existing = get_posts(
+        array(
+            'post_type'      => 'cad_client',
+            'posts_per_page' => 1,
+            'post_status'    => array('publish', 'draft', 'pending', 'private'),
+            'fields'         => 'ids',
+        )
+    );
+
+    if (!empty($existing)) {
+        update_option('cad_clients_seeded', 1);
+        return;
+    }
+
+    $defaults = cad_theme_default_clients();
+    foreach ($defaults as $index => $item) {
+        $name = isset($item['name']) ? sanitize_text_field((string) $item['name']) : '';
+        if ('' === $name) {
+            continue;
+        }
+
+        $post_id = wp_insert_post(
+            array(
+                'post_type'   => 'cad_client',
+                'post_status' => 'publish',
+                'post_title'  => $name,
+                'menu_order'  => (int) $index,
+            )
+        );
+
+        if (is_wp_error($post_id) || !$post_id) {
+            continue;
+        }
+
+        $logo_url = isset($item['logo']) ? esc_url_raw((string) $item['logo']) : '';
+        $logo_color = isset($item['color']) ? (string) $item['color'] : '#ffffff';
+
+        $attachment_id = 0;
+        if ('' !== $logo_url) {
+            $attachment_id = cad_theme_maybe_sideload_image($logo_url, $post_id);
+        }
+        if (!$attachment_id) {
+            $attachment_id = cad_theme_create_client_seed_logo_attachment($post_id, $name, $logo_color);
+        }
+
+        if ($attachment_id) {
+            $alt_text = sprintf(__('Logo de %s', 'cad-theme'), $name);
+            update_post_meta($attachment_id, '_wp_attachment_image_alt', sanitize_text_field($alt_text));
+        }
+    }
+
+    update_option('cad_clients_seeded', 1);
+}
+
+function cad_theme_seed_clients()
+{
+    cad_theme_seed_clients_if_missing();
+}
+add_action('after_switch_theme', 'cad_theme_seed_clients');
+
+function cad_theme_maybe_seed_clients()
+{
+    if (get_option('cad_clients_seeded')) {
+        return;
+    }
+
+    cad_theme_seed_clients_if_missing();
+}
+add_action('admin_init', 'cad_theme_maybe_seed_clients');
+
+function cad_theme_client_admin_columns($columns)
+{
+    $result = array();
+    foreach ($columns as $key => $label) {
+        $result[$key] = $label;
+        if ('title' === $key) {
+            $result['cad_client_logo'] = __('Logo', 'cad-theme');
+            $result['menu_order'] = __('Orden', 'cad-theme');
+        }
+    }
+
+    return $result;
+}
+add_filter('manage_cad_client_posts_columns', 'cad_theme_client_admin_columns');
+
+function cad_theme_client_admin_column_content($column, $post_id)
+{
+    if ('cad_client_logo' === $column) {
+        $thumbnail_id = (int) get_post_thumbnail_id($post_id);
+        if (!$thumbnail_id) {
+            echo '&mdash;';
+            return;
+        }
+
+        echo wp_kses_post(
+            wp_get_attachment_image(
+                $thumbnail_id,
+                array(72, 40),
+                false,
+                array(
+                    'style' => 'width:72px;height:40px;object-fit:contain;',
+                    'alt'   => '',
+                )
+            )
+        );
+        return;
+    }
+
+    if ('menu_order' === $column) {
+        echo esc_html((string) ((int) get_post_field('menu_order', $post_id)));
+    }
+}
+add_action('manage_cad_client_posts_custom_column', 'cad_theme_client_admin_column_content', 10, 2);
+
+function cad_theme_client_admin_sortable_columns($columns)
+{
+    $columns['menu_order'] = 'menu_order';
+    return $columns;
+}
+add_filter('manage_edit-cad_client_sortable_columns', 'cad_theme_client_admin_sortable_columns');
+
+function cad_theme_client_admin_default_order($query)
+{
+    if (!is_admin() || !$query->is_main_query()) {
+        return;
+    }
+
+    if ('cad_client' !== $query->get('post_type')) {
+        return;
+    }
+
+    if ($query->get('orderby')) {
+        return;
+    }
+
+    $query->set(
+        'orderby',
+        array(
+            'menu_order' => 'ASC',
+            'title'      => 'ASC',
+        )
+    );
+    $query->set('order', 'ASC');
+}
+add_action('pre_get_posts', 'cad_theme_client_admin_default_order');
+
+function cad_theme_backfill_business_area_images()
+{
+    if (get_option('cad_business_areas_image_backfill_done')) {
+        return;
+    }
+
+    $defaults = cad_theme_default_business_cards();
+    $images_by_title = array();
+
+    foreach ($defaults as $item) {
+        if (empty($item['title']) || empty($item['image'])) {
+            continue;
+        }
+
+        $images_by_title[sanitize_title($item['title'])] = (string) $item['image'];
+    }
+
+    if (empty($images_by_title)) {
+        update_option('cad_business_areas_image_backfill_done', 1);
+        return;
+    }
+
+    $posts = get_posts(
+        array(
+            'post_type'      => 'cad_business_area',
+            'posts_per_page' => -1,
+            'post_status'    => array('publish', 'draft', 'pending', 'private'),
+        )
+    );
+
+    foreach ($posts as $post) {
+        if (has_post_thumbnail($post->ID)) {
+            continue;
+        }
+
+        $key = sanitize_title($post->post_title);
+        if (empty($images_by_title[$key])) {
+            continue;
+        }
+
+        cad_theme_maybe_sideload_image($images_by_title[$key], $post->ID);
+    }
+
+    update_option('cad_business_areas_image_backfill_done', 1);
+}
+add_action('admin_init', 'cad_theme_backfill_business_area_images');
+
+function cad_theme_project_gallery_seed_palette()
+{
+    return array(
+        array('#dbeafe', '#93c5fd'),
+        array('#ffe4e6', '#fda4af'),
+        array('#dcfce7', '#86efac'),
+        array('#fef3c7', '#fcd34d'),
+        array('#ede9fe', '#c4b5fd'),
+        array('#cffafe', '#67e8f9'),
+        array('#ffe8cc', '#fdba74'),
+        array('#fef9c3', '#fde047'),
+        array('#d1fae5', '#6ee7b7'),
+        array('#e0f2fe', '#7dd3fc'),
+        array('#e2e8f0', '#94a3b8'),
+        array('#fde68a', '#f59e0b'),
+        array('#fecdd3', '#fb7185'),
+        array('#ddd6fe', '#a78bfa'),
+        array('#bae6fd', '#38bdf8'),
+    );
+}
+
+function cad_theme_hex_to_rgb($hex)
+{
+    $hex = ltrim((string) $hex, '#');
+    if (3 === strlen($hex)) {
+        $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+    }
+
+    if (6 !== strlen($hex)) {
+        return array(148, 163, 184);
+    }
+
+    return array(
+        hexdec(substr($hex, 0, 2)),
+        hexdec(substr($hex, 2, 2)),
+        hexdec(substr($hex, 4, 2)),
+    );
+}
+
+function cad_theme_generate_project_gallery_seed_binary($index)
+{
+    if (!function_exists('imagecreatetruecolor')) {
+        return '';
+    }
+
+    $palette = cad_theme_project_gallery_seed_palette();
+    if (empty($palette)) {
+        return '';
+    }
+
+    $slot = max(1, (int) $index) - 1;
+    $colors = $palette[$slot % count($palette)];
+    $start_rgb = cad_theme_hex_to_rgb(isset($colors[0]) ? $colors[0] : '#dbeafe');
+    $end_rgb = cad_theme_hex_to_rgb(isset($colors[1]) ? $colors[1] : '#93c5fd');
+
+    $width = 1600;
+    $height = 1000;
+    $image = imagecreatetruecolor($width, $height);
+    if (!$image) {
+        return '';
+    }
+
+    for ($y = 0; $y < $height; $y++) {
+        $ratio = $height > 1 ? ($y / ($height - 1)) : 0;
+        $red = (int) round($start_rgb[0] + (($end_rgb[0] - $start_rgb[0]) * $ratio));
+        $green = (int) round($start_rgb[1] + (($end_rgb[1] - $start_rgb[1]) * $ratio));
+        $blue = (int) round($start_rgb[2] + (($end_rgb[2] - $start_rgb[2]) * $ratio));
+        $line_color = imagecolorallocate($image, $red, $green, $blue);
+        imageline($image, 0, $y, $width, $y, $line_color);
+    }
+
+    $glow_a = imagecolorallocatealpha($image, 255, 255, 255, 95);
+    imagefilledellipse($image, (int) ($width * 0.2), (int) ($height * 0.22), (int) ($width * 0.36), (int) ($width * 0.36), $glow_a);
+    $glow_b = imagecolorallocatealpha($image, 15, 23, 42, 112);
+    imagefilledellipse($image, (int) ($width * 0.8), (int) ($height * 0.82), (int) ($width * 0.42), (int) ($width * 0.42), $glow_b);
+
+    $text_color = imagecolorallocate($image, 15, 23, 42);
+    $label = sprintf('Proyecto %02d', max(1, (int) $index));
+    imagestring($image, 5, 26, 26, $label, $text_color);
+
+    ob_start();
+    imagepng($image);
+    $binary = (string) ob_get_clean();
+    imagedestroy($image);
+
+    return $binary;
+}
+
+function cad_theme_create_project_gallery_seed_attachment($index)
+{
+    $index = max(1, (int) $index);
+    $binary = cad_theme_generate_project_gallery_seed_binary($index);
+    if ('' === $binary) {
+        return 0;
+    }
+
+    if (!function_exists('wp_upload_bits')) {
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+    }
+    if (!function_exists('wp_generate_attachment_metadata')) {
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+    }
+
+    $filename = sprintf('cad-project-gallery-%02d.png', $index);
+    $upload = wp_upload_bits($filename, null, $binary);
+    if (!empty($upload['error'])) {
+        return 0;
+    }
+
+    $filetype = wp_check_filetype($upload['file'], null);
+    $attachment_id = wp_insert_attachment(
+        array(
+            'post_mime_type' => !empty($filetype['type']) ? $filetype['type'] : 'image/png',
+            'post_title'     => sprintf(__('Galeria proyecto %02d', 'cad-theme'), $index),
+            'post_status'    => 'inherit',
+        ),
+        $upload['file']
+    );
+
+    if (is_wp_error($attachment_id) || !$attachment_id) {
+        return 0;
+    }
+
+    $metadata = wp_generate_attachment_metadata($attachment_id, $upload['file']);
+    if (!empty($metadata)) {
+        wp_update_attachment_metadata($attachment_id, $metadata);
+    }
+
+    update_post_meta($attachment_id, '_cad_project_seed_gallery', '1');
+    update_post_meta($attachment_id, '_cad_project_seed_gallery_index', $index);
+
+    return (int) $attachment_id;
+}
+
+function cad_theme_get_project_gallery_seed_attachment_ids($count = 15)
+{
+    $count = max(1, (int) $count);
+    $ids = array();
+
+    for ($index = 1; $index <= $count; $index++) {
+        $existing = get_posts(
+            array(
+                'post_type'      => 'attachment',
+                'post_status'    => 'inherit',
+                'posts_per_page' => 1,
+                'fields'         => 'ids',
+                'meta_query'     => array(
+                    'relation' => 'AND',
+                    array(
+                        'key'   => '_cad_project_seed_gallery',
+                        'value' => '1',
+                    ),
+                    array(
+                        'key'   => '_cad_project_seed_gallery_index',
+                        'value' => (string) $index,
+                    ),
+                ),
+            )
+        );
+
+        if (!empty($existing)) {
+            $ids[] = (int) $existing[0];
+            continue;
+        }
+
+        $created_id = cad_theme_create_project_gallery_seed_attachment($index);
+        if ($created_id) {
+            $ids[] = $created_id;
+        }
+    }
+
+    return array_values(array_filter(array_map('absint', $ids)));
+}
+
+function cad_theme_backfill_project_gallery_media()
+{
+    if (get_option('cad_projects_gallery_media_backfilled')) {
+        return;
+    }
+
+    $project_ids = get_posts(
+        array(
+            'post_type'      => 'cad_project',
+            'posts_per_page' => -1,
+            'post_status'    => array('publish', 'draft', 'pending', 'private'),
+            'fields'         => 'ids',
+        )
+    );
+
+    if (empty($project_ids)) {
+        update_option('cad_projects_gallery_media_backfilled', 1);
+        return;
+    }
+
+    $seed_ids = cad_theme_get_project_gallery_seed_attachment_ids(15);
+    if (empty($seed_ids)) {
+        return;
+    }
+
+    foreach ($project_ids as $project_id) {
+        $gallery_ids = get_post_meta($project_id, '_cad_project_gallery', true);
+        if (!is_array($gallery_ids)) {
+            $gallery_ids = array();
+        }
+        $gallery_ids = array_values(array_filter(array_map('absint', $gallery_ids)));
+
+        if (count($gallery_ids) >= 15) {
+            continue;
+        }
+
+        $updated_gallery = $gallery_ids;
+        foreach ($seed_ids as $seed_id) {
+            if (in_array($seed_id, $updated_gallery, true)) {
+                continue;
+            }
+
+            $updated_gallery[] = $seed_id;
+            if (count($updated_gallery) >= 15) {
+                break;
+            }
+        }
+
+        if ($updated_gallery !== $gallery_ids) {
+            update_post_meta($project_id, '_cad_project_gallery', $updated_gallery);
+        }
+    }
+
+    update_option('cad_projects_gallery_media_backfilled', 1);
+}
+add_action('admin_init', 'cad_theme_backfill_project_gallery_media');
+
+function cad_theme_autofill_project_gallery_media_on_save($post_id, $post, $update)
+{
+    if (!$post || 'cad_project' !== $post->post_type) {
+        return;
+    }
+    if ($update && wp_is_post_revision($post_id)) {
+        return;
+    }
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+
+    $gallery_ids = get_post_meta($post_id, '_cad_project_gallery', true);
+    if (!is_array($gallery_ids)) {
+        $gallery_ids = array();
+    }
+    $gallery_ids = array_values(array_filter(array_map('absint', $gallery_ids)));
+
+    if (count($gallery_ids) >= 15) {
+        return;
+    }
+
+    $seed_ids = cad_theme_get_project_gallery_seed_attachment_ids(15);
+    if (empty($seed_ids)) {
+        return;
+    }
+
+    $updated_gallery = $gallery_ids;
+    foreach ($seed_ids as $seed_id) {
+        if (in_array($seed_id, $updated_gallery, true)) {
+            continue;
+        }
+
+        $updated_gallery[] = $seed_id;
+        if (count($updated_gallery) >= 15) {
+            break;
+        }
+    }
+
+    if ($updated_gallery !== $gallery_ids) {
+        update_post_meta($post_id, '_cad_project_gallery', $updated_gallery);
+    }
+}
+add_action('save_post_cad_project', 'cad_theme_autofill_project_gallery_media_on_save', 20, 3);
+
+function cad_theme_seed_business_areas_if_missing()
+{
+    $existing = get_posts(
+        array(
+            'post_type'      => 'cad_business_area',
+            'posts_per_page' => 1,
+            'post_status'    => array('publish', 'draft', 'pending', 'private'),
+            'fields'         => 'ids',
+        )
+    );
+
+    if (!empty($existing)) {
+        update_option('cad_business_areas_seeded', 1);
+        return;
+    }
+
+    $defaults = cad_theme_default_business_cards();
+    foreach ($defaults as $index => $item) {
+        $post_id = wp_insert_post(
+            array(
+                'post_type'    => 'cad_business_area',
+                'post_status'  => 'publish',
+                'post_title'   => isset($item['title']) ? (string) $item['title'] : '',
+                'post_content' => isset($item['description']) ? (string) $item['description'] : '',
+                'menu_order'   => (int) $index,
+            )
+        );
+
+        if (is_wp_error($post_id) || !$post_id) {
+            continue;
+        }
+
+        if (!empty($item['cta'])) {
+            update_post_meta($post_id, '_cad_business_cta_label', sanitize_text_field($item['cta']));
+        }
+
+        if (!empty($item['url'])) {
+            update_post_meta($post_id, '_cad_business_cta_url', esc_url_raw($item['url']));
+        }
+
+        if (!empty($item['tone'])) {
+            update_post_meta($post_id, '_cad_business_tone', sanitize_key($item['tone']));
+        }
+
+        if (!empty($item['image'])) {
+            cad_theme_maybe_sideload_image($item['image'], $post_id);
+        }
+    }
+
+    update_option('cad_business_areas_seeded', 1);
+}
+
+function cad_theme_seed_business_areas()
+{
+    cad_theme_seed_business_areas_if_missing();
+}
+add_action('after_switch_theme', 'cad_theme_seed_business_areas');
+
+function cad_theme_seed_indicators_if_missing()
+{
+    $existing = get_posts(
+        array(
+            'post_type'      => 'cad_indicator',
+            'posts_per_page' => 1,
+            'post_status'    => array('publish', 'draft', 'pending', 'private'),
+            'fields'         => 'ids',
+        )
+    );
+
+    if (!empty($existing)) {
+        update_option('cad_indicators_seeded', 1);
+        return;
+    }
+
+    $defaults = cad_theme_default_indicators();
+    foreach ($defaults as $index => $item) {
+        $post_id = wp_insert_post(
+            array(
+                'post_type'   => 'cad_indicator',
+                'post_status' => 'publish',
+                'post_title'  => isset($item['label']) ? (string) $item['label'] : '',
+                'menu_order'  => (int) $index,
+            )
+        );
+
+        if (is_wp_error($post_id) || !$post_id) {
+            continue;
+        }
+
+        if (!empty($item['value'])) {
+            update_post_meta($post_id, '_cad_indicator_value', sanitize_text_field($item['value']));
+        }
+
+        if (!empty($item['period'])) {
+            update_post_meta($post_id, '_cad_indicator_period', sanitize_text_field($item['period']));
+        }
+    }
+
+    update_option('cad_indicators_seeded', 1);
+}
+
+function cad_theme_seed_indicators()
+{
+    cad_theme_seed_indicators_if_missing();
+}
+add_action('after_switch_theme', 'cad_theme_seed_indicators');
+
+function cad_theme_maybe_seed_business_areas()
+{
+    if (get_option('cad_business_areas_seeded')) {
+        return;
+    }
+
+    cad_theme_seed_business_areas_if_missing();
+}
+add_action('admin_init', 'cad_theme_maybe_seed_business_areas');
+
+function cad_theme_maybe_seed_indicators()
+{
+    if (get_option('cad_indicators_seeded')) {
+        return;
+    }
+
+    cad_theme_seed_indicators_if_missing();
+}
+add_action('admin_init', 'cad_theme_maybe_seed_indicators');
+
+function cad_theme_seed_home_intro_if_missing()
+{
+    $existing = get_posts(
+        array(
+            'post_type'      => 'cad_home_intro',
+            'posts_per_page' => 1,
+            'post_status'    => array('publish', 'draft', 'pending', 'private'),
+            'fields'         => 'ids',
+        )
+    );
+
+    if (!empty($existing)) {
+        update_option('cad_home_intro_seeded', 1);
+        return;
+    }
+
+    $defaults = cad_theme_home_intro_defaults();
+    $post_id = wp_insert_post(
+        array(
+            'post_type'    => 'cad_home_intro',
+            'post_status'  => 'publish',
+            'post_title'   => $defaults['title'],
+            'post_content' => $defaults['content'],
+            'post_name'    => 'somos',
+        )
+    );
+
+    if (is_wp_error($post_id) || !$post_id) {
+        return;
+    }
+
+    update_option('cad_home_intro_seeded', 1);
+}
+
+function cad_theme_seed_home_intro()
+{
+    cad_theme_seed_home_intro_if_missing();
+}
+add_action('after_switch_theme', 'cad_theme_seed_home_intro');
+
+function cad_theme_maybe_seed_home_intro()
+{
+    if (get_option('cad_home_intro_seeded')) {
+        return;
+    }
+
+    cad_theme_seed_home_intro_if_missing();
+}
+add_action('admin_init', 'cad_theme_maybe_seed_home_intro');
 
 function cad_theme_seed_video_banner()
 {

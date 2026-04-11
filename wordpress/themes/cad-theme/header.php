@@ -49,33 +49,6 @@
             ?>
         </nav>
 
-        <nav class="cad-sidebar__quick-links" aria-label="<?php esc_attr_e('Menu secundario', 'cad-theme'); ?>">
-            <?php
-            wp_nav_menu(
-                array(
-                    'theme_location' => 'secondary',
-                    'container'      => false,
-                    'menu_class'     => 'cad-sidebar__quick-links-list',
-                    'depth'          => 1,
-                    'fallback_cb'    => 'cad_theme_render_default_secondary_menu',
-                )
-            );
-            ?>
-        </nav>
-
-        <div class="cad-sidebar__bottom">
-            <?php
-            wp_nav_menu(
-                array(
-                    'theme_location' => 'cta',
-                    'container'      => false,
-                    'menu_class'     => 'cad-join-menu',
-                    'depth'          => 1,
-                    'fallback_cb'    => 'cad_theme_render_default_cta_menu',
-                )
-            );
-            ?>
-        </div>
     </aside>
 
     <div class="cad-content">

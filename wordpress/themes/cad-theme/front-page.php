@@ -1,9 +1,33 @@
 <?php
 get_header();
 
-$business_cards = cad_theme_default_business_cards();
-$indicator_cards = cad_theme_default_indicators();
-$offices = cad_theme_default_offices();
+$business_cards = cad_theme_get_business_cards();
+$business_count = is_array($business_cards) ? count($business_cards) : 0;
+$business_grid_class = 'cad-business-grid';
+if ($business_count > 0 && $business_count < 4) {
+    $business_grid_class .= ' cad-business-grid--' . $business_count;
+}
+$indicator_cards = cad_theme_get_indicator_cards();
+$indicator_count = is_array($indicator_cards) ? count($indicator_cards) : 0;
+$indicator_grid_class = 'cad-indicators-grid';
+if ($indicator_count > 0 && $indicator_count < 5) {
+    $indicator_grid_class .= ' cad-indicators-grid--' . $indicator_count;
+}
+$clients = cad_theme_get_clients();
+$projects_query = new WP_Query(
+    array(
+        'post_type'      => 'cad_project',
+        'posts_per_page' => 12,
+        'post_status'    => 'publish',
+        'orderby'        => array(
+            'menu_order' => 'ASC',
+            'date'       => 'DESC',
+        ),
+        'no_found_rows'  => true,
+    )
+);
+$business_section_content = cad_theme_get_business_section_content();
+$home_intro_content = cad_theme_get_home_intro_content();
 $video_banner = cad_theme_get_video_banner();
 $youtube_embed = $video_banner['show_video'] ? cad_theme_get_youtube_embed_url($video_banner['youtube']) : '';
 $mp4_src = $video_banner['show_mp4'] ? $video_banner['mp4'] : '';
@@ -56,32 +80,46 @@ $hero_class = $has_video ? 'cad-hero' : 'cad-hero is-video-paused';
         </div>
     </section>
 
-    <div class="cad-page-nav" data-section-nav>
-        <a href="#somos" class="is-active"><?php esc_html_e('CAD', 'cad-theme'); ?></a>
-        <a href="#business-areas"><?php esc_html_e('Areas de Negocio', 'cad-theme'); ?></a>
-        <a href="#indicadores"><?php esc_html_e('Indicadores', 'cad-theme'); ?></a>
-        <a href="#presencia"><?php esc_html_e('Presencia', 'cad-theme'); ?></a>
-    </div>
+    <nav class="cad-page-nav" data-section-nav aria-label="<?php esc_attr_e('Secciones de la pagina', 'cad-theme'); ?>">
+        <?php
+        wp_nav_menu(
+            array(
+                'theme_location' => 'page_nav',
+                'container'      => false,
+                'menu_class'     => 'cad-page-nav__list',
+                'depth'          => 1,
+                'fallback_cb'    => 'cad_theme_render_default_page_nav',
+            )
+        );
+        ?>
+    </nav>
 
     <section id="somos" class="cad-section cad-section--intro">
         <div class="cad-shell-narrow">
-            <p><?php esc_html_e('El respeto a las personas, a la sociedad y al medioambiente es el pilar sobre el cual se cimenta la empresa. En base a esto desarrollamos proyectos y construimos relaciones de largo plazo.', 'cad-theme'); ?></p>
+            <?php echo $home_intro_content; ?>
         </div>
     </section>
 
     <section id="business-areas" class="cad-section">
         <div class="cad-shell-wide">
-            <h2 class="cad-title"><?php esc_html_e('Areas de Negocio', 'cad-theme'); ?></h2>
+            <h2 class="cad-title"><?php echo esc_html(cad_theme_get_business_section_title()); ?></h2>
+            <?php if (!empty($business_section_content)) : ?>
+                <div class="cad-section__lead"><?php echo $business_section_content; ?></div>
+            <?php endif; ?>
 
-            <div class="cad-business-grid">
+            <div class="<?php echo esc_attr($business_grid_class); ?>">
                 <?php foreach ($business_cards as $business_card) : ?>
                     <article class="cad-business-card <?php echo esc_attr((string) $business_card['tone']); ?>">
                         <div class="cad-business-card__media" style="background-image:url('<?php echo esc_url((string) $business_card['image']); ?>');"></div>
                         <div class="cad-business-card__overlay"></div>
                         <div class="cad-business-card__content">
                             <h3><?php echo esc_html((string) $business_card['title']); ?></h3>
-                            <p><?php echo esc_html((string) $business_card['description']); ?></p>
-                            <a href="<?php echo esc_url((string) $business_card['url']); ?>"><?php echo esc_html((string) $business_card['cta']); ?></a>
+                            <?php if (!empty($business_card['description'])) : ?>
+                                <?php echo $business_card['description']; ?>
+                            <?php endif; ?>
+                            <?php if (!empty($business_card['cta'])) : ?>
+                                <a class="cad-business-card__cta" href="<?php echo esc_url((string) $business_card['url']); ?>"><?php echo esc_html((string) $business_card['cta']); ?></a>
+                            <?php endif; ?>
                         </div>
                     </article>
                 <?php endforeach; ?>
@@ -91,56 +129,115 @@ $hero_class = $has_video ? 'cad-hero' : 'cad-hero is-video-paused';
 
     <section id="indicadores" class="cad-section">
         <div class="cad-shell-wide">
-            <h2 class="cad-title"><?php esc_html_e('Indicadores', 'cad-theme'); ?></h2>
-            <div class="cad-indicators-grid">
+            <h2 class="cad-title"><?php echo esc_html(cad_theme_get_indicator_section_title()); ?></h2>
+            <div class="<?php echo esc_attr($indicator_grid_class); ?>">
                 <?php foreach ($indicator_cards as $indicator_card) : ?>
-                    <article class="cad-indicator-card">
+                    <?php
+                    $indicator_period = isset($indicator_card['period']) ? trim((string) $indicator_card['period']) : '';
+                    $indicator_card_class = 'cad-indicator-card';
+                    if ('' === $indicator_period) {
+                        $indicator_card_class .= ' is-no-period';
+                    }
+                    ?>
+                    <article class="<?php echo esc_attr($indicator_card_class); ?>">
                         <p class="cad-indicator-card__label"><?php echo esc_html((string) $indicator_card['label']); ?></p>
                         <p class="cad-indicator-card__value"><?php echo esc_html((string) $indicator_card['value']); ?></p>
-                        <p class="cad-indicator-card__period"><?php echo esc_html((string) $indicator_card['period']); ?></p>
+                        <?php if ('' !== $indicator_period) : ?>
+                            <p class="cad-indicator-card__period"><?php echo esc_html($indicator_period); ?></p>
+                        <?php endif; ?>
                     </article>
                 <?php endforeach; ?>
             </div>
         </div>
     </section>
 
-    <section id="presencia" class="cad-section cad-section--presence">
+    <section id="proyectos" class="cad-section cad-section--projects">
         <div class="cad-shell-wide">
-            <h2 class="cad-title"><?php esc_html_e('Presencia', 'cad-theme'); ?></h2>
+            <span id="presencia" class="cad-anchor-legacy" aria-hidden="true"></span>
+            <h2 class="cad-title"><?php esc_html_e('Proyectos', 'cad-theme'); ?></h2>
 
-            <div class="cad-presence-map" aria-hidden="true">
-                <div class="cad-presence-map__stats">
-                    <p><?php esc_html_e('Nuestra trayectoria', 'cad-theme'); ?></p>
-                    <strong>2024</strong>
-                    <p><?php esc_html_e('Proyectos: 1.355', 'cad-theme'); ?></p>
+            <?php if ($projects_query->have_posts()) : ?>
+                <div class="cad-projects-carousel" data-projects-carousel>
+                    <button type="button" class="cad-projects-carousel__nav" data-projects-prev aria-label="<?php esc_attr_e('Ver proyectos anteriores', 'cad-theme'); ?>">
+                        <span class="material-symbols-outlined" aria-hidden="true">chevron_left</span>
+                    </button>
+                    <div class="cad-projects-carousel__viewport">
+                        <div class="cad-projects-carousel__track" data-projects-track>
+                            <?php while ($projects_query->have_posts()) : $projects_query->the_post(); ?>
+                                <?php
+                                $excerpt = get_the_excerpt();
+                                $excerpt = $excerpt ? wp_trim_words($excerpt, 18) : '';
+                                $thumb_html = get_the_post_thumbnail(get_the_ID(), 'large', array(
+                                    'class'   => 'cad-project-card__image',
+                                    'loading' => 'lazy',
+                                ));
+                                ?>
+                                <a class="cad-project-card" href="<?php the_permalink(); ?>" aria-label="<?php echo esc_attr(get_the_title()); ?>">
+                                    <div class="cad-project-card__media">
+                                        <?php if ($thumb_html) : ?>
+                                            <?php echo $thumb_html; ?>
+                                        <?php else : ?>
+                                            <div class="cad-project-card__placeholder"></div>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="cad-project-card__overlay"></div>
+                                    <div class="cad-project-card__content">
+                                        <h3 class="cad-project-card__title"><?php the_title(); ?></h3>
+                                        <?php if ($excerpt) : ?>
+                                            <p class="cad-project-card__excerpt"><?php echo esc_html($excerpt); ?></p>
+                                        <?php endif; ?>
+                                    </div>
+                                </a>
+                            <?php endwhile; ?>
+                        </div>
+                    </div>
+                    <button type="button" class="cad-projects-carousel__nav" data-projects-next aria-label="<?php esc_attr_e('Ver proyectos siguientes', 'cad-theme'); ?>">
+                        <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+                    </button>
                 </div>
-                <span class="dot is-1"></span>
-                <span class="dot is-2"></span>
-                <span class="dot is-3"></span>
-                <span class="dot is-4"></span>
-                <span class="dot is-5"></span>
-                <span class="dot is-6"></span>
-                <span class="dot is-7"></span>
-                <span class="dot is-8"></span>
-            </div>
+            <?php else : ?>
+                <p class="cad-projects-empty"><?php esc_html_e('Pronto compartiremos nuevos proyectos destacados.', 'cad-theme'); ?></p>
+            <?php endif; ?>
+            <?php wp_reset_postdata(); ?>
 
-            <div id="oficinas" class="cad-offices">
-                <h3><?php esc_html_e('Nuestras oficinas', 'cad-theme'); ?></h3>
-                <div class="cad-offices-grid">
-                    <?php foreach ($offices as $office) : ?>
-                        <article class="cad-office-card">
-                            <h4><?php echo esc_html((string) $office['city']); ?></h4>
-                            <address>
-                                <?php foreach ((array) $office['address'] as $line) : ?>
-                                    <span><?php echo esc_html((string) $line); ?></span>
+            <div id="clientes" class="cad-clients">
+                <h3><?php esc_html_e('Clientes', 'cad-theme'); ?></h3>
+                <?php if (!empty($clients)) : ?>
+                    <div class="cad-clients-carousel" data-clients-carousel>
+                        <button type="button" class="cad-clients-carousel__nav" data-clients-prev aria-label="<?php esc_attr_e('Ver clientes anteriores', 'cad-theme'); ?>">
+                            <span class="material-symbols-outlined" aria-hidden="true">chevron_left</span>
+                        </button>
+                        <div class="cad-clients-carousel__viewport">
+                            <div class="cad-clients-carousel__track" data-clients-track>
+                                <?php foreach ($clients as $client) : ?>
+                                    <?php
+                                    $logo_html = wp_get_attachment_image(
+                                        (int) $client['logo_id'],
+                                        'medium',
+                                        false,
+                                        array(
+                                            'class'    => 'cad-client-card__logo',
+                                            'loading'  => 'lazy',
+                                            'decoding' => 'async',
+                                            'alt'      => (string) $client['alt'],
+                                        )
+                                    );
+                                    ?>
+                                    <article class="cad-client-card" aria-label="<?php echo esc_attr((string) $client['name']); ?>">
+                                        <?php if ($logo_html) : ?>
+                                            <?php echo $logo_html; ?>
+                                        <?php endif; ?>
+                                    </article>
                                 <?php endforeach; ?>
-                            </address>
-                            <?php if (!empty($office['phone'])) : ?>
-                                <a href="tel:<?php echo esc_attr(preg_replace('/\s+/', '', (string) $office['phone'])); ?>"><?php echo esc_html((string) $office['phone']); ?></a>
-                            <?php endif; ?>
-                        </article>
-                    <?php endforeach; ?>
-                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="cad-clients-carousel__nav" data-clients-next aria-label="<?php esc_attr_e('Ver clientes siguientes', 'cad-theme'); ?>">
+                            <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+                        </button>
+                    </div>
+                <?php else : ?>
+                    <p class="cad-clients-empty"><?php esc_html_e('Agrega clientes desde el panel para mostrar sus logos aqui.', 'cad-theme'); ?></p>
+                <?php endif; ?>
             </div>
         </div>
     </section>

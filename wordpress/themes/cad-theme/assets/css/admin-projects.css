@@ -1,0 +1,241 @@
+.cad-project-meta {
+    display: grid;
+    gap: 2rem;
+}
+
+.cad-project-icon-picker-field {
+    margin: 0.75rem 0 1rem;
+}
+
+.cad-project-icon-picker__trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+    max-width: 360px;
+    min-height: 46px;
+    padding: 0.5rem 0.7rem;
+    border: 1px solid #dcdcde;
+    border-radius: 10px;
+    background: #fff;
+    text-align: left;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cad-project-icon-picker__trigger:hover {
+    border-color: #8c8f94;
+}
+
+.cad-project-icon-picker__trigger:focus-visible {
+    outline: none;
+    border-color: #2271b1;
+    box-shadow: 0 0 0 1px #2271b1;
+}
+
+.cad-project-icon-picker__preview-icon {
+    font-size: 24px;
+    line-height: 1;
+    color: #0f172a;
+}
+
+.cad-project-icon-picker__preview-text {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 500;
+    color: #1d2327;
+}
+
+.cad-project-icon-picker__hint {
+    font-size: 11px;
+    line-height: 1;
+    color: #646970;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.cad-project-icon-modal[hidden] {
+    display: none;
+}
+
+.cad-project-icon-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+}
+
+.cad-project-icon-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.46);
+}
+
+.cad-project-icon-modal__dialog {
+    position: relative;
+    width: min(920px, calc(100vw - 2rem));
+    max-height: calc(100vh - 3rem);
+    margin: 1.5rem auto;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 20px 48px rgba(15, 23, 42, 0.25);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.cad-project-icon-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.9rem 1.1rem;
+    border-bottom: 1px solid #ececec;
+}
+
+.cad-project-icon-modal__header h3 {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.cad-project-icon-modal__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid #dcdcde;
+    border-radius: 999px;
+    color: #1d2327;
+    text-decoration: none;
+}
+
+.cad-project-icon-modal__body {
+    padding: 1rem;
+}
+
+.cad-project-icon-modal__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.6rem;
+    max-height: 62vh;
+    overflow-y: auto;
+    padding-right: 0.25rem;
+}
+
+.cad-project-icon-modal__option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.38rem;
+    padding: 0.75rem 0.5rem;
+    border: 1px solid #dcdcde;
+    border-radius: 10px;
+    background: #fff;
+    color: #1d2327;
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.cad-project-icon-modal__option:hover {
+    border-color: #8c8f94;
+}
+
+.cad-project-icon-modal__option:focus-visible {
+    outline: 2px solid #2271b1;
+    outline-offset: 2px;
+}
+
+.cad-project-icon-modal__option.is-selected {
+    border-color: #2271b1;
+    background: #f0f6fc;
+    box-shadow: inset 0 0 0 1px #2271b1;
+}
+
+.cad-project-icon-modal__icon {
+    font-size: 28px;
+    line-height: 1;
+}
+
+.cad-project-icon-modal__label {
+    font-size: 11px;
+    line-height: 1.3;
+    text-align: center;
+}
+
+body.cad-project-icon-modal-open {
+    overflow: hidden;
+}
+
+@media (max-width: 782px) {
+    .cad-project-icon-picker__trigger {
+        max-width: 100%;
+    }
+
+    .cad-project-icon-modal__dialog {
+        width: calc(100vw - 1rem);
+        max-height: calc(100vh - 1rem);
+        margin: 0.5rem auto;
+    }
+}
+
+.cad-project-meta__section h4 {
+    margin: 0 0 0.4rem;
+    font-size: 1rem;
+}
+
+.cad-repeatable__list {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.cad-repeatable__item {
+    border: 1px solid #dcdcde;
+    border-radius: 6px;
+    padding: 1rem;
+    background: #fff;
+}
+
+.cad-repeatable__fields {
+    margin-bottom: 0.75rem;
+}
+
+.cad-repeatable__row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.cad-repeatable__row .button {
+    white-space: nowrap;
+}
+
+.cad-repeatable__remove {
+    color: #b32d2e;
+}
+
+.cad-project-gallery__preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.cad-project-gallery__item {
+    width: 80px;
+    height: 80px;
+    overflow: hidden;
+    border-radius: 6px;
+    border: 1px solid #dcdcde;
+    background: #f6f7f7;
+}
+
+.cad-project-gallery__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cad-project-gallery__actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}

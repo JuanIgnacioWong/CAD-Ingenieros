@@ -122,6 +122,191 @@
         });
     }
 
+    function initProjectsCarousel() {
+        var carousels = document.querySelectorAll('[data-projects-carousel]');
+        if (!carousels.length) {
+            return;
+        }
+
+        carousels.forEach(function (carousel) {
+            var track = carousel.querySelector('[data-projects-track]');
+            var prev = carousel.querySelector('[data-projects-prev]');
+            var next = carousel.querySelector('[data-projects-next]');
+            if (!track) {
+                return;
+            }
+
+            function getScrollStep() {
+                var card = track.querySelector('.cad-project-card');
+                if (!card) {
+                    return track.clientWidth;
+                }
+                var styles = window.getComputedStyle(track);
+                var gapValue = styles.columnGap || styles.gap || '0';
+                var gap = parseFloat(gapValue) || 0;
+                return card.getBoundingClientRect().width + gap;
+            }
+
+            function updateButtons() {
+                var maxScroll = track.scrollWidth - track.clientWidth - 1;
+                if (prev) {
+                    prev.disabled = track.scrollLeft <= 0;
+                }
+                if (next) {
+                    next.disabled = track.scrollLeft >= maxScroll;
+                }
+            }
+
+            function scrollByStep(direction) {
+                var amount = getScrollStep();
+                track.scrollBy({ left: direction * amount, behavior: 'smooth' });
+            }
+
+            if (prev) {
+                prev.addEventListener('click', function () {
+                    scrollByStep(-1);
+                });
+            }
+
+            if (next) {
+                next.addEventListener('click', function () {
+                    scrollByStep(1);
+                });
+            }
+
+            track.addEventListener('scroll', updateButtons, { passive: true });
+            window.addEventListener('resize', updateButtons);
+            updateButtons();
+        });
+    }
+
+    initProjectsCarousel();
+
+    function initClientsCarousel() {
+        var carousels = document.querySelectorAll('[data-clients-carousel]');
+        if (!carousels.length) {
+            return;
+        }
+
+        carousels.forEach(function (carousel) {
+            var track = carousel.querySelector('[data-clients-track]');
+            var prev = carousel.querySelector('[data-clients-prev]');
+            var next = carousel.querySelector('[data-clients-next]');
+            if (!track) {
+                return;
+            }
+
+            function getScrollStep() {
+                var card = track.querySelector('.cad-client-card');
+                if (!card) {
+                    return track.clientWidth;
+                }
+                var styles = window.getComputedStyle(track);
+                var gapValue = styles.columnGap || styles.gap || '0';
+                var gap = parseFloat(gapValue) || 0;
+                return card.getBoundingClientRect().width + gap;
+            }
+
+            function updateButtons() {
+                var maxScroll = track.scrollWidth - track.clientWidth - 1;
+                if (prev) {
+                    prev.disabled = track.scrollLeft <= 0;
+                }
+                if (next) {
+                    next.disabled = track.scrollLeft >= maxScroll;
+                }
+            }
+
+            function scrollByStep(direction) {
+                var amount = getScrollStep();
+                track.scrollBy({ left: direction * amount, behavior: 'smooth' });
+            }
+
+            if (prev) {
+                prev.addEventListener('click', function () {
+                    scrollByStep(-1);
+                });
+            }
+
+            if (next) {
+                next.addEventListener('click', function () {
+                    scrollByStep(1);
+                });
+            }
+
+            track.addEventListener('scroll', updateButtons, { passive: true });
+            window.addEventListener('resize', updateButtons);
+            updateButtons();
+        });
+    }
+
+    initClientsCarousel();
+
+    function initProjectGallery() {
+        var galleries = document.querySelectorAll('[data-project-gallery-grid]');
+        if (!galleries.length) {
+            return;
+        }
+
+        galleries.forEach(function (grid) {
+            var items = Array.prototype.slice.call(grid.querySelectorAll('[data-gallery-item]'));
+            if (!items.length) {
+                return;
+            }
+
+            var perPage = parseInt(grid.getAttribute('data-gallery-per-page'), 10);
+            if (!perPage || perPage < 1) {
+                perPage = 6;
+            }
+
+            var totalPages = Math.max(1, Math.ceil(items.length / perPage));
+            var block = grid.closest('.cad-project-block--gallery');
+            var prev = block ? block.querySelector('[data-gallery-prev]') : null;
+            var next = block ? block.querySelector('[data-gallery-next]') : null;
+            var status = block ? block.querySelector('[data-gallery-status]') : null;
+            var currentPage = 0;
+
+            function renderPage(page) {
+                currentPage = Math.min(Math.max(page, 0), totalPages - 1);
+
+                items.forEach(function (item, index) {
+                    var itemPage = Math.floor(index / perPage);
+                    if (itemPage === currentPage) {
+                        item.removeAttribute('hidden');
+                        return;
+                    }
+                    item.setAttribute('hidden', 'hidden');
+                });
+
+                if (status) {
+                    status.textContent = String(currentPage + 1) + ' / ' + String(totalPages);
+                }
+                if (prev) {
+                    prev.disabled = currentPage <= 0;
+                }
+                if (next) {
+                    next.disabled = currentPage >= totalPages - 1;
+                }
+            }
+
+            if (prev) {
+                prev.addEventListener('click', function () {
+                    renderPage(currentPage - 1);
+                });
+            }
+
+            if (next) {
+                next.addEventListener('click', function () {
+                    renderPage(currentPage + 1);
+                });
+            }
+
+            renderPage(0);
+        });
+    }
+
+    initProjectGallery();
+
     var sectionNav = document.querySelector('[data-section-nav]');
     if (!sectionNav) {
         return;
