@@ -119,7 +119,7 @@
             return;
         }
 
-        var input = gallery.querySelector('input[name="cad_project_gallery_ids"]');
+        var input = gallery.querySelector('[data-gallery-ids-input]');
         var preview = gallery.querySelector('[data-project-gallery-preview]');
         if (!input || !preview) {
             return;
@@ -168,7 +168,7 @@
             return;
         }
 
-        var input = gallery.querySelector('input[name="cad_project_gallery_ids"]');
+        var input = gallery.querySelector('[data-gallery-ids-input]');
         var preview = gallery.querySelector('[data-project-gallery-preview]');
         if (input) {
             input.value = '';

@@ -1,0 +1,229 @@
+.cad-contact-admin__actions,
+.cad-contact-admin__filters,
+.cad-contact-admin__cards,
+.cad-contact-admin__panels {
+    margin-top: 1rem;
+}
+
+.cad-contact-admin__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.cad-contact-admin__filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.75rem 1rem;
+    padding: 1rem 1.1rem;
+    background: #fff;
+    border: 1px solid #dcdcde;
+    border-radius: 12px;
+}
+
+.cad-contact-admin__filters label {
+    display: grid;
+    gap: 0.35rem;
+    min-width: 180px;
+}
+
+.cad-contact-admin__filters span {
+    font-weight: 600;
+}
+
+.cad-contact-admin__cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.9rem;
+}
+
+.cad-contact-admin__card,
+.cad-contact-admin__panel {
+    background: #fff;
+    border: 1px solid #dcdcde;
+    border-radius: 14px;
+}
+
+.cad-contact-admin__card {
+    padding: 1rem 1.1rem;
+    display: grid;
+    gap: 0.35rem;
+}
+
+.cad-contact-admin__card span {
+    color: #646970;
+    font-size: 0.85rem;
+}
+
+.cad-contact-admin__card strong {
+    font-size: 1.7rem;
+    line-height: 1.1;
+}
+
+.cad-contact-admin__panels {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 1rem;
+}
+
+.cad-contact-admin__panel {
+    padding: 1.2rem;
+}
+
+.cad-contact-admin__panel h2 {
+    margin: 0 0 1rem;
+    font-size: 1.1rem;
+}
+
+.cad-contact-admin__daily-list,
+.cad-contact-admin__recent-list,
+.cad-contact-admin__history {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.cad-contact-admin__daily-item,
+.cad-contact-admin__recent-item,
+.cad-contact-admin__history-item {
+    padding: 0.9rem 1rem;
+    border: 1px solid #e4e6ea;
+    border-radius: 12px;
+    background: #fafafa;
+}
+
+.cad-contact-admin__daily-meta,
+.cad-contact-admin__recent-item,
+.cad-contact-admin__history-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.cad-contact-admin__daily-bar {
+    margin-top: 0.65rem;
+    height: 8px;
+    border-radius: 999px;
+    background: #ececec;
+    overflow: hidden;
+}
+
+.cad-contact-admin__daily-bar span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: #ef8432;
+}
+
+.cad-contact-admin__recent-item p,
+.cad-contact-admin__recent-item span,
+.cad-contact-admin__history-meta span {
+    margin: 0.2rem 0 0;
+    color: #646970;
+}
+
+.cad-contact-admin__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 28px;
+    padding: 0 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.cad-contact-admin__badge.is-new {
+    background: #fff3cd;
+    color: #8a5d00;
+}
+
+.cad-contact-admin__badge.is-review {
+    background: #dfe9ff;
+    color: #174ea6;
+}
+
+.cad-contact-admin__badge.is-replied {
+    background: #daf5db;
+    color: #136b16;
+}
+
+.cad-contact-admin__badge.is-closed {
+    background: #ececec;
+    color: #3c434a;
+}
+
+.cad-contact-admin__detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+}
+
+.cad-contact-admin__detail-item {
+    padding: 0.85rem 0.95rem;
+    border: 1px solid #e4e6ea;
+    border-radius: 12px;
+    background: #fafafa;
+    display: grid;
+    gap: 0.25rem;
+}
+
+.cad-contact-admin__detail-label {
+    color: #646970;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.cad-contact-admin__message {
+    margin-top: 1rem;
+}
+
+.cad-contact-admin__message h3,
+.cad-contact-admin__history h3 {
+    margin-bottom: 0.7rem;
+}
+
+.cad-contact-admin__message-body,
+.cad-contact-admin__history-body {
+    padding: 1rem;
+    border: 1px solid #e4e6ea;
+    border-radius: 12px;
+    background: #fafafa;
+    line-height: 1.7;
+}
+
+.cad-contact-admin__settings-form {
+    margin-top: 1rem;
+    background: #fff;
+    border: 1px solid #dcdcde;
+    border-radius: 14px;
+    padding: 1rem 1.25rem 1.4rem;
+}
+
+@media (max-width: 1080px) {
+    .cad-contact-admin__cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cad-contact-admin__panels {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 782px) {
+    .cad-contact-admin__cards,
+    .cad-contact-admin__detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cad-contact-admin__daily-meta,
+    .cad-contact-admin__recent-item,
+    .cad-contact-admin__history-meta {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

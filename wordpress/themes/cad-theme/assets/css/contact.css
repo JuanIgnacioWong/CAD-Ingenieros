@@ -1,0 +1,398 @@
+.cad-contact-page {
+    background:
+        radial-gradient(circle at 10% 0%, rgba(239, 132, 50, 0.08), transparent 24%),
+        linear-gradient(180deg, #11161c 0%, #0f141a 100%);
+}
+
+.cad-contact-page__hero {
+    position: relative;
+    overflow: hidden;
+    padding-top: clamp(1.25rem, 2vw, 2rem);
+    padding-bottom: clamp(2.25rem, 4vw, 4rem);
+}
+
+.cad-contact-page__hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(115deg, rgba(239, 132, 50, 0.08), transparent 32%),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0, rgba(255, 255, 255, 0.04) 1px, transparent 1px, transparent 112px),
+        repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0, rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 112px);
+    opacity: 0.34;
+    pointer-events: none;
+}
+
+.cad-contact-page__hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 60rem;
+    padding-right: clamp(0rem, 4vw, 4rem);
+    display: grid;
+    gap: 0.85rem;
+}
+
+.cad-contact-page__hero-inner .cad-title {
+    margin-bottom: 0;
+}
+
+.cad-contact-page__hero-inner .cad-section__lead {
+    margin: 0;
+    max-width: 46rem;
+}
+
+.cad-contact-page__content {
+    padding-top: 0.5rem;
+    padding-bottom: clamp(3.2rem, 6vw, 5.4rem);
+}
+
+.cad-contact-page__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    gap: clamp(1.25rem, 2.4vw, 2rem);
+    align-items: start;
+    width: min(100%, 1120px);
+    margin: 0 auto;
+}
+
+.cad-contact-page__sidebar {
+    display: grid;
+    gap: clamp(1rem, 1.8vw, 1.4rem);
+    padding-top: 0.35rem;
+}
+
+.cad-contact-page__panel,
+.cad-contact-page__form-panel,
+.cad-contact-page__info-card,
+.cad-contact-page__whatsapp {
+    min-height: auto;
+    border-radius: 1.2rem;
+    padding: clamp(1.35rem, 2vw, 1.9rem);
+}
+
+.cad-contact-page__panel {
+    display: grid;
+    gap: 0.35rem;
+}
+
+.cad-contact-page__panel-title {
+    font-size: clamp(1.5rem, 2.3vw, 2rem);
+    letter-spacing: -0.02em;
+}
+
+.cad-contact-page__panel-copy {
+    margin-top: 0.95rem;
+    color: #dbcaba;
+    line-height: 1.72;
+    max-width: 38rem;
+}
+
+.cad-contact-page__panel-copy p {
+    margin: 0;
+}
+
+.cad-contact-page__panel-copy p + p {
+    margin-top: 0.9rem;
+}
+
+.cad-contact-page__info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.9rem, 1.8vw, 1.2rem);
+}
+
+.cad-contact-page__info-card {
+    display: grid;
+    align-content: start;
+    gap: 0.6rem;
+    min-height: 14rem;
+}
+
+.cad-contact-page__info-card a,
+.cad-contact-page__info-card strong,
+.cad-contact-page__stack {
+    color: #f8f3ee;
+    font-size: 1rem;
+    line-height: 1.55;
+}
+
+.cad-contact-page__info-card a:hover,
+.cad-contact-page__info-card a:focus-visible {
+    color: var(--color-accent-soft);
+}
+
+.cad-contact-page__info-icon {
+    width: 2.9rem;
+    height: 2.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.9rem;
+    background: rgba(239, 132, 50, 0.12);
+    color: var(--color-accent);
+    font-size: 1.5rem;
+}
+
+.cad-contact-page__info-label {
+    color: var(--color-accent-soft);
+    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.cad-contact-page__stack {
+    display: grid;
+    gap: 0.22rem;
+}
+
+.cad-contact-page__whatsapp {
+    display: grid;
+    gap: 0.8rem;
+    align-content: start;
+}
+
+.cad-contact-page__whatsapp p {
+    color: #dbcaba;
+    line-height: 1.65;
+    max-width: 34rem;
+}
+
+.cad-contact-page__whatsapp-button {
+    width: fit-content;
+    margin-top: 0.2rem;
+    background: var(--color-accent);
+    color: #11161c;
+    border-color: var(--color-accent);
+}
+
+.cad-contact-page__form-panel {
+    position: relative;
+    overflow: hidden;
+}
+
+.cad-contact-page__form-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(239, 132, 50, 0.4), rgba(239, 132, 50, 0));
+    pointer-events: none;
+}
+
+.cad-contact-page__form-header {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 0.75rem;
+    margin-bottom: 1.55rem;
+    max-width: 38rem;
+}
+
+.cad-contact-page__form-header h2 {
+    font-size: clamp(1.8rem, 2.7vw, 2.45rem);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+}
+
+.cad-contact-page__form-header p {
+    color: #dbcaba;
+    line-height: 1.65;
+}
+
+.cad-contact-form {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 1.1rem;
+}
+
+.cad-contact-form__notice {
+    border-radius: 1rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 0.95rem;
+    line-height: 1.55;
+}
+
+.cad-contact-form__notice.is-success {
+    background: rgba(41, 83, 53, 0.32);
+    border-color: rgba(120, 194, 134, 0.34);
+    color: #e8f7eb;
+}
+
+.cad-contact-form__notice.is-error {
+    background: rgba(104, 38, 38, 0.32);
+    border-color: rgba(220, 125, 125, 0.3);
+    color: #ffe4e4;
+}
+
+.cad-contact-form__form {
+    display: grid;
+    gap: 1.15rem;
+}
+
+.cad-contact-form__honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.cad-contact-form__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 1.1rem;
+}
+
+.cad-contact-form__field {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.cad-contact-form__field.is-full {
+    grid-column: 1 / -1;
+}
+
+.cad-contact-form__field label,
+.cad-contact-form__field--checkbox span {
+    color: #f8f3ee;
+    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.cad-contact-form__field input,
+.cad-contact-form__field textarea {
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.95rem;
+    background: rgba(255, 255, 255, 0.035);
+    color: #f8f3ee;
+    padding: 1rem 1.05rem;
+    font: inherit;
+    line-height: 1.5;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.cad-contact-form__field textarea {
+    resize: vertical;
+    min-height: 10rem;
+}
+
+.cad-contact-form__field input::placeholder,
+.cad-contact-form__field textarea::placeholder {
+    color: rgba(248, 243, 238, 0.46);
+}
+
+.cad-contact-form__field input:hover,
+.cad-contact-form__field textarea:hover,
+.cad-contact-form__field input:focus,
+.cad-contact-form__field textarea:focus {
+    outline: none;
+    border-color: rgba(239, 132, 50, 0.62);
+    box-shadow: 0 0 0 3px rgba(239, 132, 50, 0.14);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.cad-contact-form__field--checkbox {
+    gap: 0.5rem;
+}
+
+.cad-contact-form__checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    color: #dbcaba;
+    line-height: 1.6;
+}
+
+.cad-contact-form__checkbox input {
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-top: 0.18rem;
+    accent-color: var(--color-accent);
+}
+
+.cad-contact-form__checkbox a {
+    color: var(--color-accent-soft);
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+}
+
+.cad-contact-form__error {
+    color: #ffbbb2;
+    font-size: 0.86rem;
+    line-height: 1.45;
+}
+
+.cad-contact-form__actions {
+    display: flex;
+    justify-content: flex-start;
+    padding-top: 0.3rem;
+}
+
+.cad-contact-form__submit {
+    cursor: pointer;
+    background: var(--color-accent);
+    color: #11161c;
+    border-color: var(--color-accent);
+}
+
+.cad-contact-page__whatsapp-button:hover,
+.cad-contact-page__whatsapp-button:focus-visible,
+.cad-contact-form__submit:hover,
+.cad-contact-form__submit:focus-visible {
+    background: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+    color: #11161c;
+}
+
+@media (max-width: 1080px) {
+    .cad-contact-page__hero-inner {
+        padding-right: 0;
+    }
+
+    .cad-contact-page__layout {
+        grid-template-columns: 1fr;
+        width: min(100%, 920px);
+    }
+
+    .cad-contact-page__sidebar {
+        padding-top: 0;
+    }
+}
+
+@media (max-width: 782px) {
+    .cad-contact-page__hero {
+        padding-top: 0;
+        padding-bottom: 1.8rem;
+    }
+
+    .cad-contact-page__info-grid,
+    .cad-contact-form__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cad-contact-page__panel,
+    .cad-contact-page__form-panel,
+    .cad-contact-page__info-card,
+    .cad-contact-page__whatsapp {
+        padding: 1.35rem 1.2rem;
+    }
+
+    .cad-contact-page__info-card {
+        min-height: auto;
+    }
+}
+
+@media (max-width: 560px) {
+    .cad-contact-page__whatsapp-button,
+    .cad-contact-form__submit {
+        width: 100%;
+    }
+}

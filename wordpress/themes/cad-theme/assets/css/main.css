@@ -874,6 +874,662 @@ p {
     font-size: 0.95rem;
 }
 
+.cad-business-area-page {
+    background:
+        radial-gradient(circle at top left, rgba(239, 132, 50, 0.08), transparent 30%),
+        linear-gradient(180deg, #11161c 0%, #0c1117 100%);
+    color: var(--color-text);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.cad-business-area-page.cad-main--generic {
+    padding: 0;
+}
+
+.cad-business-area {
+    width: 100%;
+}
+
+.cad-business-area__inner {
+    width: min(calc(100vw - var(--sidebar-width) - 4rem), 1180px);
+    margin: 0 auto;
+}
+
+.cad-business-area__hero {
+    position: relative;
+    min-height: min(92vh, 860px);
+    overflow: hidden;
+    background: #0d1218;
+}
+
+.cad-business-area__hero::before,
+.cad-business-area__hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.cad-business-area__hero::before {
+    background:
+        linear-gradient(115deg, rgba(239, 132, 50, 0.14), transparent 38%),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.06) 0, rgba(255, 255, 255, 0.06) 1px, transparent 1px, transparent 112px),
+        repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0, rgba(255, 255, 255, 0.04) 1px, transparent 1px, transparent 112px);
+    opacity: 0.28;
+    z-index: 1;
+}
+
+.cad-business-area__hero::after {
+    inset: auto -10% -12% 48%;
+    height: 52%;
+    border-top: 1px solid rgba(239, 132, 50, 0.24);
+    transform: rotate(-8deg);
+    z-index: 1;
+}
+
+.cad-business-area__hero-media,
+.cad-business-area__hero-overlay {
+    position: absolute;
+    inset: 0;
+}
+
+.cad-business-area__hero-media {
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.02);
+}
+
+.cad-business-area__hero-media.is-placeholder {
+    background:
+        radial-gradient(circle at 18% 22%, rgba(239, 132, 50, 0.2), transparent 28%),
+        radial-gradient(circle at 84% 76%, rgba(255, 255, 255, 0.09), transparent 22%),
+        linear-gradient(135deg, #202a34 0%, #131a22 55%, #0b1015 100%);
+}
+
+.cad-business-area__hero-overlay {
+    background:
+        linear-gradient(90deg, rgba(10, 12, 16, 0.92) 0%, rgba(10, 12, 16, 0.72) 42%, rgba(10, 12, 16, 0.82) 100%),
+        linear-gradient(180deg, rgba(10, 12, 16, 0) 0%, rgba(10, 12, 16, 0.28) 48%, rgba(10, 12, 16, 0.86) 100%);
+    z-index: 1;
+}
+
+.cad-business-area__hero-inner {
+    position: relative;
+    z-index: 2;
+    min-height: min(92vh, 860px);
+    padding: clamp(7.25rem, 14vw, 10rem) 0 clamp(3rem, 6vw, 4.4rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 1.4rem;
+}
+
+.cad-business-area__badge {
+    width: fit-content;
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    padding: 0.7rem 0.95rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    background: rgba(11, 14, 18, 0.62);
+    backdrop-filter: blur(10px);
+}
+
+.cad-business-area__badge-label,
+.cad-business-area__badge-context,
+.cad-business-area__kicker,
+.cad-business-area__cta-kicker {
+    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.cad-business-area__badge-label {
+    color: #fff;
+}
+
+.cad-business-area__badge-context {
+    color: var(--color-accent-soft);
+}
+
+.cad-business-area__title {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    max-width: 11.4em;
+    font-size: clamp(3rem, 7vw, 6.25rem);
+    text-transform: uppercase;
+    letter-spacing: -0.045em;
+    line-height: 0.92;
+}
+
+.cad-business-area__title span {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.28em;
+    align-items: baseline;
+}
+
+.cad-business-area__title em {
+    font-style: normal;
+    color: var(--color-accent);
+}
+
+.cad-business-area__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem 1.8rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.cad-business-area__meta li {
+    position: relative;
+    color: rgba(255, 255, 255, 0.84);
+    font-size: 0.96rem;
+    line-height: 1.45;
+}
+
+.cad-business-area__meta li:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -0.95rem;
+    width: 0.28rem;
+    height: 0.28rem;
+    border-radius: 999px;
+    background: rgba(239, 132, 50, 0.72);
+    transform: translateY(-50%);
+}
+
+.cad-business-area__section {
+    position: relative;
+    padding: clamp(3.6rem, 7vw, 5.2rem) 0;
+}
+
+.cad-business-area__section--intro {
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%),
+        linear-gradient(180deg, #121820 0%, #0f141a 100%);
+}
+
+.cad-business-area__intro {
+    position: relative;
+    max-width: 60rem;
+    padding-left: 1.5rem;
+}
+
+.cad-business-area__intro::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.15rem;
+    bottom: 0.15rem;
+    width: 3px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, var(--color-accent) 0%, rgba(239, 132, 50, 0.12) 100%);
+}
+
+.cad-business-area__kicker {
+    display: inline-block;
+    margin-bottom: 1rem;
+    color: var(--color-accent-soft);
+}
+
+.cad-business-area__intro-copy {
+    display: grid;
+    gap: 0.9rem;
+    color: #f2e8de;
+    font-size: clamp(1.02rem, 1.6vw, 1.28rem);
+    line-height: 1.8;
+}
+
+.cad-business-area__intro-copy p {
+    margin: 0;
+}
+
+.cad-business-area__section-heading {
+    display: grid;
+    gap: 0.85rem;
+    margin-bottom: 1.8rem;
+    max-width: 42rem;
+}
+
+.cad-business-area__section-heading h2 {
+    font-size: clamp(2rem, 4.4vw, 3.3rem);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+}
+
+.cad-business-area__structure-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.cad-business-area__service-card {
+    position: relative;
+    min-height: 15rem;
+    padding: 1.65rem 1.6rem 1.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 1.1rem;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0) 34%),
+        linear-gradient(165deg, #171e26 0%, #0f151b 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    transition: transform 0.22s ease, border-color 0.22s ease, background-color 0.22s ease;
+}
+
+.cad-business-area__service-card::before {
+    content: '';
+    position: absolute;
+    top: 1.15rem;
+    right: 1.15rem;
+    width: 4rem;
+    height: 4rem;
+    border-top: 1px solid rgba(239, 132, 50, 0.24);
+    border-right: 1px solid rgba(239, 132, 50, 0.24);
+    opacity: 0.75;
+}
+
+.cad-business-area__service-card:hover,
+.cad-business-area__service-card:focus-within {
+    transform: translateY(-4px);
+    border-color: rgba(239, 132, 50, 0.28);
+}
+
+.cad-business-area__service-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 1.1rem;
+    border-radius: 0.9rem;
+    background: rgba(239, 132, 50, 0.12);
+    color: var(--color-accent);
+    font-size: 1.5rem;
+}
+
+.cad-business-area__service-card h3 {
+    max-width: 13ch;
+    font-size: clamp(1.35rem, 2.4vw, 1.8rem);
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+}
+
+.cad-business-area__service-card p {
+    margin-top: 0.7rem;
+    max-width: 30rem;
+    color: #dbcaba;
+    line-height: 1.65;
+}
+
+.cad-business-area__section--gallery {
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%),
+        linear-gradient(180deg, #10151b 0%, #0e1319 100%);
+}
+
+.cad-business-area__gallery {
+    display: grid;
+    grid-template-columns: 1.55fr 1fr;
+    grid-template-rows: repeat(2, minmax(16rem, 1fr));
+    gap: 1rem;
+}
+
+.cad-business-area__gallery-item {
+    position: relative;
+    min-height: 16rem;
+    margin: 0;
+    overflow: hidden;
+    border-radius: 1.1rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #121820;
+}
+
+.cad-business-area__gallery-item--1 {
+    grid-row: 1 / span 2;
+}
+
+.cad-business-area__gallery-item img,
+.cad-business-area__gallery-placeholder {
+    width: 100%;
+    height: 100%;
+}
+
+.cad-business-area__gallery-item img {
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.cad-business-area__gallery-item:hover img {
+    transform: scale(1.04);
+}
+
+.cad-business-area__gallery-item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(8, 10, 12, 0.08) 0%, rgba(8, 10, 12, 0.46) 100%);
+    pointer-events: none;
+}
+
+.cad-business-area__gallery-placeholder {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    padding: 1.15rem;
+    background:
+        linear-gradient(135deg, rgba(239, 132, 50, 0.18) 0%, transparent 36%),
+        repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.045) 0, rgba(255, 255, 255, 0.045) 1px, transparent 1px, transparent 18px),
+        linear-gradient(160deg, #202a34 0%, #121820 100%);
+}
+
+.cad-business-area__gallery-placeholder span {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 0.72rem;
+    border-radius: 999px;
+    background: rgba(10, 12, 16, 0.54);
+    color: #fff;
+    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.cad-business-area__section--projects {
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.015) 0%, transparent 100%),
+        linear-gradient(180deg, #0f141a 0%, #0c1015 100%);
+}
+
+.cad-business-area__project-list {
+    display: grid;
+    gap: 0.8rem;
+}
+
+.cad-business-area__project-item {
+    display: grid;
+    grid-template-columns: 4rem minmax(0, 1fr) auto 2.6rem;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.15rem 1.2rem;
+    border-left: 3px solid transparent;
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.02);
+    transition: background-color 0.22s ease, border-color 0.22s ease, transform 0.22s ease;
+}
+
+.cad-business-area__project-item:hover,
+.cad-business-area__project-item:focus-visible {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.14);
+    border-left-color: var(--color-accent);
+}
+
+.cad-business-area__project-item:focus-visible {
+    outline: 2px solid rgba(239, 132, 50, 0.7);
+    outline-offset: 3px;
+}
+
+.cad-business-area__project-item.is-static {
+    cursor: default;
+}
+
+.cad-business-area__project-number {
+    color: rgba(255, 255, 255, 0.34);
+    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.cad-business-area__project-body h3 {
+    font-size: clamp(1.1rem, 2vw, 1.42rem);
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+}
+
+.cad-business-area__project-body p {
+    margin-top: 0.25rem;
+    color: #d8c7b7;
+    line-height: 1.55;
+}
+
+.cad-business-area__project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.45rem;
+}
+
+.cad-business-area__project-tags span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2rem;
+    padding: 0 0.72rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #f3e9df;
+    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.cad-business-area__project-arrow {
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 1.55rem;
+    transition: transform 0.22s ease, color 0.22s ease;
+}
+
+.cad-business-area__project-item:hover .cad-business-area__project-arrow,
+.cad-business-area__project-item:focus-visible .cad-business-area__project-arrow {
+    color: var(--color-accent);
+    transform: translate(3px, -3px);
+}
+
+.cad-business-area__section--cta {
+    padding: 0;
+    background: var(--color-accent);
+}
+
+.cad-business-area__cta {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1.5rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.cad-business-area__cta-kicker {
+    display: inline-block;
+    margin-bottom: 0.65rem;
+    color: rgba(20, 16, 12, 0.64);
+}
+
+.cad-business-area__cta-copy p {
+    max-width: 34rem;
+    color: #1f1712;
+    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-size: clamp(1.35rem, 2.9vw, 2.1rem);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+}
+
+.cad-business-area__cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+.cad-business-area__cta-primary,
+.cad-business-area__cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3rem;
+    padding: 0 1.2rem;
+    border-radius: 999px;
+    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.cad-business-area__cta-primary {
+    background: #11161c;
+    color: #fff;
+    border: 1px solid #11161c;
+}
+
+.cad-business-area__cta-secondary {
+    background: rgba(255, 255, 255, 0.12);
+    color: #1f1712;
+    border: 1px solid rgba(17, 22, 28, 0.24);
+}
+
+.cad-business-area__cta-primary:hover,
+.cad-business-area__cta-primary:focus-visible,
+.cad-business-area__cta-secondary:hover,
+.cad-business-area__cta-secondary:focus-visible {
+    transform: translateY(-2px);
+}
+
+@media (max-width: 1180px) {
+    .cad-business-area__inner {
+        width: min(calc(100vw - var(--sidebar-width) - 2.5rem), 1180px);
+    }
+
+    .cad-business-area__project-item {
+        grid-template-columns: 3.4rem minmax(0, 1fr);
+    }
+
+    .cad-business-area__project-tags,
+    .cad-business-area__project-arrow {
+        grid-column: 2;
+    }
+
+    .cad-business-area__project-tags {
+        justify-content: flex-start;
+    }
+
+    .cad-business-area__project-arrow {
+        justify-self: end;
+        grid-row: 1 / span 2;
+    }
+}
+
+@media (max-width: 900px) {
+    .cad-business-area__structure-grid,
+    .cad-business-area__cta {
+        grid-template-columns: 1fr;
+    }
+
+    .cad-business-area__gallery {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(3, minmax(15rem, 1fr));
+    }
+
+    .cad-business-area__gallery-item--1 {
+        grid-row: auto;
+    }
+
+    .cad-business-area__cta-actions {
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 782px) {
+    .cad-business-area__inner {
+        width: min(calc(100vw - 2rem), 1180px);
+    }
+
+    .cad-business-area__hero,
+    .cad-business-area__hero-inner {
+        min-height: auto;
+    }
+
+    .cad-business-area__hero-inner {
+        padding-top: 6.4rem;
+        padding-bottom: 2.5rem;
+    }
+
+    .cad-business-area__meta {
+        gap: 0.55rem 1rem;
+    }
+
+    .cad-business-area__meta li:not(:last-child)::after {
+        display: none;
+    }
+
+    .cad-business-area__intro {
+        padding-left: 1rem;
+    }
+
+    .cad-business-area__service-card,
+    .cad-business-area__gallery-item {
+        min-height: 14rem;
+    }
+
+    .cad-business-area__project-item {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+
+    .cad-business-area__project-number,
+    .cad-business-area__project-tags,
+    .cad-business-area__project-arrow {
+        grid-column: auto;
+    }
+
+    .cad-business-area__project-arrow {
+        justify-self: start;
+    }
+}
+
+@media (max-width: 560px) {
+    .cad-business-area__badge {
+        width: 100%;
+        border-radius: 1rem;
+    }
+
+    .cad-business-area__title {
+        font-size: clamp(2.4rem, 14vw, 3.4rem);
+    }
+
+    .cad-business-area__section-heading h2 {
+        font-size: clamp(1.75rem, 9vw, 2.3rem);
+    }
+
+    .cad-business-area__cta-copy p {
+        font-size: 1.45rem;
+    }
+
+    .cad-business-area__cta-primary,
+    .cad-business-area__cta-secondary {
+        width: 100%;
+    }
+}
+
 .cad-post,
 .cad-page {
     background: rgba(255, 255, 255, 0.02);
