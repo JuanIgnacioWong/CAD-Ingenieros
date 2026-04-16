@@ -1,0 +1,353 @@
+/* Login branding aligned with the CAD frontend design system. */
+body.login {
+    min-height: 100vh;
+    margin: 0;
+    padding: clamp(1.1rem, 2.5vw, 2rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow-x: hidden;
+    font-family: 'Barlow', 'Segoe UI', sans-serif;
+    color: #fff8f2;
+    background:
+        radial-gradient(circle at 18% 20%, rgba(239, 132, 50, 0.18), transparent 30%),
+        radial-gradient(circle at 82% 78%, rgba(255, 255, 255, 0.08), transparent 24%),
+        linear-gradient(145deg, var(--cad-login-bg-soft) 0%, #252d38 48%, var(--cad-login-bg) 100%);
+}
+
+body.login::before,
+body.login::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+}
+
+body.login::before {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0;
+    transform: scale(1.04);
+    transition: opacity 0.3s ease;
+}
+
+body.login.cad-login--has-background-image::before {
+    opacity: 0.22;
+}
+
+body.login::after {
+    background:
+        linear-gradient(135deg, rgba(9, 12, 16, 0.72) 0%, rgba(9, 12, 16, 0.52) 45%, rgba(9, 12, 16, 0.88) 100%),
+        linear-gradient(180deg, rgba(9, 12, 16, 0.18) 0%, rgba(9, 12, 16, 0.76) 100%);
+}
+
+body.login div#login {
+    width: min(100%, 28.5rem);
+    padding: 0;
+    position: relative;
+    z-index: 1;
+    animation: cad-login-reveal 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+body.login h1 {
+    margin: 0 0 1.4rem;
+}
+
+body.login h1 a {
+    width: min(15rem, 72vw);
+    height: clamp(4rem, 11vw, 5.4rem);
+    margin: 0 auto;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+body.login.cad-login--text-logo h1 a {
+    width: auto;
+    height: auto;
+    background-image: none !important;
+    text-indent: 0;
+    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-size: clamp(2rem, 8vw, 3rem);
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cad-login-accent);
+}
+
+body.login .cad-login__intro,
+body.login .message,
+body.login #login_error,
+body.login .notice {
+    margin: 0 0 1rem;
+    border: 1px solid var(--cad-login-line);
+    border-radius: 1.1rem;
+    box-shadow: 0 1.25rem 3rem rgba(6, 8, 11, 0.24);
+    backdrop-filter: blur(14px);
+}
+
+body.login .cad-login__intro {
+    padding: 0.95rem 1rem;
+    background: rgba(11, 14, 18, 0.46);
+    color: #f4e7db;
+    text-align: center;
+    line-height: 1.55;
+}
+
+body.login .message,
+body.login #login_error,
+body.login .notice {
+    padding: 0.95rem 1rem;
+    background: rgba(255, 243, 234, 0.94);
+    color: #433428;
+}
+
+body.login #login_error a,
+body.login .message a,
+body.login .notice a {
+    color: var(--cad-login-accent-hover);
+}
+
+body.login form {
+    margin: 0;
+    padding: clamp(1.4rem, 3vw, 1.9rem);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 1.5rem;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.48) 0%, rgba(255, 255, 255, 0.12) 100%),
+        linear-gradient(180deg, var(--cad-login-panel-strong) 0%, var(--cad-login-panel) 100%);
+    box-shadow:
+        0 2rem 5rem rgba(7, 10, 14, 0.42),
+        inset 0 1px 0 rgba(255, 255, 255, 0.36);
+    backdrop-filter: blur(22px);
+}
+
+body.login label {
+    display: block;
+    margin-bottom: 0.45rem;
+    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--cad-login-muted);
+}
+
+body.login form .input,
+body.login input[type='text'],
+body.login input[type='password'] {
+    min-height: 3.25rem;
+    margin-top: 0;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--cad-login-line-strong);
+    border-radius: 0.95rem;
+    background: rgba(255, 255, 255, 0.82);
+    color: var(--cad-login-text);
+    font-size: 1rem;
+    line-height: 1.4;
+    box-shadow: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+}
+
+body.login form .input:hover,
+body.login input[type='text']:hover,
+body.login input[type='password']:hover {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+body.login form .input:focus,
+body.login input[type='text']:focus,
+body.login input[type='password']:focus {
+    border-color: rgba(239, 132, 50, 0.7);
+    box-shadow: 0 0 0 4px rgba(239, 132, 50, 0.16);
+    transform: translateY(-1px);
+}
+
+body.login .forgetmenot {
+    margin-top: 0.2rem;
+}
+
+body.login .forgetmenot label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-bottom: 0;
+    font-family: 'Barlow', 'Segoe UI', sans-serif;
+    font-size: 0.97rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--cad-login-text);
+}
+
+body.login .forgetmenot input[type='checkbox'] {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--cad-login-accent);
+}
+
+body.login .wp-pwd {
+    position: relative;
+}
+
+body.login .button.wp-hide-pw {
+    border-radius: 0.85rem;
+    color: var(--cad-login-muted);
+}
+
+body.login .button.wp-hide-pw:focus {
+    box-shadow: 0 0 0 3px rgba(239, 132, 50, 0.16);
+}
+
+body.login .button.button-primary {
+    min-height: 3.25rem;
+    margin-top: 0.2rem;
+    padding: 0 1.45rem;
+    border: 0;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--cad-login-accent) 0%, var(--cad-login-accent-hover) 100%);
+    box-shadow: 0 1rem 2.25rem rgba(239, 132, 50, 0.28);
+    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+body.login .button.button-primary:hover,
+body.login .button.button-primary:focus {
+    background: linear-gradient(135deg, var(--cad-login-accent) 0%, var(--cad-login-accent-hover) 100%);
+    filter: brightness(1.03);
+    transform: translateY(-1px);
+    box-shadow: 0 1.15rem 2.6rem rgba(239, 132, 50, 0.32);
+}
+
+body.login .button.button-primary:focus {
+    box-shadow:
+        0 1.15rem 2.6rem rgba(239, 132, 50, 0.32),
+        0 0 0 3px rgba(239, 132, 50, 0.18);
+}
+
+body.login .button-secondary,
+body.login .button {
+    transition: box-shadow 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+body.login p#nav,
+body.login p#backtoblog,
+body.login .privacy-policy-page-link,
+body.login .language-switcher {
+    margin: 1rem 0 0;
+    text-align: center;
+}
+
+body.login p#nav a,
+body.login p#backtoblog a,
+body.login .privacy-policy-page-link a {
+    color: rgba(255, 248, 242, 0.82);
+    transition: color 0.2s ease;
+}
+
+body.login p#nav a:hover,
+body.login p#nav a:focus,
+body.login p#backtoblog a:hover,
+body.login p#backtoblog a:focus,
+body.login .privacy-policy-page-link a:hover,
+body.login .privacy-policy-page-link a:focus {
+    color: #ffffff;
+}
+
+body.login .language-switcher {
+    display: flex;
+    justify-content: center;
+}
+
+body.login .language-switcher form {
+    width: auto;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+}
+
+body.login .language-switcher select {
+    min-height: 2.75rem;
+    padding: 0 2.75rem 0 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    background: rgba(10, 14, 18, 0.46);
+    color: #fff8f2;
+}
+
+body.login .language-switcher .button {
+    min-height: 2.75rem;
+    border-radius: 999px;
+}
+
+body.login .cad-login__footer {
+    margin: 1rem 0 0;
+    text-align: center;
+    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 248, 242, 0.68);
+}
+
+@keyframes cad-login-reveal {
+    from {
+        opacity: 0;
+        transform: translateY(1.1rem);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 782px) {
+    body.login {
+        padding: 1rem;
+    }
+
+    body.login div#login {
+        width: 100%;
+    }
+
+    body.login form {
+        padding: 1.25rem;
+        border-radius: 1.2rem;
+    }
+
+    body.login .button.button-primary {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    body.login .cad-login__intro,
+    body.login .message,
+    body.login #login_error,
+    body.login .notice,
+    body.login form {
+        border-radius: 1rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.login *,
+    body.login *::before,
+    body.login *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+    }
+}

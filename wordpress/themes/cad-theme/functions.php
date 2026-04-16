@@ -478,6 +478,179 @@ function cad_theme_assets()
 }
 add_action('wp_enqueue_scripts', 'cad_theme_assets');
 
+// Login branding is loaded through hooks so it survives WordPress core updates.
+function cad_theme_login_company_name()
+{
+    $company_name = trim((string) wp_specialchars_decode(get_bloginfo('name'), ENT_QUOTES));
+
+    if ('' !== $company_name) {
+        return $company_name;
+    }
+
+    return 'CAD';
+}
+
+function cad_theme_get_login_logo_url()
+{
+    $logo_id = (int) get_theme_mod('custom_logo');
+
+    if (!$logo_id) {
+        return '';
+    }
+
+    $logo_url = wp_get_attachment_image_url($logo_id, 'full');
+
+    return $logo_url ? esc_url_raw($logo_url) : '';
+}
+
+function cad_theme_get_login_background_image_url()
+{
+    if (!function_exists('cad_theme_get_video_banner')) {
+        return '';
+    }
+
+    $video_banner = cad_theme_get_video_banner();
+    if (!is_array($video_banner)) {
+        return '';
+    }
+
+    $background_image = isset($video_banner['fallback']) ? esc_url_raw((string) $video_banner['fallback']) : '';
+    if ('' === $background_image || empty($video_banner['show_fallback'])) {
+        return '';
+    }
+
+    $defaults = function_exists('cad_theme_video_banner_defaults') ? cad_theme_video_banner_defaults() : array();
+    $default_background = isset($defaults['fallback']) ? esc_url_raw((string) $defaults['fallback']) : '';
+
+    if ('' !== $default_background && $background_image === $default_background) {
+        return '';
+    }
+
+    return $background_image;
+}
+
+function cad_theme_get_login_branding()
+{
+    return array(
+        'company_name'         => cad_theme_login_company_name(),
+        'logo_url'             => cad_theme_get_login_logo_url(),
+        'background_image_url' => cad_theme_get_login_background_image_url(),
+    );
+}
+
+function cad_theme_login_body_class($classes)
+{
+    $branding = cad_theme_get_login_branding();
+    $classes[] = 'cad-login';
+    $classes[] = $branding['logo_url'] ? 'cad-login--has-custom-logo' : 'cad-login--text-logo';
+
+    if ($branding['background_image_url']) {
+        $classes[] = 'cad-login--has-background-image';
+    }
+
+    return array_values(array_unique($classes));
+}
+add_filter('login_body_class', 'cad_theme_login_body_class');
+
+function cad_theme_login_assets()
+{
+    $version = wp_get_theme()->get('Version');
+    $branding = cad_theme_get_login_branding();
+
+    wp_enqueue_style(
+        'cad-theme-login-fonts',
+        'https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Barlow:wght@400;500;600;700&display=swap',
+        array(),
+        null
+    );
+
+    wp_enqueue_style(
+        'cad-theme-login',
+        get_theme_file_uri('/assets/css/login.css'),
+        array('login', 'dashicons', 'cad-theme-login-fonts'),
+        $version
+    );
+
+    $inline_css = implode(
+        '',
+        array(
+            ':root{',
+            '--cad-login-bg:#171b21;',
+            '--cad-login-bg-soft:#364150;',
+            '--cad-login-panel:#fff3ea;',
+            '--cad-login-panel-strong:rgba(255,255,255,0.95);',
+            '--cad-login-text:#2f261f;',
+            '--cad-login-muted:#7f6a58;',
+            '--cad-login-line:rgba(255,255,255,0.14);',
+            '--cad-login-line-strong:rgba(47,38,31,0.16);',
+            '--cad-login-accent:#ef8432;',
+            '--cad-login-accent-hover:#d96f1e;',
+            '--cad-login-accent-soft:#f4b483;',
+            '}',
+        )
+    );
+
+    if ($branding['logo_url']) {
+        $inline_css .= sprintf(
+            '.login h1 a{background-image:url("%s") !important;}',
+            esc_url_raw($branding['logo_url'])
+        );
+    }
+
+    if ($branding['background_image_url']) {
+        $inline_css .= sprintf(
+            'body.login::before{background-image:url("%s");}',
+            esc_url_raw($branding['background_image_url'])
+        );
+    }
+
+    wp_add_inline_style('cad-theme-login', $inline_css);
+}
+add_action('login_enqueue_scripts', 'cad_theme_login_assets');
+
+function cad_theme_login_header_url()
+{
+    return home_url('/');
+}
+add_filter('login_headerurl', 'cad_theme_login_header_url');
+
+function cad_theme_login_header_text()
+{
+    return cad_theme_login_company_name();
+}
+add_filter('login_headertext', 'cad_theme_login_header_text');
+
+function cad_theme_login_message($message)
+{
+    $intro = sprintf(
+        '<p class="cad-login__intro">%s</p>',
+        esc_html(
+            sprintf(
+                __('Acceso privado de %s. Usa tus credenciales corporativas para continuar.', 'cad-theme'),
+                cad_theme_login_company_name()
+            )
+        )
+    );
+
+    return $message . $intro;
+}
+add_filter('login_message', 'cad_theme_login_message');
+
+function cad_theme_login_footer_note()
+{
+    printf(
+        '<p class="cad-login__footer">%s</p>',
+        esc_html(
+            sprintf(
+                __('%1$s | %2$s', 'cad-theme'),
+                cad_theme_login_company_name(),
+                wp_date('Y')
+            )
+        )
+    );
+}
+add_action('login_footer', 'cad_theme_login_footer_note');
+
 function cad_theme_video_banner_defaults()
 {
     return array(
