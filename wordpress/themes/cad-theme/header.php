@@ -9,13 +9,43 @@
 <?php wp_body_open(); ?>
 <a class="cad-skip-link" href="#main-content"><?php esc_html_e('Saltar al contenido', 'cad-theme'); ?></a>
 
+<?php $mobile_logo_id = (int) get_theme_mod('custom_logo'); ?>
 <div class="cad-site" data-site-shell>
     <div class="cad-mobile-bar">
+        <a
+            class="cad-mobile-bar__brand<?php echo $mobile_logo_id ? ' cad-mobile-bar__brand--logo' : ''; ?>"
+            href="<?php echo esc_url(home_url('/')); ?>"
+            aria-label="<?php esc_attr_e('Inicio', 'cad-theme'); ?>"
+        >
+            <?php if ($mobile_logo_id) : ?>
+                <?php
+                echo wp_get_attachment_image(
+                    $mobile_logo_id,
+                    'full',
+                    false,
+                    array(
+                        'class'         => 'cad-mobile-bar__logo',
+                        'loading'       => 'eager',
+                        'decoding'      => 'async',
+                        'fetchpriority' => 'high',
+                        'alt'           => '',
+                    )
+                );
+                ?>
+            <?php else : ?>
+                <span class="cad-mobile-bar__brand-mark">CAD</span>
+                <span class="cad-mobile-bar__brand-sub"><?php esc_html_e('Ingenieros', 'cad-theme'); ?></span>
+            <?php endif; ?>
+        </a>
         <button class="cad-mobile-bar__toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="cad-sidebar">
-            <span class="cad-mobile-bar__icon" aria-hidden="true"></span>
-            <span><?php esc_html_e('Menu', 'cad-theme'); ?></span>
+            <span class="cad-mobile-bar__toggle-copy">
+                <span class="cad-mobile-bar__toggle-eyebrow"><?php esc_html_e('Navegacion', 'cad-theme'); ?></span>
+                <span class="cad-mobile-bar__toggle-label"><?php esc_html_e('Menu', 'cad-theme'); ?></span>
+            </span>
+            <span class="cad-mobile-bar__toggle-box" aria-hidden="true">
+                <span class="cad-mobile-bar__icon"></span>
+            </span>
         </button>
-        <a class="cad-mobile-bar__brand" href="<?php echo esc_url(home_url('/')); ?>">CAD</a>
     </div>
 
     <div class="cad-overlay" data-menu-overlay></div>

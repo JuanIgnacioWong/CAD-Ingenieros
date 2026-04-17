@@ -59,6 +59,7 @@
     display: grid;
     gap: clamp(1rem, 1.8vw, 1.4rem);
     padding-top: 0.35rem;
+    min-width: 0;
 }
 
 .cad-contact-page__panel,
@@ -114,6 +115,7 @@
     color: #f8f3ee;
     font-size: 1rem;
     line-height: 1.55;
+    overflow-wrap: anywhere;
 }
 
 .cad-contact-page__info-card a:hover,
@@ -170,6 +172,7 @@
 .cad-contact-page__form-panel {
     position: relative;
     overflow: hidden;
+    min-width: 0;
 }
 
 .cad-contact-page__form-panel::before {
@@ -275,6 +278,7 @@
     color: #f8f3ee;
     padding: 1rem 1.05rem;
     font: inherit;
+    font-size: 1rem;
     line-height: 1.5;
     transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
@@ -373,9 +377,18 @@
         padding-bottom: 1.8rem;
     }
 
+    .cad-contact-page__hero-inner {
+        gap: 0.75rem;
+    }
+
+    .cad-contact-page__layout {
+        gap: 1rem;
+    }
+
     .cad-contact-page__info-grid,
     .cad-contact-form__grid {
         grid-template-columns: 1fr;
+        gap: 0.85rem;
     }
 
     .cad-contact-page__panel,
@@ -383,10 +396,51 @@
     .cad-contact-page__info-card,
     .cad-contact-page__whatsapp {
         padding: 1.35rem 1.2rem;
+        border-radius: 1.1rem;
     }
 
     .cad-contact-page__info-card {
         min-height: auto;
+    }
+
+    .cad-contact-page__panel-title {
+        font-size: clamp(1.35rem, 8vw, 1.7rem);
+    }
+
+    .cad-contact-page__form-header {
+        margin-bottom: 1.25rem;
+    }
+
+    .cad-contact-page__form-header h2 {
+        font-size: clamp(1.6rem, 8vw, 2rem);
+    }
+
+    .cad-contact-page__panel-copy,
+    .cad-contact-page__form-header p,
+    .cad-contact-page__whatsapp p {
+        font-size: 0.98rem;
+        line-height: 1.68;
+    }
+
+    .cad-contact-page__info-icon {
+        width: 2.6rem;
+        height: 2.6rem;
+        font-size: 1.35rem;
+    }
+
+    .cad-contact-form__actions {
+        width: 100%;
+    }
+
+    .cad-contact-page__whatsapp-button,
+    .cad-contact-form__submit {
+        width: 100%;
+        max-width: 100%;
+        min-height: 3rem;
+        white-space: normal;
+        text-align: center;
+        line-height: 1.35;
+        justify-content: center;
     }
 }
 
