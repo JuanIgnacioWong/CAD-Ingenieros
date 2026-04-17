@@ -35,6 +35,7 @@ services:
       - ./wordpress/plugins:/var/www/html/wp-content/plugins
       - ./wordpress/mu-plugins:/var/www/html/wp-content/mu-plugins
       - ./wordpress/themes/cad-theme:/var/www/html/wp-content/themes/CAD-theme
+      - ./wordpress/uploads:/var/www/html/wp-content/uploads
 
 volumes:
   db_data:

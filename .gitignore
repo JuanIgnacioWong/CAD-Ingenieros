@@ -3,4 +3,3 @@
 wp-config.php
 wp-config.production.php
 database/backups/
-wordpress/uploads/

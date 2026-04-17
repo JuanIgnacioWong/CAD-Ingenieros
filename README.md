@@ -16,7 +16,7 @@ Este proyecto contiene una instalacion independiente de WordPress para `CAD Them
 - `wordpress/themes/cad-theme/`
 - `wordpress/plugins/`
 - `wordpress/mu-plugins/`
-- `wordpress/uploads/` (local, no versionado)
+- `wordpress/uploads/`
 
 Nota: el tema local esta normalizado como `wordpress/themes/cad-theme`, y Docker lo monta dentro de WordPress como `wp-content/themes/CAD-theme` para mantener compatibilidad.
 El core versionado para despliegue vive en `wordpress-core/` y hoy corresponde a WordPress `6.9.1`.
@@ -81,9 +81,11 @@ Importante:
 
 - El core de WordPress se versiona en `wordpress-core/`.
 - El contenido editable del proyecto se mantiene en `wordpress/` y se publica dentro de `wp-content/`.
+- `wordpress/uploads/` ahora forma parte del deploy para incluir las imagenes cargadas localmente.
 - `wp-config.php` no se versiona ni se despliega desde Git; debe existir en el servidor o crearse una vez en `public_html/CAD`.
 - El repo incluye `wp-config.production.example.php` como base editable para produccion.
-- El deploy preserva `wp-config.php`, `.htaccess`, `wp-content/uploads/`, `wp-content/languages/`, `wp-content/cache/` y `wp-content/upgrade/` del servidor.
+- El deploy preserva `wp-config.php`, `.htaccess`, `wp-content/languages/`, `wp-content/cache/` y `wp-content/upgrade/` del servidor.
+- `uploads` se copia desde el repo al servidor. En ese directorio no se usa `--delete`, para no borrar media preexistente solo en produccion.
 - El deploy no publica `database/`, `.env` ni archivos de Docker.
 - Si el servidor tiene `rsync`, el deploy elimina archivos obsoletos versionados. Si no lo tiene, hace copia simple y los archivos borrados en Git pueden quedar en produccion.
 
@@ -107,6 +109,11 @@ Importante:
 cd /Users/ignaciowong/Documents/CAD-theme
 DEPLOYPATH=/tmp/CAD bash scripts/cpanel-deploy-wordpress.sh
 ```
+
+### Uploads locales
+
+- `docker-compose.yml` monta `wordpress/uploads/` en `wp-content/uploads`, asi que nuevas imagenes subidas localmente quedan en el repo.
+- Las imagenes existentes del volumen local ya fueron exportadas a `wordpress/uploads/`.
 
 ### Refrescar el core versionado
 

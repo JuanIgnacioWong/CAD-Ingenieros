@@ -24,7 +24,7 @@ fi
     "$TARGET_DIR/wp-content/uploads"
 
 if command -v rsync >/dev/null 2>&1; then
-    # Keep server-specific config and mutable runtime directories intact.
+    # Keep server-specific config intact.
     rsync -a --delete \
         --exclude='.git/' \
         --exclude='.gitignore' \
@@ -35,7 +35,6 @@ if command -v rsync >/dev/null 2>&1; then
         --exclude='wp-content/themes/' \
         --exclude='wp-content/plugins/' \
         --exclude='wp-content/mu-plugins/' \
-        --exclude='wp-content/uploads/' \
         --exclude='wp-content/languages/' \
         --exclude='wp-content/cache/' \
         --exclude='wp-content/upgrade/' \
@@ -61,6 +60,13 @@ if command -v rsync >/dev/null 2>&1; then
         --exclude='.DS_Store' \
         --exclude='.gitkeep' \
         "$CONTENT_DIR/mu-plugins"/ "$TARGET_DIR/wp-content/mu-plugins"/
+
+    rsync -a \
+        --exclude='.git/' \
+        --exclude='.gitignore' \
+        --exclude='.DS_Store' \
+        --exclude='.gitkeep' \
+        "$CONTENT_DIR/uploads"/ "$TARGET_DIR/wp-content/uploads"/
 else
     echo "rsync no esta disponible; se copiara sin eliminar archivos obsoletos." >&2
 
@@ -68,4 +74,5 @@ else
     /bin/cp -R "$CONTENT_DIR/themes/cad-theme"/. "$TARGET_DIR/wp-content/themes/CAD-theme"/
     /bin/cp -R "$CONTENT_DIR/plugins"/. "$TARGET_DIR/wp-content/plugins"/
     /bin/cp -R "$CONTENT_DIR/mu-plugins"/. "$TARGET_DIR/wp-content/mu-plugins"/
+    /bin/cp -R "$CONTENT_DIR/uploads"/. "$TARGET_DIR/wp-content/uploads"/
 fi
