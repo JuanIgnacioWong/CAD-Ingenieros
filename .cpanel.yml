@@ -1,5 +1,5 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH="$HOME/public_html/wp-content/themes/CAD-theme"
+    - export DEPLOYPATH="$HOME/public_html/CAD"
     - /bin/bash scripts/cpanel-deploy-theme.sh

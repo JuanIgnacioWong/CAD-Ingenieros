@@ -72,11 +72,11 @@ En WordPress:
 
 Este repo ya incluye `.cpanel.yml` para que cPanel despliegue solo el tema desde `wordpress/themes/cad-theme/` hacia:
 
-`$HOME/public_html/wp-content/themes/CAD-theme`
+`$HOME/public_html/CAD`
 
 Importante:
 
-- El destino usa `CAD-theme` con mayusculas porque el backup actual de WordPress tiene `template` y `stylesheet` configurados asi.
+- El destino actual de publicacion es `public_html/CAD`.
 - El deploy no publica `database/`, `uploads/`, `.env` ni archivos de Docker.
 - Si el servidor tiene `rsync`, el deploy elimina archivos obsoletos del tema. Si no lo tiene, hace copia simple y los archivos borrados en Git pueden quedar en produccion.
 

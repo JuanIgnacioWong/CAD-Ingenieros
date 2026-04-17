@@ -3,7 +3,7 @@
 set -euo pipefail
 
 SOURCE_DIR="wordpress/themes/cad-theme"
-TARGET_DIR="${DEPLOYPATH:-$HOME/public_html/wp-content/themes/CAD-theme}"
+TARGET_DIR="${DEPLOYPATH:-$HOME/public_html/CAD}"
 
 if [ ! -d "$SOURCE_DIR" ]; then
     echo "No existe el directorio de origen: $SOURCE_DIR" >&2
