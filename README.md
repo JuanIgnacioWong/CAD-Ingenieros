@@ -10,6 +10,7 @@ Este proyecto contiene una instalacion independiente de WordPress para `CAD Them
 
 - `.env.example`
 - `docker-compose.yml`
+- `wordpress-core/`
 - `database/backups/` (local, no versionado)
 - `wordpress/themes/cad-theme/`
 - `wordpress/plugins/`
@@ -17,6 +18,7 @@ Este proyecto contiene una instalacion independiente de WordPress para `CAD Them
 - `wordpress/uploads/` (local, no versionado)
 
 Nota: el tema local esta normalizado como `wordpress/themes/cad-theme`, y Docker lo monta dentro de WordPress como `wp-content/themes/CAD-theme` para mantener compatibilidad.
+El core versionado para despliegue vive en `wordpress-core/` y hoy corresponde a WordPress `6.9.1`.
 
 ## Variables de entorno
 
@@ -70,15 +72,18 @@ En WordPress:
 
 ## Git Deploy en cPanel
 
-Este repo ya incluye `.cpanel.yml` para que cPanel despliegue solo el tema desde `wordpress/themes/cad-theme/` hacia:
+Este repo ya incluye `.cpanel.yml` para que cPanel despliegue una instalacion completa de WordPress hacia:
 
 `$HOME/public_html/CAD`
 
 Importante:
 
-- El destino actual de publicacion es `public_html/CAD`.
-- El deploy no publica `database/`, `uploads/`, `.env` ni archivos de Docker.
-- Si el servidor tiene `rsync`, el deploy elimina archivos obsoletos del tema. Si no lo tiene, hace copia simple y los archivos borrados en Git pueden quedar en produccion.
+- El core de WordPress se versiona en `wordpress-core/`.
+- El contenido editable del proyecto se mantiene en `wordpress/` y se publica dentro de `wp-content/`.
+- `wp-config.php` no se versiona ni se despliega desde Git; debe existir en el servidor o crearse una vez en `public_html/CAD`.
+- El deploy preserva `wp-config.php`, `.htaccess`, `wp-content/uploads/`, `wp-content/languages/`, `wp-content/cache/` y `wp-content/upgrade/` del servidor.
+- El deploy no publica `database/`, `.env` ni archivos de Docker.
+- Si el servidor tiene `rsync`, el deploy elimina archivos obsoletos versionados. Si no lo tiene, hace copia simple y los archivos borrados en Git pueden quedar en produccion.
 
 ### Flujo recomendado
 
@@ -91,13 +96,21 @@ Importante:
 ### Archivos de deploy
 
 - `.cpanel.yml`: entrypoint que usa la ruta de cPanel y ejecuta el script.
-- `scripts/cpanel-deploy-theme.sh`: crea la carpeta destino y copia solo el tema.
+- `scripts/cpanel-deploy-wordpress.sh`: publica core + `wp-content` del proyecto a `public_html/CAD`.
+- `scripts/sync-wordpress-core-from-docker.sh`: refresca `wordpress-core/` desde el contenedor local.
 
 ### Prueba local del script
 
 ```bash
 cd /Users/ignaciowong/Documents/CAD-theme
-DEPLOYPATH=/tmp/CAD-theme bash scripts/cpanel-deploy-theme.sh
+DEPLOYPATH=/tmp/CAD bash scripts/cpanel-deploy-wordpress.sh
+```
+
+### Refrescar el core versionado
+
+```bash
+cd /Users/ignaciowong/Documents/CAD-theme
+bash scripts/sync-wordpress-core-from-docker.sh
 ```
 
 ### Git ignore base

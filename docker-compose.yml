@@ -17,7 +17,7 @@ services:
       retries: 10
 
   wordpress:
-    image: wordpress:php8.2-apache
+    image: wordpress:6.9.1-php8.2-apache
     restart: unless-stopped
     depends_on:
       db:
@@ -32,6 +32,8 @@ services:
       WORDPRESS_DEBUG: ${WORDPRESS_DEBUG}
     volumes:
       - wordpress_data:/var/www/html
+      - ./wordpress/plugins:/var/www/html/wp-content/plugins
+      - ./wordpress/mu-plugins:/var/www/html/wp-content/mu-plugins
       - ./wordpress/themes/cad-theme:/var/www/html/wp-content/themes/CAD-theme
 
 volumes:
