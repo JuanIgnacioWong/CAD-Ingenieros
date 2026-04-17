@@ -10,6 +10,7 @@ Este proyecto contiene una instalacion independiente de WordPress para `CAD Them
 
 - `.env.example`
 - `docker-compose.yml`
+- `wp-config.production.example.php`
 - `wordpress-core/`
 - `database/backups/` (local, no versionado)
 - `wordpress/themes/cad-theme/`
@@ -81,6 +82,7 @@ Importante:
 - El core de WordPress se versiona en `wordpress-core/`.
 - El contenido editable del proyecto se mantiene en `wordpress/` y se publica dentro de `wp-content/`.
 - `wp-config.php` no se versiona ni se despliega desde Git; debe existir en el servidor o crearse una vez en `public_html/CAD`.
+- El repo incluye `wp-config.production.example.php` como base editable para produccion.
 - El deploy preserva `wp-config.php`, `.htaccess`, `wp-content/uploads/`, `wp-content/languages/`, `wp-content/cache/` y `wp-content/upgrade/` del servidor.
 - El deploy no publica `database/`, `.env` ni archivos de Docker.
 - Si el servidor tiene `rsync`, el deploy elimina archivos obsoletos versionados. Si no lo tiene, hace copia simple y los archivos borrados en Git pueden quedar en produccion.
