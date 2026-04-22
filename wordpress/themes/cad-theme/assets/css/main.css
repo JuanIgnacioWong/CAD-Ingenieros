@@ -355,17 +355,22 @@ p {
 .cad-hero__content h1 {
     display: inline-flex;
     flex-direction: column;
-    gap: 0.25rem;
-    font-size: clamp(2.6rem, 8vw, 5.2rem);
-    line-height: 0.95;
+    gap: 0.12em;
 }
 
 .cad-hero__content h1 span {
-    font-weight: 400;
+    display: block;
+    font-size: clamp(2.8rem, 6vw, 5.4rem);
+    line-height: 0.95;
+    font-weight: 300;
 }
 
 .cad-hero__content h1 strong {
+    display: block;
+    font-size: clamp(1.8rem, 3.96vw, 3.56rem);
+    line-height: 1;
     font-weight: 700;
+    margin-top: 0.12em;
 }
 
 .cad-hero__video-btn {
@@ -489,10 +494,18 @@ p {
     grid-template-columns: minmax(0, 1fr);
 }
 
+.cad-business-carousel__viewport {
+    min-width: 0;
+}
+
+.cad-business-carousel__pagination {
+    display: none;
+}
+
 .cad-business-card {
     position: relative;
     min-height: 31rem;
-    border-radius: 1.2rem;
+    border-radius: 10px;
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -541,7 +554,10 @@ p {
 }
 
 .cad-business-card h3 {
-    font-size: clamp(1.9rem, 2.2vw, 2.5rem);
+    font-size: clamp(1.7rem, 1.9vw, 2.2rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    text-wrap: pretty;
 }
 
 .cad-business-card p {
@@ -572,66 +588,245 @@ p {
     background: rgba(239, 132, 50, 0.34);
 }
 
-.cad-indicators-grid {
+#indicadores .cad-indicators-layout {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: 1fr 1.2fr;
+    gap: 2rem;
+    align-items: stretch;
+}
+
+#indicadores .cad-indicators-left {
+    display: grid;
     gap: 1rem;
+    height: 100%;
 }
 
-.cad-indicators-grid.cad-indicators-grid--4 {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+#indicadores .cad-indicators-count-1 {
+    grid-template-rows: 1fr;
 }
 
-.cad-indicators-grid.cad-indicators-grid--3 {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.cad-indicators-grid.cad-indicators-grid--2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.cad-indicators-grid.cad-indicators-grid--1 {
-    grid-template-columns: minmax(0, 1fr);
-}
-
-.cad-indicator-card {
-    border-radius: 1.1rem;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: linear-gradient(145deg, #222a34 0%, #171d24 100%);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-    padding: 1.65rem 1.7rem;
-}
-
-.cad-indicator-card.is-no-period {
+#indicadores .cad-indicators-count-1 .cad-indicator-card {
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.cad-indicator-card__label {
-    color: #cfb9a5;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+#indicadores .cad-indicators-count-2 {
+    grid-template-rows: 1fr 1fr;
 }
 
-.cad-indicator-card__value {
-    margin-top: 0.25rem;
-    font-family: 'Archivo', sans-serif;
-    font-size: clamp(2.2rem, 5vw, 3.4rem);
+#indicadores .cad-indicators-count-3 {
+    grid-template-rows: 1fr 1fr 1fr;
+}
+
+#indicadores .cad-indicator-card {
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: linear-gradient(135deg, #FFFFFF 0%, #FFF7ED 58%, #FFFFFF 100%);
+    border: 1px solid rgba(239, 132, 46, 0.18);
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 18px 34px rgba(15, 23, 42, 0.08);
+    transition: all 0.3s ease;
+}
+
+#indicadores .cad-indicator-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 6px;
+    background: linear-gradient(180deg, #EF842E, #F7B06F);
+}
+
+#indicadores .cad-indicator-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 22px 40px rgba(15, 23, 42, 0.12);
+    border-color: rgba(239, 132, 46, 0.28);
+}
+
+#indicadores .cad-indicator-card.is-no-period {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#indicadores .cad-indicator-card__label {
+    width: 100%;
+    text-align: center;
+    color: #6B7280;
+    font-size: 0.82rem;
     font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.45rem;
+    opacity: 1;
 }
 
-.cad-indicator-card__period {
+#indicadores .cad-indicator-card__value {
+    width: 100%;
+    text-align: center;
+    color: #111827;
+    margin: 0.2rem 0 0.7rem;
+    font-family: 'Archivo', sans-serif;
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    font-weight: 800;
+    line-height: 1;
+    will-change: transform, opacity;
+    font-variant-numeric: tabular-nums;
+}
+
+#indicadores .cad-indicator-card__period {
+    margin-left: auto;
+    margin-right: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: fit-content;
-    margin-top: 0.6rem;
+    padding: 0.42rem 0.85rem;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.08);
-    color: #e8d7c6;
+    background: #EF842E;
+    color: #FFF7ED;
     font-size: 0.72rem;
-    padding: 0.35rem 0.62rem;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    border: 1px solid rgba(239, 132, 46, 0.22);
+    text-align: center;
+    min-height: 34px;
+}
+
+#indicadores .cad-indicators-right {
+    display: flex;
+    align-items: stretch;
+}
+
+#indicadores .cad-indicators-hero {
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 28px;
+    border-radius: 10px;
+    background: #EF842E;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+    position: relative;
+    overflow: hidden;
+}
+
+#indicadores .cad-indicators-hero::after {
+    content: "";
+    position: absolute;
+    right: -60px;
+    bottom: -60px;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    pointer-events: none;
+}
+
+#indicadores .cad-indicators-hero > * {
+    position: relative;
+    z-index: 1;
+}
+
+#indicadores .cad-indicators-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    width: max-content;
+    margin-bottom: 18px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.12);
+    color: #FFF7ED;
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+#indicadores .cad-indicators-hero .cad-title {
+    margin: 0 0 22px;
+    max-width: none;
+    font-family: 'Archivo', sans-serif;
+    font-size: clamp(2.2rem, 4vw, 3.4rem);
+    line-height: 1.02;
+    font-weight: 800;
+    color: #111827;
+    text-wrap: pretty;
+}
+
+#indicadores .cad-indicators-copy {
+    display: grid;
+    gap: 12px;
+    font-family: 'Barlow', sans-serif;
+}
+
+#indicadores .cad-indicators-copy ul,
+#indicadores .cad-indicators-copy ol {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+}
+
+#indicadores .cad-indicators-copy p,
+#indicadores .cad-indicators-copy li {
+    margin: 0;
+    list-style: none;
+    position: relative;
+    padding-left: 42px;
+    font-size: 1.1rem;
+    line-height: 1.35;
+    font-weight: 700;
+    color: #111827;
+}
+
+#indicadores .cad-indicators-copy p::before,
+#indicadores .cad-indicators-copy li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    top: 0.05rem;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: rgba(255, 247, 237, 0.92);
+    color: #EF842E;
+    font-size: 14px;
+    font-weight: 900;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+#indicadores .cad-indicators-footer {
+    position: relative;
+    z-index: 1;
+    margin-top: 28px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(17, 24, 39, 0.15);
+}
+
+#indicadores .cad-indicators-logo {
+    height: 44px;
+    width: auto;
+    display: block;
+    max-width: 180px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+    opacity: 0.95;
 }
 
 .cad-section--projects {
@@ -700,7 +895,7 @@ p {
     position: relative;
     flex: 0 0 calc((100% - (var(--cad-projects-columns) - 1) * var(--cad-projects-gap)) / var(--cad-projects-columns));
     aspect-ratio: 1 / 1;
-    border-radius: 1rem;
+    border-radius: 10px;
     overflow: hidden;
     display: flex;
     align-items: flex-end;
@@ -1094,6 +1289,163 @@ p {
     margin: 0;
 }
 
+.cad-business-area-dev {
+    background:
+        linear-gradient(180deg, rgba(248, 243, 238, 0.018) 0%, transparent 100%),
+        linear-gradient(180deg, var(--color-bg) 0%, rgba(15, 22, 32, 0.98) 100%);
+}
+
+.cad-business-area-dev__header {
+    margin-bottom: 1.9rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(248, 243, 238, 0.06);
+}
+
+.cad-business-area-dev__title {
+    color: var(--color-text);
+    font-size: clamp(1.95rem, 4vw, 3rem);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+}
+
+.cad-business-area-dev__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.42fr) minmax(0, 0.58fr);
+    gap: 1rem;
+    align-items: start;
+}
+
+.cad-business-area-dev__grid.is-single-column {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.cad-business-area-dev__card {
+    position: relative;
+    align-self: center;
+    overflow: hidden;
+    border: 1px solid rgba(47, 38, 31, 0.12);
+    border-radius: 10px;
+    background:
+        radial-gradient(circle at top right, rgba(47, 87, 215, 0.05) 0%, transparent 34%),
+        linear-gradient(180deg, rgba(239, 132, 46, 0.03) 0%, rgba(239, 132, 46, 0) 30%),
+        var(--color-light-bg);
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.18);
+}
+
+.cad-business-area-dev__card-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-accent) 0%, transparent 100%);
+}
+
+.cad-business-area-dev__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.2rem;
+    height: 3.2rem;
+    margin: 1.4rem 1.4rem 0;
+    border: 1px solid rgba(239, 132, 46, 0.14);
+    border-radius: 10px;
+    background: rgba(239, 132, 46, 0.08);
+    color: var(--color-link);
+}
+
+.cad-business-area-dev__icon .material-symbols-outlined {
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+.cad-business-area-dev__description {
+    display: grid;
+    gap: 0.9rem;
+    padding: 1.15rem 1.4rem 1.4rem;
+    color: var(--color-light-text);
+    font-family: 'Barlow', 'Segoe UI', sans-serif;
+    font-size: 1rem;
+    line-height: 1.75;
+}
+
+.cad-business-area-dev__description p {
+    margin: 0;
+}
+
+.cad-business-area-dev__list {
+    display: grid;
+    gap: 0.8rem;
+}
+
+.cad-business-area-dev__item {
+    padding: 1rem 1.05rem 1.05rem;
+    border: 1px solid rgba(248, 243, 238, 0.08);
+    border-radius: 8px;
+    background:
+        linear-gradient(180deg, rgba(248, 243, 238, 0.02) 0%, rgba(248, 243, 238, 0) 100%),
+        rgba(255, 255, 255, 0.02);
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.12);
+    transition: border-color 0.22s ease, background-color 0.22s ease, transform 0.22s ease;
+}
+
+.cad-business-area-dev__item:hover,
+.cad-business-area-dev__item:focus-within {
+    transform: translateY(-2px);
+    border-color: rgba(239, 132, 46, 0.28);
+    background-color: rgba(239, 132, 46, 0.04);
+}
+
+.cad-business-area-dev__item.is-featured {
+    border-color: rgba(239, 132, 46, 0.35);
+    background:
+        linear-gradient(180deg, rgba(239, 132, 46, 0.05) 0%, rgba(239, 132, 46, 0) 100%),
+        rgba(239, 132, 46, 0.06);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.cad-business-area-dev__item-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+}
+
+.cad-business-area-dev__dot {
+    flex: 0 0 auto;
+    width: 0.7rem;
+    height: 0.7rem;
+    margin-top: 0.4rem;
+    border-radius: 999px;
+    background: rgba(248, 243, 238, 0.28);
+    box-shadow: 0 0 0 5px rgba(248, 243, 238, 0.04);
+}
+
+.cad-business-area-dev__item:hover .cad-business-area-dev__dot,
+.cad-business-area-dev__item:focus-within .cad-business-area-dev__dot,
+.cad-business-area-dev__item.is-featured .cad-business-area-dev__dot {
+    background: var(--color-accent);
+    box-shadow: 0 0 10px rgba(239, 132, 46, 0.3);
+}
+
+.cad-business-area-dev__item-title {
+    color: var(--color-text);
+    font-size: clamp(1.12rem, 2vw, 1.45rem);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+}
+
+.cad-business-area-dev__item-body {
+    margin-top: 0.72rem;
+    padding-left: 1.5rem;
+    color: rgba(248, 243, 238, 0.68);
+    font-family: 'Barlow', 'Segoe UI', sans-serif;
+    line-height: 1.68;
+}
+
+.cad-business-area-dev__item-body p {
+    margin: 0;
+}
+
 .cad-business-area__section-heading {
     display: grid;
     gap: 0.85rem;
@@ -1439,6 +1791,10 @@ p {
 }
 
 @media (max-width: 900px) {
+    .cad-business-area-dev__grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
     .cad-business-area__structure-grid,
     .cad-business-area__cta {
         grid-template-columns: 1fr;
@@ -1461,6 +1817,31 @@ p {
 @media (max-width: 782px) {
     .cad-business-area__inner {
         width: min(calc(100% - 2rem), 1180px);
+    }
+
+    .cad-business-area-dev__header {
+        margin-bottom: 1.3rem;
+        padding-bottom: 0.8rem;
+    }
+
+    .cad-business-area-dev__description {
+        padding: 1rem 1rem 1.1rem;
+        font-size: 0.98rem;
+        line-height: 1.68;
+    }
+
+    .cad-business-area-dev__icon {
+        width: 3rem;
+        height: 3rem;
+        margin: 1rem 1rem 0;
+    }
+
+    .cad-business-area-dev__item {
+        padding: 0.95rem;
+    }
+
+    .cad-business-area-dev__item-body {
+        padding-left: 1.35rem;
     }
 
     .cad-business-area__hero,
@@ -1507,6 +1888,19 @@ p {
 }
 
 @media (max-width: 560px) {
+    .cad-business-area-dev__title {
+        font-size: clamp(1.75rem, 8vw, 2.2rem);
+    }
+
+    .cad-business-area-dev__item-top {
+        gap: 0.7rem;
+    }
+
+    .cad-business-area-dev__item-body {
+        margin-top: 0.65rem;
+        padding-left: 1.2rem;
+    }
+
     .cad-business-area__badge {
         width: 100%;
         border-radius: 1rem;
@@ -2492,6 +2886,14 @@ p {
         max-width: 12ch;
     }
 
+    .cad-hero__content h1 span {
+        font-size: clamp(2.4rem, 7vw, 4.4rem);
+    }
+
+    .cad-hero__content h1 strong {
+        font-size: clamp(1.62rem, 4.5vw, 2.88rem);
+    }
+
     .cad-page-nav {
         top: var(--mobile-bar-height);
         padding: 0.6rem 0.9rem;
@@ -2530,8 +2932,22 @@ p {
         min-height: 23rem;
     }
 
-    .cad-indicators-grid {
+    #indicadores .cad-indicators-layout {
         grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    #indicadores .cad-indicators-left {
+        grid-template-rows: none;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    #indicadores .cad-indicators-hero {
+        min-height: auto;
+    }
+
+    #indicadores .cad-indicators-hero .cad-title {
+        max-width: none;
     }
 
     .cad-projects-carousel {
@@ -2764,8 +3180,17 @@ p {
     }
 
     .cad-hero__content h1 {
-        font-size: clamp(2.1rem, 10vw, 3.6rem);
-        line-height: 0.98;
+        display: block;
+        max-width: none;
+        letter-spacing: -0.03em;
+    }
+
+    .cad-hero__content h1 span {
+        font-size: clamp(2rem, 9vw, 3rem);
+    }
+
+    .cad-hero__content h1 strong {
+        font-size: clamp(1.3rem, 6.3vw, 1.98rem);
     }
 
     .cad-hero__video-btn {
@@ -2823,18 +3248,123 @@ p {
         min-height: 2.6rem;
     }
 
-    .cad-indicator-card {
-        padding: 1.2rem 1.15rem;
-        border-radius: var(--cad-mobile-radius);
+    .cad-business-carousel {
+        display: grid;
+        gap: 0.8rem;
+        width: 100%;
     }
 
-    .cad-indicator-card__label {
+    .cad-business-carousel__viewport {
+        overflow: hidden;
+    }
+
+    .cad-business-grid {
+        display: flex;
+        gap: 0;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        scroll-padding-inline: 0;
+        padding: 0 0 0.35rem;
+        scrollbar-width: none;
+        touch-action: pan-x;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .cad-business-grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .cad-business-card {
+        flex: 0 0 100%;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        margin: 0;
+        scroll-snap-align: start;
+        opacity: 0.72;
+        transform: translateY(0.4rem) scale(0.985);
+        filter: saturate(0.88);
+        transition: transform 0.28s ease, opacity 0.28s ease, filter 0.28s ease;
+    }
+
+    .cad-business-card.is-active {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: none;
+    }
+
+    .cad-business-carousel__pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.45rem;
+    }
+
+    .cad-business-carousel__dot {
+        width: 0.55rem;
+        height: 0.55rem;
+        padding: 0;
+        border: 0;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.26);
+        transition: width 0.22s ease, background-color 0.22s ease, transform 0.22s ease;
+        cursor: pointer;
+    }
+
+    .cad-business-carousel__dot.is-active {
+        width: 1.45rem;
+        background: var(--color-accent);
+        transform: translateY(-1px);
+    }
+
+    #indicadores .cad-indicators-left {
+        grid-template-columns: 1fr;
+    }
+
+    #indicadores .cad-indicators-hero {
+        padding: 22px;
+        border-radius: 10px;
+    }
+
+    #indicadores .cad-indicator-card {
+        padding: 1.2rem;
+        border-radius: 10px;
+    }
+
+    #indicadores .cad-indicator-card__label {
         font-size: 0.8rem;
     }
 
-    .cad-indicator-card__value {
-        font-size: clamp(1.9rem, 11vw, 2.9rem);
+    #indicadores .cad-indicator-card__value {
+        font-size: clamp(2rem, 10vw, 3rem);
         overflow-wrap: anywhere;
+    }
+
+    #indicadores .cad-indicator-card::before {
+        width: 5px;
+    }
+
+    #indicadores .cad-indicators-hero .cad-title {
+        font-size: clamp(1.9rem, 9vw, 2.6rem);
+        margin-bottom: 18px;
+    }
+
+    #indicadores .cad-indicators-copy p,
+    #indicadores .cad-indicators-copy li {
+        font-size: 1rem;
+        padding-left: 38px;
+    }
+
+    #indicadores .cad-indicators-copy p::before,
+    #indicadores .cad-indicators-copy li::before {
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+    }
+
+    #indicadores .cad-indicators-logo {
+        height: 38px;
     }
 
     .cad-business-card__cta,

@@ -1285,12 +1285,13 @@ function cad_theme_business_area_meta_fields()
     return array(
         'badge_label'               => '_cad_business_badge_label',
         'badge_context'             => '_cad_business_badge_context',
-        'hero_title_suffix'         => '_cad_business_hero_title_suffix',
-        'hero_title_accent'         => '_cad_business_hero_title_accent',
         'meta_location'             => '_cad_business_meta_location',
         'meta_experience'           => '_cad_business_meta_experience',
         'meta_projects'             => '_cad_business_meta_projects',
         'description_label'         => '_cad_business_description_label',
+        'desc_ambitos_title'        => '_cad_business_desc_ambitos_title',
+        'desc_ambitos_description'  => '_cad_business_desc_ambitos_description',
+        'desc_ambitos_items'        => '_cad_business_desc_ambitos_items',
         'structure_label'           => '_cad_business_structure_label',
         'structure_title'           => '_cad_business_structure_title',
         'subareas'                  => '_cad_business_subareas',
@@ -1351,6 +1352,51 @@ function cad_theme_normalize_business_subareas($items)
     return $normalized;
 }
 
+function cad_theme_normalize_business_desc_ambitos_items($items)
+{
+    if (!is_array($items)) {
+        return array();
+    }
+
+    $normalized = array();
+
+    foreach ($items as $index => $item) {
+        if (!is_array($item)) {
+            continue;
+        }
+
+        $title = isset($item['title']) ? sanitize_text_field((string) $item['title']) : '';
+        $description = isset($item['description']) ? sanitize_textarea_field((string) $item['description']) : '';
+        $order = isset($item['order']) ? absint($item['order']) : (absint($index) + 1);
+
+        if ('' === $title && '' === $description) {
+            continue;
+        }
+
+        $normalized[] = array(
+            'title'       => $title,
+            'description' => $description,
+            'order'       => $order > 0 ? $order : (count($normalized) + 1),
+        );
+    }
+
+    usort(
+        $normalized,
+        static function ($left, $right) {
+            $left_order = isset($left['order']) ? (int) $left['order'] : 0;
+            $right_order = isset($right['order']) ? (int) $right['order'] : 0;
+
+            return $left_order <=> $right_order;
+        }
+    );
+
+    foreach ($normalized as $index => $item) {
+        $normalized[$index]['order'] = $index + 1;
+    }
+
+    return $normalized;
+}
+
 function cad_theme_normalize_business_related_projects($items)
 {
     if (!is_array($items)) {
@@ -1399,8 +1445,6 @@ function cad_theme_business_area_presets()
         'default' => array(
             'badge_label'       => __('Area de Negocio', 'cad-theme'),
             'badge_context'     => __('CAD Ingenieros', 'cad-theme'),
-            'hero_title_suffix' => __('Industrial', 'cad-theme'),
-            'hero_title_accent' => __('Especializada', 'cad-theme'),
             'meta_location'     => __('Cobertura nacional', 'cad-theme'),
             'meta_experience'   => __('18 anos de experiencia', 'cad-theme'),
             'meta_projects'     => __('126 proyectos desarrollados', 'cad-theme'),
@@ -1464,8 +1508,6 @@ function cad_theme_business_area_presets()
             'final_cta_secondary_url'   => $projects_url,
         ),
         'construccion' => array(
-            'hero_title_suffix' => __('Industrial', 'cad-theme'),
-            'hero_title_accent' => __('de precision', 'cad-theme'),
             'meta_location'     => __('Santiago y regiones', 'cad-theme'),
             'meta_experience'   => __('22 anos de experiencia', 'cad-theme'),
             'meta_projects'     => __('148 proyectos ejecutados', 'cad-theme'),
@@ -1518,8 +1560,6 @@ function cad_theme_business_area_presets()
             ),
         ),
         'inmobiliaria' => array(
-            'hero_title_suffix' => __('Desarrollo', 'cad-theme'),
-            'hero_title_accent' => __('estrategico', 'cad-theme'),
             'meta_location'     => __('Mercado metropolitano', 'cad-theme'),
             'meta_experience'   => __('16 anos de experiencia', 'cad-theme'),
             'meta_projects'     => __('94 activos desarrollados', 'cad-theme'),
@@ -1549,8 +1589,6 @@ function cad_theme_business_area_presets()
             ),
         ),
         'servicios' => array(
-            'hero_title_suffix' => __('Operacion', 'cad-theme'),
-            'hero_title_accent' => __('integral', 'cad-theme'),
             'meta_location'     => __('Cobertura multisede', 'cad-theme'),
             'meta_experience'   => __('19 anos de experiencia', 'cad-theme'),
             'meta_projects'     => __('210 contratos de servicio', 'cad-theme'),
@@ -1688,6 +1726,13 @@ function cad_theme_get_business_area_page_data($post_id)
         $subareas = cad_theme_normalize_business_subareas($preset['subareas']);
     }
     $data['subareas'] = $subareas;
+
+    $desc_ambitos_description = isset($data['desc_ambitos_description']) ? (string) $data['desc_ambitos_description'] : '';
+    $data['desc_ambitos_description'] = '' !== trim((string) wp_strip_all_tags($desc_ambitos_description))
+        ? wpautop(wp_kses_post($desc_ambitos_description))
+        : '';
+
+    $data['desc_ambitos_items'] = cad_theme_normalize_business_desc_ambitos_items($data['desc_ambitos_items']);
 
     $gallery_ids = get_post_meta($post_id, $fields['gallery_ids'], true);
     if (!is_array($gallery_ids)) {
@@ -1890,6 +1935,7 @@ function cad_theme_indicator_section_defaults()
 {
     return array(
         'title' => __('Indicadores', 'cad-theme'),
+        'content' => '',
     );
 }
 
@@ -2184,12 +2230,45 @@ function cad_theme_get_indicator_section_title()
     return isset($defaults['title']) ? (string) $defaults['title'] : '';
 }
 
-function cad_theme_get_indicator_cards()
+function cad_theme_get_indicator_section_content()
 {
     $posts = get_posts(
         array(
+            'post_type'      => 'cad_indicator_sec',
+            'posts_per_page' => 1,
+            'post_status'    => 'publish',
+        )
+    );
+
+    if (!empty($posts)) {
+        $content = (string) $posts[0]->post_content;
+        if ('' !== trim($content)) {
+            return $content;
+        }
+
+        return '';
+    }
+
+    $defaults = cad_theme_indicator_section_defaults();
+    $fallback = isset($defaults['content']) ? (string) $defaults['content'] : '';
+    if (!$fallback) {
+        return '';
+    }
+
+    return $fallback;
+}
+
+function cad_theme_get_indicator_cards($limit = 3)
+{
+    $limit = absint($limit);
+    if ($limit < 1) {
+        $limit = 3;
+    }
+
+    $posts = get_posts(
+        array(
             'post_type'      => 'cad_indicator',
-            'posts_per_page' => -1,
+            'posts_per_page' => $limit,
             'post_status'    => 'publish',
             'orderby'        => 'menu_order',
             'order'          => 'ASC',
@@ -2208,7 +2287,7 @@ function cad_theme_get_indicator_cards()
             );
         }
 
-        return $cards;
+        return array_slice($cards, 0, $limit);
     }
 
     $defaults = cad_theme_default_indicators();
@@ -2240,6 +2319,71 @@ function cad_theme_get_indicator_cards()
 
     return $cards;
 }
+
+function cad_theme_get_published_indicator_count()
+{
+    $counts = wp_count_posts('cad_indicator');
+    if (!$counts || !isset($counts->publish)) {
+        return 0;
+    }
+
+    return (int) $counts->publish;
+}
+
+function cad_theme_indicator_legacy_highlight_meta_keys()
+{
+    return array(
+        '_cad_indicator_highlight',
+        'cad_indicator_highlight',
+        '_cad_indicator_highlighted_word',
+        'cad_indicator_highlighted_word',
+        '_cad_indicator_featured_word',
+        'cad_indicator_featured_word',
+    );
+}
+
+function cad_theme_delete_indicator_legacy_highlight_meta($post_id)
+{
+    foreach (cad_theme_indicator_legacy_highlight_meta_keys() as $meta_key) {
+        delete_post_meta($post_id, $meta_key);
+    }
+}
+
+function cad_theme_is_indicator_admin_screen()
+{
+    if (!is_admin() || !function_exists('get_current_screen')) {
+        return false;
+    }
+
+    $screen = get_current_screen();
+    if (!$screen) {
+        return false;
+    }
+
+    return 'cad_indicator' === $screen->post_type;
+}
+
+function cad_theme_indicator_limit_notice_message()
+{
+    return __('ATENCION: Se recomienda un maximo de 3 indicadores. Un cuarto indicador puede romper el diseno visual de la seccion.', 'cad-theme');
+}
+
+function cad_theme_indicator_admin_notices()
+{
+    if (!cad_theme_is_indicator_admin_screen()) {
+        return;
+    }
+
+    if (cad_theme_get_published_indicator_count() <= 3) {
+        return;
+    }
+    ?>
+    <div class="notice notice-warning is-dismissible">
+        <p><strong><?php echo esc_html(cad_theme_indicator_limit_notice_message()); ?></strong></p>
+    </div>
+    <?php
+}
+add_action('admin_notices', 'cad_theme_indicator_admin_notices');
 
 function cad_theme_get_clients()
 {
@@ -2293,6 +2437,15 @@ function cad_theme_business_area_meta_boxes()
         'cad_business_area',
         'normal',
         'high'
+    );
+
+    add_meta_box(
+        'cad-business-area-desc-ambitos',
+        __('Descripcion y ambitos de desarrollo', 'cad-theme'),
+        'cad_theme_business_area_desc_ambitos_box',
+        'cad_business_area',
+        'normal',
+        'default'
     );
 
     add_meta_box(
@@ -2960,6 +3113,35 @@ function cad_theme_render_business_subarea_item($index, $item, $icon_options)
     <?php
 }
 
+function cad_theme_render_business_desc_ambitos_item($index, $item)
+{
+    $title = isset($item['title']) ? (string) $item['title'] : '';
+    $description = isset($item['description']) ? (string) $item['description'] : '';
+    $order = isset($item['order']) ? absint($item['order']) : 0;
+    if ($order < 1 && is_numeric((string) $index)) {
+        $order = absint((string) $index) + 1;
+    }
+    ?>
+    <div class="cad-repeatable__item" data-index="<?php echo esc_attr((string) $index); ?>">
+        <div class="cad-repeatable__row">
+            <div class="cad-repeatable__fields" style="width:120px; margin-bottom:0.75rem;">
+                <label for="cad-business-desc-ambitos-order-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('Orden', 'cad-theme'); ?></strong></label>
+                <input type="number" id="cad-business-desc-ambitos-order-<?php echo esc_attr((string) $index); ?>" name="cad_business_desc_ambitos_items[<?php echo esc_attr((string) $index); ?>][order]" class="widefat" min="1" step="1" value="<?php echo esc_attr($order ? (string) $order : ''); ?>">
+            </div>
+        </div>
+        <div class="cad-repeatable__fields">
+            <label for="cad-business-desc-ambitos-title-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('Titulo', 'cad-theme'); ?></strong></label>
+            <input type="text" id="cad-business-desc-ambitos-title-<?php echo esc_attr((string) $index); ?>" name="cad_business_desc_ambitos_items[<?php echo esc_attr((string) $index); ?>][title]" class="widefat" value="<?php echo esc_attr($title); ?>">
+        </div>
+        <div class="cad-repeatable__fields">
+            <label for="cad-business-desc-ambitos-description-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('Descripcion', 'cad-theme'); ?></strong></label>
+            <textarea id="cad-business-desc-ambitos-description-<?php echo esc_attr((string) $index); ?>" name="cad_business_desc_ambitos_items[<?php echo esc_attr((string) $index); ?>][description]" class="widefat" rows="3"><?php echo esc_textarea($description); ?></textarea>
+        </div>
+        <button type="button" class="button-link cad-repeatable__remove"><?php esc_html_e('Quitar', 'cad-theme'); ?></button>
+    </div>
+    <?php
+}
+
 function cad_theme_render_business_related_project_item($index, $item)
 {
     $name = isset($item['name']) ? (string) $item['name'] : '';
@@ -3011,8 +3193,6 @@ function cad_theme_business_area_content_box($post)
 
     $badge_label = (string) $get_field_value($fields['badge_label'], isset($preset['badge_label']) ? $preset['badge_label'] : '');
     $badge_context = (string) $get_field_value($fields['badge_context'], isset($preset['badge_context']) ? $preset['badge_context'] : '');
-    $hero_title_suffix = (string) $get_field_value($fields['hero_title_suffix'], isset($preset['hero_title_suffix']) ? $preset['hero_title_suffix'] : '');
-    $hero_title_accent = (string) $get_field_value($fields['hero_title_accent'], isset($preset['hero_title_accent']) ? $preset['hero_title_accent'] : '');
     $meta_location = (string) $get_field_value($fields['meta_location'], isset($preset['meta_location']) ? $preset['meta_location'] : '');
     $meta_experience = (string) $get_field_value($fields['meta_experience'], isset($preset['meta_experience']) ? $preset['meta_experience'] : '');
     $meta_projects = (string) $get_field_value($fields['meta_projects'], isset($preset['meta_projects']) ? $preset['meta_projects'] : '');
@@ -3063,14 +3243,6 @@ function cad_theme_business_area_content_box($post)
             <p>
                 <label for="cad-business-badge-context"><strong><?php esc_html_e('Contexto / empresa', 'cad-theme'); ?></strong></label><br>
                 <input type="text" id="cad-business-badge-context" name="cad_business_badge_context" class="widefat" value="<?php echo esc_attr($badge_context); ?>" placeholder="<?php esc_attr_e('CAD Ingenieros', 'cad-theme'); ?>">
-            </p>
-            <p>
-                <label for="cad-business-hero-title-suffix"><strong><?php esc_html_e('Segunda linea base', 'cad-theme'); ?></strong></label><br>
-                <input type="text" id="cad-business-hero-title-suffix" name="cad_business_hero_title_suffix" class="widefat" value="<?php echo esc_attr($hero_title_suffix); ?>" placeholder="<?php esc_attr_e('Industrial', 'cad-theme'); ?>">
-            </p>
-            <p>
-                <label for="cad-business-hero-title-accent"><strong><?php esc_html_e('Palabra destacada', 'cad-theme'); ?></strong></label><br>
-                <input type="text" id="cad-business-hero-title-accent" name="cad_business_hero_title_accent" class="widefat" value="<?php echo esc_attr($hero_title_accent); ?>" placeholder="<?php esc_attr_e('Especializada', 'cad-theme'); ?>">
             </p>
             <div class="cad-repeatable__row">
                 <div class="cad-repeatable__fields" style="flex:1;">
@@ -3203,6 +3375,70 @@ function cad_theme_business_area_content_box($post)
     <?php
 }
 
+function cad_theme_business_area_desc_ambitos_box($post)
+{
+    $fields = cad_theme_business_area_meta_fields();
+    wp_nonce_field('cad_business_area_meta', 'cad_business_area_meta_nonce');
+
+    $title = metadata_exists('post', $post->ID, $fields['desc_ambitos_title'])
+        ? (string) get_post_meta($post->ID, $fields['desc_ambitos_title'], true)
+        : __('Descripcion y Ambitos', 'cad-theme');
+
+    $description = metadata_exists('post', $post->ID, $fields['desc_ambitos_description'])
+        ? (string) get_post_meta($post->ID, $fields['desc_ambitos_description'], true)
+        : '';
+
+    $items = metadata_exists('post', $post->ID, $fields['desc_ambitos_items'])
+        ? get_post_meta($post->ID, $fields['desc_ambitos_items'], true)
+        : array();
+
+    $items = cad_theme_normalize_business_desc_ambitos_items($items);
+    ?>
+    <div class="cad-project-meta">
+        <div class="cad-project-meta__section">
+            <p>
+                <label for="cad-business-desc-ambitos-title"><strong><?php esc_html_e('Titulo de seccion', 'cad-theme'); ?></strong></label><br>
+                <input type="text" id="cad-business-desc-ambitos-title" name="cad_business_desc_ambitos_title" class="widefat" value="<?php echo esc_attr($title); ?>" placeholder="<?php esc_attr_e('Descripcion y Ambitos', 'cad-theme'); ?>">
+            </p>
+            <p class="description"><?php esc_html_e('Si lo dejas vacio, la seccion se muestra sin encabezado.', 'cad-theme'); ?></p>
+        </div>
+
+        <div class="cad-project-meta__section">
+            <h4><?php esc_html_e('Descripcion izquierda', 'cad-theme'); ?></h4>
+            <p class="description"><?php esc_html_e('Usa parrafos breves para la card principal. El contenido se muestra con formato enriquecido en frontend.', 'cad-theme'); ?></p>
+            <?php
+            wp_editor(
+                $description,
+                'cad_business_desc_ambitos_editor',
+                array(
+                    'textarea_name' => 'cad_business_desc_ambitos_description',
+                    'textarea_rows' => 8,
+                    'media_buttons' => false,
+                    'teeny'         => true,
+                )
+            );
+            ?>
+        </div>
+
+        <div class="cad-project-meta__section">
+            <h4><?php esc_html_e('Ambitos de desarrollo', 'cad-theme'); ?></h4>
+            <p class="description"><?php esc_html_e('Cada item admite titulo, descripcion y orden manual. El frontend muestra todos los ambitos visibles al cargar.', 'cad-theme'); ?></p>
+            <div class="cad-repeatable" data-repeatable="business-desc-ambitos">
+                <div class="cad-repeatable__list">
+                    <?php foreach ($items as $index => $item) : ?>
+                        <?php cad_theme_render_business_desc_ambitos_item($index, $item); ?>
+                    <?php endforeach; ?>
+                </div>
+                <button type="button" class="button cad-repeatable__add" data-repeatable-add="business-desc-ambitos"><?php esc_html_e('Agregar ambito', 'cad-theme'); ?></button>
+                <template class="cad-repeatable__template" data-repeatable-template="business-desc-ambitos">
+                    <?php cad_theme_render_business_desc_ambitos_item('__INDEX__', array()); ?>
+                </template>
+            </div>
+        </div>
+    </div>
+    <?php
+}
+
 function cad_theme_business_area_settings_box($post)
 {
     wp_nonce_field('cad_business_area_meta', 'cad_business_area_meta_nonce');
@@ -3244,13 +3480,15 @@ function cad_theme_business_area_style_box($post)
 
 function cad_theme_save_business_area_meta($post_id)
 {
-    if (!isset($_POST['cad_business_area_meta_nonce']) || !wp_verify_nonce($_POST['cad_business_area_meta_nonce'], 'cad_business_area_meta')) {
+    if (!isset($_POST['cad_business_area_meta_nonce'])) {
         return;
     }
 
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
         return;
     }
+
+    check_admin_referer('cad_business_area_meta', 'cad_business_area_meta_nonce');
 
     if (!current_user_can('edit_post', $post_id)) {
         return;
@@ -3283,8 +3521,6 @@ function cad_theme_save_business_area_meta($post_id)
     $text_fields = array(
         'badge_label'               => 'cad_business_badge_label',
         'badge_context'             => 'cad_business_badge_context',
-        'hero_title_suffix'         => 'cad_business_hero_title_suffix',
-        'hero_title_accent'         => 'cad_business_hero_title_accent',
         'meta_location'             => 'cad_business_meta_location',
         'meta_experience'           => 'cad_business_meta_experience',
         'meta_projects'             => 'cad_business_meta_projects',
@@ -3308,6 +3544,9 @@ function cad_theme_save_business_area_meta($post_id)
         }
     }
 
+    $desc_ambitos_title = isset($_POST['cad_business_desc_ambitos_title']) ? sanitize_text_field(wp_unslash($_POST['cad_business_desc_ambitos_title'])) : '';
+    update_post_meta($post_id, $fields['desc_ambitos_title'], $desc_ambitos_title);
+
     $textarea_fields = array(
         'final_cta_text' => 'cad_business_final_cta_text',
     );
@@ -3319,6 +3558,13 @@ function cad_theme_save_business_area_meta($post_id)
         } else {
             delete_post_meta($post_id, $fields[$field_key]);
         }
+    }
+
+    $desc_ambitos_description = isset($_POST['cad_business_desc_ambitos_description']) ? wp_kses_post(wp_unslash($_POST['cad_business_desc_ambitos_description'])) : '';
+    if ('' !== trim((string) wp_strip_all_tags($desc_ambitos_description))) {
+        update_post_meta($post_id, $fields['desc_ambitos_description'], $desc_ambitos_description);
+    } else {
+        delete_post_meta($post_id, $fields['desc_ambitos_description']);
     }
 
     $url_fields = array(
@@ -3343,6 +3589,16 @@ function cad_theme_save_business_area_meta($post_id)
         update_post_meta($post_id, $fields['subareas'], $subareas);
     } else {
         delete_post_meta($post_id, $fields['subareas']);
+    }
+
+    $desc_ambitos_items = array();
+    if (isset($_POST['cad_business_desc_ambitos_items']) && is_array($_POST['cad_business_desc_ambitos_items'])) {
+        $desc_ambitos_items = cad_theme_normalize_business_desc_ambitos_items(wp_unslash($_POST['cad_business_desc_ambitos_items']));
+    }
+    if (!empty($desc_ambitos_items)) {
+        update_post_meta($post_id, $fields['desc_ambitos_items'], $desc_ambitos_items);
+    } else {
+        delete_post_meta($post_id, $fields['desc_ambitos_items']);
     }
 
     $related_projects = array();
@@ -3410,6 +3666,8 @@ function cad_theme_save_indicator_meta($post_id)
     } else {
         delete_post_meta($post_id, '_cad_indicator_period');
     }
+
+    cad_theme_delete_indicator_legacy_highlight_meta($post_id);
 }
 add_action('save_post_cad_indicator', 'cad_theme_save_indicator_meta');
 
@@ -4934,6 +5192,29 @@ function cad_theme_seed_indicators_if_missing()
 
     update_option('cad_indicators_seeded', 1);
 }
+
+function cad_theme_cleanup_indicator_legacy_highlight_meta()
+{
+    if (get_option('cad_indicator_highlight_meta_cleaned')) {
+        return;
+    }
+
+    $indicator_ids = get_posts(
+        array(
+            'post_type'      => 'cad_indicator',
+            'posts_per_page' => -1,
+            'post_status'    => array('publish', 'draft', 'pending', 'private'),
+            'fields'         => 'ids',
+        )
+    );
+
+    foreach ($indicator_ids as $indicator_id) {
+        cad_theme_delete_indicator_legacy_highlight_meta((int) $indicator_id);
+    }
+
+    update_option('cad_indicator_highlight_meta_cleaned', 1);
+}
+add_action('admin_init', 'cad_theme_cleanup_indicator_legacy_highlight_meta');
 
 function cad_theme_seed_indicators()
 {

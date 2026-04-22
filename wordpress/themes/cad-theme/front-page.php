@@ -9,9 +9,25 @@ if ($business_count > 0 && $business_count < 4) {
 }
 $indicator_cards = cad_theme_get_indicator_cards();
 $indicator_count = is_array($indicator_cards) ? count($indicator_cards) : 0;
-$indicator_grid_class = 'cad-indicators-grid';
-if ($indicator_count > 0 && $indicator_count < 5) {
-    $indicator_grid_class .= ' cad-indicators-grid--' . $indicator_count;
+$indicator_layout_count = max(1, min(3, $indicator_count));
+$indicator_left_class = 'cad-indicators-left cad-indicators-count-' . $indicator_layout_count;
+$indicator_section_title = cad_theme_get_indicator_section_title();
+$indicator_section_content = cad_theme_get_indicator_section_content();
+$indicator_section_content = preg_replace('/(<(?:li|p)[^>]*>\s*)(?:&#x2714;|&#10004;|&#10003;|✔|✓|•)\s*/u', '$1', (string) $indicator_section_content);
+$indicator_logo_id = (int) get_theme_mod('custom_logo');
+$indicator_logo_html = '';
+if ($indicator_logo_id) {
+    $indicator_logo_html = wp_get_attachment_image(
+        $indicator_logo_id,
+        'full',
+        false,
+        array(
+            'class'    => 'cad-indicators-logo',
+            'loading'  => 'lazy',
+            'decoding' => 'async',
+            'alt'      => __('CAD Ingenieros', 'cad-theme'),
+        )
+    );
 }
 $clients = cad_theme_get_clients();
 $projects_query = new WP_Query(
@@ -107,46 +123,110 @@ $hero_class = $has_video ? 'cad-hero' : 'cad-hero is-video-paused';
                 <div class="cad-section__lead"><?php echo $business_section_content; ?></div>
             <?php endif; ?>
 
-            <div class="<?php echo esc_attr($business_grid_class); ?>">
-                <?php foreach ($business_cards as $business_card) : ?>
-                    <article class="cad-business-card <?php echo esc_attr((string) $business_card['tone']); ?>">
-                        <div class="cad-business-card__media" style="background-image:url('<?php echo esc_url((string) $business_card['image']); ?>');"></div>
-                        <div class="cad-business-card__overlay"></div>
-                        <div class="cad-business-card__content">
-                            <h3><?php echo esc_html((string) $business_card['title']); ?></h3>
-                            <?php if (!empty($business_card['description'])) : ?>
-                                <?php echo $business_card['description']; ?>
-                            <?php endif; ?>
-                            <?php if (!empty($business_card['cta'])) : ?>
-                                <a class="cad-business-card__cta" href="<?php echo esc_url((string) $business_card['url']); ?>"><?php echo esc_html((string) $business_card['cta']); ?></a>
-                            <?php endif; ?>
-                        </div>
-                    </article>
-                <?php endforeach; ?>
+            <div class="cad-business-carousel" data-business-carousel>
+                <div class="cad-business-carousel__viewport">
+                    <div class="<?php echo esc_attr($business_grid_class); ?>" data-business-track>
+                        <?php foreach ($business_cards as $business_card) : ?>
+                            <article class="cad-business-card <?php echo esc_attr((string) $business_card['tone']); ?>">
+                                <div class="cad-business-card__media" style="background-image:url('<?php echo esc_url((string) $business_card['image']); ?>');"></div>
+                                <div class="cad-business-card__overlay"></div>
+                                <div class="cad-business-card__content">
+                                    <h3><?php echo esc_html((string) $business_card['title']); ?></h3>
+                                    <?php if (!empty($business_card['description'])) : ?>
+                                        <?php echo $business_card['description']; ?>
+                                    <?php endif; ?>
+                                    <?php if (!empty($business_card['cta'])) : ?>
+                                        <a class="cad-business-card__cta" href="<?php echo esc_url((string) $business_card['url']); ?>"><?php echo esc_html((string) $business_card['cta']); ?></a>
+                                    <?php endif; ?>
+                                </div>
+                            </article>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+                <?php if ($business_count > 1) : ?>
+                    <div class="cad-business-carousel__pagination" data-business-pagination></div>
+                <?php endif; ?>
             </div>
         </div>
     </section>
 
-    <section id="indicadores" class="cad-section">
+    <section id="indicadores" class="cad-section cad-indicators-split">
         <div class="cad-shell-wide">
-            <h2 class="cad-title"><?php echo esc_html(cad_theme_get_indicator_section_title()); ?></h2>
-            <div class="<?php echo esc_attr($indicator_grid_class); ?>">
-                <?php foreach ($indicator_cards as $indicator_card) : ?>
-                    <?php
-                    $indicator_period = isset($indicator_card['period']) ? trim((string) $indicator_card['period']) : '';
-                    $indicator_card_class = 'cad-indicator-card';
-                    if ('' === $indicator_period) {
-                        $indicator_card_class .= ' is-no-period';
-                    }
-                    ?>
-                    <article class="<?php echo esc_attr($indicator_card_class); ?>">
-                        <p class="cad-indicator-card__label"><?php echo esc_html((string) $indicator_card['label']); ?></p>
-                        <p class="cad-indicator-card__value"><?php echo esc_html((string) $indicator_card['value']); ?></p>
-                        <?php if ('' !== $indicator_period) : ?>
-                            <p class="cad-indicator-card__period"><?php echo esc_html($indicator_period); ?></p>
+            <div class="cad-indicators-layout">
+                <div class="<?php echo esc_attr($indicator_left_class); ?>">
+                    <?php foreach ($indicator_cards as $indicator_card) : ?>
+                        <?php
+                        $indicator_period = isset($indicator_card['period']) ? trim((string) $indicator_card['period']) : '';
+                        $indicator_card_class = 'cad-indicator-card';
+                        $indicator_value = isset($indicator_card['value']) ? (string) $indicator_card['value'] : '';
+                        $indicator_count_value = '';
+                        $indicator_count_prefix = '';
+                        $indicator_count_suffix = '';
+                        $indicator_count_separator = '';
+                        if ('' === $indicator_period) {
+                            $indicator_card_class .= ' is-no-period';
+                        }
+
+                        if (preg_match('/^(.*?)(\d[\d\.,]*)(.*)$/u', $indicator_value, $indicator_matches)) {
+                            $indicator_count_prefix = trim((string) $indicator_matches[1]);
+                            $indicator_count_suffix = trim((string) $indicator_matches[3]);
+                            $indicator_numeric_token = (string) $indicator_matches[2];
+                            $indicator_digits_only = preg_replace('/\D+/', '', $indicator_numeric_token);
+
+                            if (is_string($indicator_digits_only) && '' !== $indicator_digits_only) {
+                                $indicator_count_value = $indicator_digits_only;
+
+                                if (false !== strpos($indicator_numeric_token, '.')) {
+                                    $indicator_count_separator = '.';
+                                } elseif (false !== strpos($indicator_numeric_token, ',')) {
+                                    $indicator_count_separator = ',';
+                                }
+                            }
+                        }
+                        ?>
+                        <article class="<?php echo esc_attr($indicator_card_class); ?>">
+                            <p class="cad-indicator-card__label"><?php echo esc_html((string) $indicator_card['label']); ?></p>
+                            <p
+                                class="cad-indicator-card__value"
+                                <?php if ('' !== $indicator_count_value) : ?>
+                                    data-count="<?php echo esc_attr($indicator_count_value); ?>"
+                                    <?php if ('' !== $indicator_count_prefix) : ?>
+                                        data-prefix="<?php echo esc_attr($indicator_count_prefix); ?>"
+                                    <?php endif; ?>
+                                    <?php if ('' !== $indicator_count_suffix) : ?>
+                                        data-suffix="<?php echo esc_attr($indicator_count_suffix); ?>"
+                                    <?php endif; ?>
+                                    <?php if ('' !== $indicator_count_separator) : ?>
+                                        data-separator="<?php echo esc_attr($indicator_count_separator); ?>"
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                            ><?php echo esc_html($indicator_value); ?></p>
+                            <?php if ('' !== $indicator_period) : ?>
+                                <p class="cad-indicator-card__period"><?php echo esc_html($indicator_period); ?></p>
+                            <?php endif; ?>
+                        </article>
+                    <?php endforeach; ?>
+                </div>
+
+                <div class="cad-indicators-right">
+                    <div class="cad-indicators-hero">
+                        <div>
+                            <div class="cad-indicators-eyebrow"><?php esc_html_e('CAD Ingenieros', 'cad-theme'); ?></div>
+                            <h2 class="cad-title"><?php echo esc_html($indicator_section_title); ?></h2>
+                            <?php if ('' !== trim(wp_strip_all_tags($indicator_section_content))) : ?>
+                                <div class="cad-indicators-copy">
+                                    <?php echo wp_kses_post(wpautop($indicator_section_content)); ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <?php if ($indicator_logo_html) : ?>
+                            <div class="cad-indicators-footer">
+                                <?php echo $indicator_logo_html; ?>
+                            </div>
                         <?php endif; ?>
-                    </article>
-                <?php endforeach; ?>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

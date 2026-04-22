@@ -242,6 +242,95 @@
 
     initClientsCarousel();
 
+    function initBusinessCarousel() {
+        var carousels = document.querySelectorAll('[data-business-carousel]');
+        if (!carousels.length) {
+            return;
+        }
+
+        var mobileQuery = window.matchMedia('(max-width: 782px)');
+
+        carousels.forEach(function (carousel) {
+            var track = carousel.querySelector('[data-business-track]');
+            var pagination = carousel.querySelector('[data-business-pagination]');
+            var slides = track ? Array.prototype.slice.call(track.querySelectorAll('.cad-business-card')) : [];
+            var dots = [];
+
+            if (!track || !slides.length) {
+                return;
+            }
+
+            function getScrollStep() {
+                var card = slides[0];
+                if (!card) {
+                    return track.clientWidth;
+                }
+
+                var styles = window.getComputedStyle(track);
+                var gapValue = styles.columnGap || styles.gap || '0';
+                var gap = parseFloat(gapValue) || 0;
+                return card.getBoundingClientRect().width + gap;
+            }
+
+            function getActiveIndex() {
+                var step = getScrollStep();
+                if (!step) {
+                    return 0;
+                }
+
+                return Math.min(Math.max(Math.round(track.scrollLeft / step), 0), slides.length - 1);
+            }
+
+            function setActiveSlide(index) {
+                slides.forEach(function (slide, slideIndex) {
+                    slide.classList.toggle('is-active', !mobileQuery.matches || slideIndex === index);
+                });
+
+                dots.forEach(function (dot, dotIndex) {
+                    var isActive = dotIndex === index;
+                    dot.classList.toggle('is-active', isActive);
+                    dot.setAttribute('aria-current', isActive ? 'true' : 'false');
+                });
+            }
+
+            function updateState() {
+                setActiveSlide(getActiveIndex());
+            }
+
+            function scrollToIndex(index) {
+                track.scrollTo({ left: getScrollStep() * index, behavior: 'smooth' });
+            }
+
+            if (pagination && slides.length > 1) {
+                slides.forEach(function (_, index) {
+                    var dot = document.createElement('button');
+                    dot.type = 'button';
+                    dot.className = 'cad-business-carousel__dot';
+                    dot.setAttribute('aria-label', 'Ver tarjeta ' + String(index + 1));
+                    dot.setAttribute('aria-current', 'false');
+                    dot.addEventListener('click', function () {
+                        scrollToIndex(index);
+                    });
+                    pagination.appendChild(dot);
+                    dots.push(dot);
+                });
+            }
+
+            track.addEventListener('scroll', updateState, { passive: true });
+            window.addEventListener('resize', updateState);
+            if (typeof mobileQuery.addEventListener === 'function') {
+                mobileQuery.addEventListener('change', updateState);
+            } else if (typeof mobileQuery.addListener === 'function') {
+                mobileQuery.addListener(updateState);
+            }
+
+            setActiveSlide(0);
+            updateState();
+        });
+    }
+
+    initBusinessCarousel();
+
     function initProjectGallery() {
         var galleries = document.querySelectorAll('[data-project-gallery-grid]');
         if (!galleries.length) {
@@ -306,6 +395,114 @@
     }
 
     initProjectGallery();
+
+    function initIndicatorCounters() {
+        var section = document.querySelector('#indicadores');
+        if (!section) {
+            return;
+        }
+
+        var values = Array.prototype.slice.call(section.querySelectorAll('.cad-indicator-card__value[data-count]'));
+        if (!values.length) {
+            return;
+        }
+
+        function formatCount(value, separator) {
+            var count = Math.max(0, Math.round(value));
+            if (!separator) {
+                return String(count);
+            }
+
+            return String(count).replace(/\B(?=(\d{3})+(?!\d))/g, separator);
+        }
+
+        function buildValueText(element, value) {
+            var prefix = element.getAttribute('data-prefix') || '';
+            var suffix = element.getAttribute('data-suffix') || '';
+            var separator = element.getAttribute('data-separator') || '';
+            var numeric = formatCount(value, separator);
+            var suffixSpacer = suffix && !/^[\s\+\-%]/.test(suffix) ? ' ' : '';
+            var prefixSpacer = prefix && /[A-Za-z0-9ÁÉÍÓÚÜÑáéíóúüñ]$/.test(prefix) ? ' ' : '';
+
+            if (!prefix) {
+                return numeric + suffixSpacer + suffix;
+            }
+
+            return prefix + prefixSpacer + numeric + suffixSpacer + suffix;
+        }
+
+        function setFinalValues() {
+            values.forEach(function (element) {
+                var target = parseInt(element.getAttribute('data-count'), 10);
+                if (!Number.isFinite(target)) {
+                    return;
+                }
+
+                element.textContent = buildValueText(element, target);
+            });
+        }
+
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            setFinalValues();
+            return;
+        }
+
+        function animateCounter(element) {
+            var target = parseInt(element.getAttribute('data-count'), 10);
+            if (!Number.isFinite(target)) {
+                return;
+            }
+
+            var duration = 1500;
+            var startTime = null;
+
+            function step(timestamp) {
+                if (null === startTime) {
+                    startTime = timestamp;
+                }
+
+                var progress = Math.min((timestamp - startTime) / duration, 1);
+                var eased = 1 - Math.pow(1 - progress, 3);
+                var current = Math.round(target * eased);
+                element.textContent = buildValueText(element, current);
+
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            }
+
+            element.textContent = buildValueText(element, 0);
+            window.requestAnimationFrame(step);
+        }
+
+        if (!('IntersectionObserver' in window)) {
+            setFinalValues();
+            return;
+        }
+
+        var hasAnimated = false;
+        var observer = new IntersectionObserver(
+            function (entries) {
+                entries.forEach(function (entry) {
+                    if (!entry.isIntersecting || hasAnimated) {
+                        return;
+                    }
+
+                    hasAnimated = true;
+                    values.forEach(animateCounter);
+                    observer.disconnect();
+                });
+            },
+            {
+                threshold: 0.35,
+                rootMargin: '0px 0px -10% 0px',
+            }
+        );
+
+        observer.observe(section);
+    }
+
+    initIndicatorCounters();
 
     var sectionNav = document.querySelector('[data-section-nav]');
     if (!sectionNav) {

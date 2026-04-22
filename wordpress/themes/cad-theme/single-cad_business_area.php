@@ -6,17 +6,14 @@ get_header();
     <?php while (have_posts()) : the_post(); ?>
         <?php
         $business_area_data = cad_theme_get_business_area_page_data(get_the_ID());
-        $hero_line_two = trim(
-            implode(
-                ' ',
-                array_filter(
-                    array(
-                        isset($business_area_data['hero_title_suffix']) ? (string) $business_area_data['hero_title_suffix'] : '',
-                        isset($business_area_data['hero_title_accent']) ? (string) $business_area_data['hero_title_accent'] : '',
-                    )
-                )
-            )
-        );
+        $desc_ambitos_title = trim((string) $business_area_data['desc_ambitos_title']);
+        $desc_ambitos_description = isset($business_area_data['desc_ambitos_description']) ? (string) $business_area_data['desc_ambitos_description'] : '';
+        $desc_ambitos_items = isset($business_area_data['desc_ambitos_items']) && is_array($business_area_data['desc_ambitos_items'])
+            ? $business_area_data['desc_ambitos_items']
+            : array();
+        $has_desc_ambitos_description = '' !== trim((string) wp_strip_all_tags($desc_ambitos_description));
+        $has_desc_ambitos_items = !empty($desc_ambitos_items);
+        $has_desc_ambitos_section = $has_desc_ambitos_description || $has_desc_ambitos_items;
         ?>
         <article <?php post_class('cad-business-area'); ?>>
             <header class="cad-business-area__hero">
@@ -40,17 +37,6 @@ get_header();
 
                     <h1 class="cad-business-area__title">
                         <span><?php the_title(); ?></span>
-                        <span>
-                            <?php if (!empty($business_area_data['hero_title_suffix'])) : ?>
-                                <span class="cad-business-area__title-base"><?php echo esc_html((string) $business_area_data['hero_title_suffix']); ?></span>
-                            <?php endif; ?>
-                            <?php if (!empty($business_area_data['hero_title_accent'])) : ?>
-                                <em><?php echo esc_html((string) $business_area_data['hero_title_accent']); ?></em>
-                            <?php endif; ?>
-                            <?php if ('' === $hero_line_two) : ?>
-                                <em><?php esc_html_e('Especializada', 'cad-theme'); ?></em>
-                            <?php endif; ?>
-                        </span>
                     </h1>
 
                     <ul class="cad-business-area__meta" aria-label="<?php esc_attr_e('Resumen del area', 'cad-theme'); ?>">
@@ -79,6 +65,55 @@ get_header();
                     </div>
                 </div>
             </section>
+
+            <?php if ($has_desc_ambitos_section) : ?>
+                <section class="cad-business-area__section cad-business-area-dev">
+                    <div class="cad-business-area__inner">
+                        <?php if ('' !== $desc_ambitos_title) : ?>
+                            <header class="cad-business-area-dev__header">
+                                <h2 class="cad-business-area-dev__title"><?php echo esc_html($desc_ambitos_title); ?></h2>
+                            </header>
+                        <?php endif; ?>
+
+                        <div class="cad-business-area-dev__grid<?php echo (!$has_desc_ambitos_description || !$has_desc_ambitos_items) ? ' is-single-column' : ''; ?>">
+                            <?php if ($has_desc_ambitos_description) : ?>
+                                <article class="cad-business-area-dev__card">
+                                    <div class="cad-business-area-dev__card-line" aria-hidden="true"></div>
+                                    <div class="cad-business-area-dev__icon" aria-hidden="true">
+                                        <span class="material-symbols-outlined">description</span>
+                                    </div>
+                                    <div class="cad-business-area-dev__description">
+                                        <?php echo wp_kses_post($desc_ambitos_description); ?>
+                                    </div>
+                                </article>
+                            <?php endif; ?>
+
+                            <?php if ($has_desc_ambitos_items) : ?>
+                                <div class="cad-business-area-dev__list">
+                                    <?php foreach ($desc_ambitos_items as $index => $item) : ?>
+                                        <?php
+                                        $item_title = isset($item['title']) ? (string) $item['title'] : '';
+                                        $item_description = isset($item['description']) ? (string) $item['description'] : '';
+                                        ?>
+                                        <article class="cad-business-area-dev__item<?php echo 0 === $index ? ' is-featured' : ''; ?>">
+                                            <div class="cad-business-area-dev__item-top">
+                                                <span class="cad-business-area-dev__dot" aria-hidden="true"></span>
+                                                <h3 class="cad-business-area-dev__item-title"><?php echo esc_html($item_title); ?></h3>
+                                            </div>
+
+                                            <?php if ('' !== $item_description) : ?>
+                                                <div class="cad-business-area-dev__item-body">
+                                                    <?php echo wp_kses_post(wpautop(esc_html($item_description))); ?>
+                                                </div>
+                                            <?php endif; ?>
+                                        </article>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </section>
+            <?php endif; ?>
 
             <section class="cad-business-area__section">
                 <div class="cad-business-area__inner">
