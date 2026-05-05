@@ -4,6 +4,23 @@
     var iconPickerActiveField = null;
     var iconPickerActiveTrigger = null;
 
+    function initializeColorPickers(context) {
+        if (typeof jQuery === 'undefined' || !jQuery.fn || typeof jQuery.fn.wpColorPicker !== 'function') {
+            return;
+        }
+
+        var $scope = context ? jQuery(context) : jQuery(document);
+        $scope.find('.cad-color-picker').each(function () {
+            var $input = jQuery(this);
+            if ($input.data('cadColorPickerInitialized')) {
+                return;
+            }
+
+            $input.wpColorPicker();
+            $input.data('cadColorPickerInitialized', true);
+        });
+    }
+
     function openMediaSelector(options) {
         if (!hasMediaLibrary) {
             return;
@@ -66,6 +83,7 @@
         var index = getNextIndex(list);
         var html = template.innerHTML.replace(/__INDEX__/g, String(index));
         list.insertAdjacentHTML('beforeend', html);
+        initializeColorPickers(list.lastElementChild);
     }
 
     function handleRemove(event) {
@@ -304,4 +322,5 @@
     });
 
     document.addEventListener('keydown', handleIconPickerKeydown);
+    initializeColorPickers(document);
 })();

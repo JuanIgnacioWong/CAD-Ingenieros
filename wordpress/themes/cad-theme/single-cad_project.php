@@ -3,8 +3,7 @@ get_header();
 ?>
 
 <main id="main-content" class="cad-main cad-main--generic cad-project-page">
-    <div class="cad-shell-wide">
-        <?php while (have_posts()) : the_post(); ?>
+    <?php while (have_posts()) : the_post(); ?>
             <?php
             $documents = get_post_meta(get_the_ID(), '_cad_project_documents', true);
             if (!is_array($documents)) {
@@ -20,13 +19,9 @@ get_header();
             }
 
             $category_manual = get_post_meta(get_the_ID(), '_cad_project_category', true);
-            $category_icon = get_post_meta(get_the_ID(), '_cad_project_category_icon', true);
             $client = get_post_meta(get_the_ID(), '_cad_project_client', true);
-            $client_icon = get_post_meta(get_the_ID(), '_cad_project_client_icon', true);
             $location = get_post_meta(get_the_ID(), '_cad_project_location', true);
-            $location_icon = get_post_meta(get_the_ID(), '_cad_project_location_icon', true);
             $surface = get_post_meta(get_the_ID(), '_cad_project_surface', true);
-            $surface_icon = get_post_meta(get_the_ID(), '_cad_project_surface_icon', true);
 
             if (function_exists('get_field')) {
                 $acf_category = get_field('categoria');
@@ -90,23 +85,6 @@ get_header();
                 );
             }
 
-            $min_gallery_items = 15;
-            $gallery_count = count($gallery_items);
-            if ($gallery_count < $min_gallery_items) {
-                for ($index = $gallery_count; $index < $min_gallery_items; $index++) {
-                    $item_number = $index + 1;
-                    $label = sprintf(__('Muestra %02d', 'cad-theme'), $item_number);
-                    $hue_a = ($item_number * 23) % 360;
-                    $hue_b = ($hue_a + 42) % 360;
-                    $svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 960"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="hsl(' . $hue_a . ',70%,84%)"/><stop offset="100%" stop-color="hsl(' . $hue_b . ',72%,68%)"/></linearGradient></defs><rect width="1280" height="960" fill="url(#g)"/><circle cx="240" cy="160" r="180" fill="rgba(255,255,255,0.32)"/><circle cx="1080" cy="860" r="220" fill="rgba(17,24,39,0.08)"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#0f172a" font-family="Arial, sans-serif" font-size="52" font-weight="700">' . esc_html($label) . '</text></svg>';
-                    $gallery_items[] = array(
-                        'type' => 'placeholder',
-                        'url'  => 'data:image/svg+xml;utf8,' . rawurlencode($svg),
-                        'alt'  => $label,
-                    );
-                }
-            }
-
             $gallery_total = count($gallery_items);
             $gallery_per_page = 5;
             $gallery_pages = (int) ceil($gallery_total / $gallery_per_page);
@@ -131,18 +109,6 @@ get_header();
 
             $category_items = array();
             $category_seen = array();
-
-            if (function_exists('cad_theme_project_meta_icon_resolve')) {
-                $category_icon = cad_theme_project_meta_icon_resolve($category_icon, 'category');
-                $client_icon = cad_theme_project_meta_icon_resolve($client_icon, 'client');
-                $location_icon = cad_theme_project_meta_icon_resolve($location_icon, 'location');
-                $surface_icon = cad_theme_project_meta_icon_resolve($surface_icon, 'surface');
-            } else {
-                $category_icon = 'category';
-                $client_icon = 'business';
-                $location_icon = 'location_on';
-                $surface_icon = 'square_foot';
-            }
 
             foreach ($terms as $term) {
                 $term_name = isset($term->name) ? trim((string) $term->name) : '';
@@ -196,6 +162,110 @@ get_header();
                     $description = $acf_description;
                 }
             }
+
+            $project_year = get_the_date('Y');
+            $eyebrow_label = __('Proyecto CAD Ingenieros', 'cad-theme');
+            if (is_string($project_year) && preg_match('/^\d{4}$/', $project_year)) {
+                $eyebrow_label = sprintf(__('Proyecto CAD Ingenieros · %s', 'cad-theme'), $project_year);
+            }
+            $projects_anchor_url = home_url('/#proyectos');
+            $contact_anchor_url = home_url('/#contacto');
+            $project_cta_text = __('Si quieres desarrollar un proyecto similar, conversemos sobre tu caso y próximos objetivos.', 'cad-theme');
+            if (function_exists('cad_theme_get_legacy_business_cta_buttons')) {
+                $project_cta_buttons = cad_theme_get_legacy_business_cta_buttons(
+                    __('Contactar', 'cad-theme'),
+                    $contact_anchor_url,
+                    __('Ver proyectos', 'cad-theme'),
+                    $projects_anchor_url
+                );
+            } else {
+                $project_cta_buttons = array(
+                    array(
+                        'label'        => __('Contactar', 'cad-theme'),
+                        'url'          => $contact_anchor_url,
+                        'target_blank' => '0',
+                        'style'        => 'solid',
+                        'bg_color'     => '',
+                        'text_color'   => '',
+                        'border_color' => '',
+                        'border_radius' => '10px',
+                    ),
+                    array(
+                        'label'        => __('Ver proyectos', 'cad-theme'),
+                        'url'          => $projects_anchor_url,
+                        'target_blank' => '0',
+                        'style'        => 'outline',
+                        'bg_color'     => '',
+                        'text_color'   => '',
+                        'border_color' => '',
+                        'border_radius' => '10px',
+                    ),
+                );
+            }
+
+            $meta_items = array();
+            if (!empty($category_items)) {
+                $meta_items[] = array(
+                    'label' => __('Categoria', 'cad-theme'),
+                    'type'  => 'tags',
+                    'value' => $category_items,
+                );
+            }
+            if (!empty($client)) {
+                $meta_items[] = array(
+                    'label' => __('Mandante', 'cad-theme'),
+                    'type'  => 'text',
+                    'value' => (string) $client,
+                );
+            }
+            if (!empty($location)) {
+                $meta_items[] = array(
+                    'label' => __('Ubicacion', 'cad-theme'),
+                    'type'  => 'text',
+                    'value' => (string) $location,
+                );
+            }
+            if (!empty($surface)) {
+                $meta_items[] = array(
+                    'label' => __('Superficie', 'cad-theme'),
+                    'type'  => 'text',
+                    'value' => (string) $surface,
+                );
+            }
+
+            $document_items = array();
+            foreach ($documents as $document) {
+                $doc_url = isset($document['url']) ? esc_url((string) $document['url']) : '';
+                if (!$doc_url) {
+                    continue;
+                }
+                $doc_label = isset($document['label']) ? sanitize_text_field((string) $document['label']) : '';
+                if (!$doc_label) {
+                    $doc_label = wp_basename($doc_url);
+                }
+                $document_items[] = array(
+                    'url'   => $doc_url,
+                    'label' => $doc_label,
+                );
+            }
+
+            $video_items = array();
+            foreach ($videos as $video) {
+                $video_url = isset($video['url']) ? esc_url((string) $video['url']) : '';
+                if (!$video_url) {
+                    continue;
+                }
+                $video_label = isset($video['label']) ? sanitize_text_field((string) $video['label']) : '';
+                $embed = wp_oembed_get($video_url);
+                if (!$embed && function_exists('cad_theme_get_external_video_embed_html')) {
+                    $embed = cad_theme_get_external_video_embed_html($video_url);
+                }
+                $video_items[] = array(
+                    'url'   => $video_url,
+                    'label' => $video_label,
+                    'embed' => $embed,
+                );
+            }
             ?>
             <article <?php post_class('cad-project'); ?>>
                 <header class="cad-project__header">
@@ -204,92 +274,65 @@ get_header();
                             <?php the_post_thumbnail('full', array('loading' => 'lazy', 'class' => 'cad-project__hero-image')); ?>
                         </div>
                     <?php endif; ?>
-                    <div class="cad-project__header-content">
-                        <a class="cad-project__back" href="<?php echo esc_url(home_url('/#proyectos')); ?>">
-                            <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
-                            <?php esc_html_e('Volver', 'cad-theme'); ?>
-                        </a>
-                        <h1 class="cad-project__title"><?php the_title(); ?></h1>
-                        <?php if ($excerpt) : ?>
-                            <p class="cad-project__excerpt"><?php echo esc_html($excerpt); ?></p>
-                        <?php endif; ?>
+                    <div class="cad-business-area__inner">
+                        <div class="cad-project__header-content">
+                            <a class="cad-project__back" href="<?php echo esc_url(home_url('/#proyectos')); ?>">
+                                <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+                                <?php esc_html_e('Volver', 'cad-theme'); ?>
+                            </a>
+                            <div class="cad-project__eyebrow">
+                                <span aria-hidden="true"></span>
+                                <?php echo esc_html($eyebrow_label); ?>
+                            </div>
+                            <h1 class="cad-project__title"><?php the_title(); ?></h1>
+                            <?php if ($excerpt) : ?>
+                                <p class="cad-project__excerpt"><?php echo esc_html($excerpt); ?></p>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 </header>
 
-                <div class="cad-project__layout">
-                    <aside class="cad-project__meta">
-                        <?php if (!empty($category_items)) : ?>
-                            <div class="cad-project-meta-card cad-project-meta-card--full">
-                                <span class="cad-project-meta-card__icon material-symbols-outlined" aria-hidden="true"><?php echo esc_html($category_icon); ?></span>
-                                <div class="cad-project-meta-card__content">
-                                    <span class="cad-project-meta-card__label"><?php esc_html_e('Categoria', 'cad-theme'); ?></span>
-                                    <div class="cad-project-meta-card__value cad-project-meta-card__tags">
-                                        <?php foreach ($category_items as $category_item) : ?>
-                                            <?php if (!empty($category_item['url'])) : ?>
-                                                <a href="<?php echo esc_url((string) $category_item['url']); ?>"><?php echo esc_html((string) $category_item['label']); ?></a>
-                                            <?php else : ?>
-                                                <span><?php echo esc_html((string) $category_item['label']); ?></span>
-                                            <?php endif; ?>
-                                        <?php endforeach; ?>
+                <?php if (!empty($meta_items)) : ?>
+                    <section class="cad-business-area__section cad-project-page__section cad-project-page__section--meta">
+                        <div class="cad-business-area__inner">
+                            <aside class="cad-project__meta" aria-label="<?php esc_attr_e('Datos del proyecto', 'cad-theme'); ?>">
+                                <?php foreach ($meta_items as $meta_item) : ?>
+                                    <div class="cad-project__meta-item">
+                                        <span><?php echo esc_html((string) $meta_item['label']); ?></span>
+                                        <?php if ('tags' === $meta_item['type']) : ?>
+                                            <div class="cad-project__meta-tags">
+                                                <?php foreach ((array) $meta_item['value'] as $category_item) : ?>
+                                                    <?php if (!empty($category_item['url'])) : ?>
+                                                        <a href="<?php echo esc_url((string) $category_item['url']); ?>"><?php echo esc_html((string) $category_item['label']); ?></a>
+                                                    <?php else : ?>
+                                                        <strong><?php echo esc_html((string) $category_item['label']); ?></strong>
+                                                    <?php endif; ?>
+                                                <?php endforeach; ?>
+                                            </div>
+                                        <?php else : ?>
+                                            <strong><?php echo esc_html((string) $meta_item['value']); ?></strong>
+                                        <?php endif; ?>
                                     </div>
-                                </div>
-                            </div>
-                        <?php endif; ?>
+                                <?php endforeach; ?>
+                            </aside>
+                        </div>
+                    </section>
+                <?php endif; ?>
 
-                        <?php if ($client) : ?>
-                            <div class="cad-project-meta-card">
-                                <span class="cad-project-meta-card__icon material-symbols-outlined" aria-hidden="true"><?php echo esc_html($client_icon); ?></span>
-                                <div class="cad-project-meta-card__content">
-                                    <span class="cad-project-meta-card__label"><?php esc_html_e('Mandante', 'cad-theme'); ?></span>
-                                    <span class="cad-project-meta-card__value"><?php echo esc_html($client); ?></span>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-
-                        <?php if ($location) : ?>
-                            <div class="cad-project-meta-card">
-                                <span class="cad-project-meta-card__icon material-symbols-outlined" aria-hidden="true"><?php echo esc_html($location_icon); ?></span>
-                                <div class="cad-project-meta-card__content">
-                                    <span class="cad-project-meta-card__label"><?php esc_html_e('Ubicacion', 'cad-theme'); ?></span>
-                                    <span class="cad-project-meta-card__value"><?php echo esc_html($location); ?></span>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-
-                        <?php if ($surface) : ?>
-                            <div class="cad-project-meta-card">
-                                <span class="cad-project-meta-card__icon material-symbols-outlined" aria-hidden="true"><?php echo esc_html($surface_icon); ?></span>
-                                <div class="cad-project-meta-card__content">
-                                    <span class="cad-project-meta-card__label"><?php esc_html_e('Superficie', 'cad-theme'); ?></span>
-                                    <span class="cad-project-meta-card__value"><?php echo esc_html($surface); ?></span>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-
-                    </aside>
-
-                    <div class="cad-project__body">
-                        <?php if (!empty($documents)) : ?>
+                <section class="cad-business-area__section cad-project-page__section cad-project-page__section--content">
+                    <div class="cad-business-area__inner">
+                        <div class="cad-project__body">
+                        <?php if (!empty($document_items)) : ?>
                             <section class="cad-project-block cad-project-block--documents">
                                 <div class="cad-project-block__header">
                                     <span class="cad-project-block__kicker"><?php esc_html_e('Documentos', 'cad-theme'); ?></span>
                                     <h2><?php echo esc_html($documents_title); ?></h2>
                                 </div>
                                 <ul class="cad-project-block__list">
-                                    <?php foreach ($documents as $document) : ?>
-                                        <?php
-                                        $doc_url = isset($document['url']) ? esc_url($document['url']) : '';
-                                        if (!$doc_url) {
-                                            continue;
-                                        }
-                                        $doc_label = isset($document['label']) ? sanitize_text_field($document['label']) : '';
-                                        if (!$doc_label) {
-                                            $doc_label = wp_basename($doc_url);
-                                        }
-                                        ?>
+                                    <?php foreach ($document_items as $document_item) : ?>
                                         <li>
-                                            <a href="<?php echo esc_url($doc_url); ?>" target="_blank" rel="noopener noreferrer">
-                                                <?php echo esc_html($doc_label); ?>
+                                            <a href="<?php echo esc_url((string) $document_item['url']); ?>" target="_blank" rel="noopener noreferrer">
+                                                <?php echo esc_html((string) $document_item['label']); ?>
                                             </a>
                                         </li>
                                     <?php endforeach; ?>
@@ -307,7 +350,7 @@ get_header();
                                             <button type="button" class="cad-gallery-nav cad-gallery-nav--prev" data-gallery-prev aria-label="<?php esc_attr_e('Ver imagenes anteriores', 'cad-theme'); ?>" disabled>
                                                 <span aria-hidden="true">&larr;</span>
                                             </button>
-                                            <span class="cad-project-block__gallery-status" data-gallery-status>1 / <?php echo esc_html((string) $gallery_pages); ?></span>
+                                            <span class="cad-project-block__gallery-status" data-gallery-status aria-live="polite">1 / <?php echo esc_html((string) $gallery_pages); ?></span>
                                             <button type="button" class="cad-gallery-nav cad-gallery-nav--next" data-gallery-next aria-label="<?php esc_attr_e('Ver imagenes siguientes', 'cad-theme'); ?>">
                                                 <span aria-hidden="true">&rarr;</span>
                                             </button>
@@ -337,11 +380,24 @@ get_header();
                                     <?php endforeach; ?>
                                 </div>
                             </section>
+                        <?php else : ?>
+                            <section class="cad-project-block cad-project-block--gallery cad-project-block--gallery-empty" id="project-gallery">
+                                <div class="cad-project-block__header">
+                                    <span class="cad-project-block__kicker"><?php esc_html_e('Galeria', 'cad-theme'); ?></span>
+                                    <h2><?php echo esc_html($gallery_title); ?></h2>
+                                </div>
+                                <div class="cad-project-block__content">
+                                    <p><?php esc_html_e('Aun no hay imagenes disponibles para este proyecto.', 'cad-theme'); ?></p>
+                                </div>
+                            </section>
                         <?php endif; ?>
 
-                        <section class="cad-project-main">
-                            <span class="cad-project-main__kicker"><?php esc_html_e('Descripcion del proyecto', 'cad-theme'); ?></span>
-                            <div class="cad-project-main__copy">
+                        <section class="cad-project-block cad-project-block--description">
+                            <div class="cad-project-block__header">
+                                <span class="cad-project-block__kicker"><?php esc_html_e('Descripcion', 'cad-theme'); ?></span>
+                                <h2><?php esc_html_e('Sobre el proyecto', 'cad-theme'); ?></h2>
+                            </div>
+                            <div class="cad-project-block__content cad-project-main__copy">
                                 <?php if (!empty($description)) : ?>
                                     <?php echo wp_kses_post($description); ?>
                                 <?php else : ?>
@@ -350,7 +406,7 @@ get_header();
                             </div>
                         </section>
 
-                        <?php if (!empty($videos)) : ?>
+                        <?php if (!empty($video_items)) : ?>
                             <footer class="cad-project__footer">
                                 <section class="cad-project-block">
                                     <div class="cad-project-block__header">
@@ -358,32 +414,21 @@ get_header();
                                         <h2><?php echo esc_html($videos_title); ?></h2>
                                     </div>
                                     <div class="cad-project-block__videos">
-                                        <?php foreach ($videos as $video) : ?>
-                                            <?php
-                                            $video_url = isset($video['url']) ? esc_url((string) $video['url']) : '';
-                                            if (!$video_url) {
-                                                continue;
-                                            }
-                                            $video_label = isset($video['label']) ? sanitize_text_field($video['label']) : '';
-                                            $embed = wp_oembed_get($video_url);
-                                            if (!$embed && function_exists('cad_theme_get_external_video_embed_html')) {
-                                                $embed = cad_theme_get_external_video_embed_html($video_url);
-                                            }
-                                            ?>
+                                        <?php foreach ($video_items as $video_item) : ?>
                                             <div class="cad-project-block__video">
-                                                <?php if ($video_label) : ?>
-                                                    <h3><?php echo esc_html($video_label); ?></h3>
+                                                <?php if (!empty($video_item['label'])) : ?>
+                                                    <h3><?php echo esc_html((string) $video_item['label']); ?></h3>
                                                 <?php endif; ?>
-                                                <?php if ($embed) : ?>
+                                                <?php if (!empty($video_item['embed'])) : ?>
                                                     <div class="cad-project-block__video-embed">
                                                         <?php if (function_exists('cad_theme_sanitize_video_embed_html')) : ?>
-                                                            <?php echo cad_theme_sanitize_video_embed_html($embed); ?>
+                                                            <?php echo cad_theme_sanitize_video_embed_html((string) $video_item['embed']); ?>
                                                         <?php else : ?>
-                                                            <?php echo wp_kses_post($embed); ?>
+                                                            <?php echo wp_kses_post((string) $video_item['embed']); ?>
                                                         <?php endif; ?>
                                                     </div>
                                                 <?php else : ?>
-                                                    <a href="<?php echo esc_url($video_url); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html($video_url); ?></a>
+                                                    <a href="<?php echo esc_url((string) $video_item['url']); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html((string) $video_item['url']); ?></a>
                                                 <?php endif; ?>
                                             </div>
                                         <?php endforeach; ?>
@@ -391,11 +436,53 @@ get_header();
                                 </section>
                             </footer>
                         <?php endif; ?>
+
+                        </div>
                     </div>
-                </div>
+                </section>
             </article>
-        <?php endwhile; ?>
-    </div>
+
+            <section class="cad-business-area__section cad-business-area__section--cta">
+                <div class="cad-business-area__inner cad-business-area__cta">
+                    <div class="cad-business-area__cta-copy">
+                        <span class="cad-business-area__cta-kicker"><?php esc_html_e('Siguiente paso', 'cad-theme'); ?></span>
+                        <?php if (!empty($project_cta_text)) : ?>
+                            <p><?php echo esc_html((string) $project_cta_text); ?></p>
+                        <?php endif; ?>
+                    </div>
+
+                    <?php if (!empty($project_cta_buttons) && is_array($project_cta_buttons)) : ?>
+                        <div class="cad-business-area__cta-actions">
+                            <?php foreach ($project_cta_buttons as $cta_button) : ?>
+                                <?php
+                                $button_style = isset($cta_button['style']) && in_array((string) $cta_button['style'], array('solid', 'outline'), true)
+                                    ? (string) $cta_button['style']
+                                    : 'solid';
+                                $button_target = !empty($cta_button['target_blank']) ? '_blank' : '_self';
+                                $button_rel = '_blank' === $button_target ? 'noopener noreferrer' : '';
+                                $button_style_attr = sprintf(
+                                    '--cta-bg:%1$s;--cta-text:%2$s;--cta-border:%3$s;--cta-radius:%4$s;',
+                                    esc_attr(isset($cta_button['bg_color']) ? (string) $cta_button['bg_color'] : ''),
+                                    esc_attr(isset($cta_button['text_color']) ? (string) $cta_button['text_color'] : ''),
+                                    esc_attr(isset($cta_button['border_color']) ? (string) $cta_button['border_color'] : ''),
+                                    esc_attr(isset($cta_button['border_radius']) ? (string) $cta_button['border_radius'] : '10px')
+                                );
+                                ?>
+                                <a
+                                    class="cad-business-area__cta-button is-<?php echo esc_attr($button_style); ?>"
+                                    href="<?php echo esc_url(isset($cta_button['url']) ? (string) $cta_button['url'] : '#'); ?>"
+                                    target="<?php echo esc_attr($button_target); ?>"
+                                    <?php if ($button_rel) : ?>rel="<?php echo esc_attr($button_rel); ?>"<?php endif; ?>
+                                    style="<?php echo esc_attr($button_style_attr); ?>"
+                                >
+                                    <?php echo esc_html(isset($cta_button['label']) ? (string) $cta_button['label'] : ''); ?>
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </section>
+    <?php endwhile; ?>
 </main>
 
 <?php

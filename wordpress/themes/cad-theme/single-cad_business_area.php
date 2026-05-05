@@ -168,50 +168,52 @@ get_header();
             </section>
 
             <section class="cad-business-area__section cad-business-area__section--projects">
-                <div class="cad-business-area__inner">
-                    <div class="cad-business-area__section-heading">
-                        <?php if (!empty($business_area_data['projects_label'])) : ?>
-                            <span class="cad-business-area__kicker"><?php echo esc_html((string) $business_area_data['projects_label']); ?></span>
-                        <?php endif; ?>
-                        <?php if (!empty($business_area_data['projects_title'])) : ?>
-                            <h2><?php echo esc_html((string) $business_area_data['projects_title']); ?></h2>
-                        <?php endif; ?>
+                <?php if ('1' === (string) $business_area_data['show_related_projects'] && !empty($business_area_data['related_projects'])) : ?>
+                    <div class="cad-business-area__inner">
+                        <div class="cad-business-area__section-heading">
+                            <?php if (!empty($business_area_data['projects_label'])) : ?>
+                                <span class="cad-business-area__kicker"><?php echo esc_html((string) $business_area_data['projects_label']); ?></span>
+                            <?php endif; ?>
+                            <?php if (!empty($business_area_data['projects_title'])) : ?>
+                                <h2><?php echo esc_html((string) $business_area_data['projects_title']); ?></h2>
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="cad-business-area__project-list">
+                            <?php foreach ($business_area_data['related_projects'] as $index => $project_item) : ?>
+                                <?php
+                                $project_name = isset($project_item['name']) ? (string) $project_item['name'] : '';
+                                $project_url = isset($project_item['url']) ? (string) $project_item['url'] : '';
+                                $project_location = isset($project_item['location']) ? (string) $project_item['location'] : '';
+                                $project_year = isset($project_item['year']) ? (string) $project_item['year'] : '';
+                                $project_status = isset($project_item['status']) ? (string) $project_item['status'] : '';
+                                $project_tag = $project_url ? 'a' : 'article';
+                                ?>
+                                <<?php echo $project_tag; ?> class="cad-business-area__project-item<?php echo $project_url ? '' : ' is-static'; ?>"<?php if ($project_url) : ?> href="<?php echo esc_url($project_url); ?>"<?php endif; ?>>
+                                    <span class="cad-business-area__project-number"><?php echo esc_html(sprintf('%02d', $index + 1)); ?></span>
+
+                                    <div class="cad-business-area__project-body">
+                                        <h3><?php echo esc_html($project_name); ?></h3>
+                                        <?php if ($project_location) : ?>
+                                            <p><?php echo esc_html($project_location); ?></p>
+                                        <?php endif; ?>
+                                    </div>
+
+                                    <div class="cad-business-area__project-tags">
+                                        <?php if ($project_year) : ?>
+                                            <span><?php echo esc_html($project_year); ?></span>
+                                        <?php endif; ?>
+                                        <?php if ($project_status) : ?>
+                                            <span><?php echo esc_html($project_status); ?></span>
+                                        <?php endif; ?>
+                                    </div>
+
+                                    <span class="cad-business-area__project-arrow material-symbols-outlined" aria-hidden="true">arrow_outward</span>
+                                </<?php echo $project_tag; ?>>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
-
-                    <div class="cad-business-area__project-list">
-                        <?php foreach ($business_area_data['related_projects'] as $index => $project_item) : ?>
-                            <?php
-                            $project_name = isset($project_item['name']) ? (string) $project_item['name'] : '';
-                            $project_url = isset($project_item['url']) ? (string) $project_item['url'] : '';
-                            $project_location = isset($project_item['location']) ? (string) $project_item['location'] : '';
-                            $project_year = isset($project_item['year']) ? (string) $project_item['year'] : '';
-                            $project_status = isset($project_item['status']) ? (string) $project_item['status'] : '';
-                            $project_tag = $project_url ? 'a' : 'article';
-                            ?>
-                            <<?php echo $project_tag; ?> class="cad-business-area__project-item<?php echo $project_url ? '' : ' is-static'; ?>"<?php if ($project_url) : ?> href="<?php echo esc_url($project_url); ?>"<?php endif; ?>>
-                                <span class="cad-business-area__project-number"><?php echo esc_html(sprintf('%02d', $index + 1)); ?></span>
-
-                                <div class="cad-business-area__project-body">
-                                    <h3><?php echo esc_html($project_name); ?></h3>
-                                    <?php if ($project_location) : ?>
-                                        <p><?php echo esc_html($project_location); ?></p>
-                                    <?php endif; ?>
-                                </div>
-
-                                <div class="cad-business-area__project-tags">
-                                    <?php if ($project_year) : ?>
-                                        <span><?php echo esc_html($project_year); ?></span>
-                                    <?php endif; ?>
-                                    <?php if ($project_status) : ?>
-                                        <span><?php echo esc_html($project_status); ?></span>
-                                    <?php endif; ?>
-                                </div>
-
-                                <span class="cad-business-area__project-arrow material-symbols-outlined" aria-hidden="true">arrow_outward</span>
-                            </<?php echo $project_tag; ?>>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
+                <?php endif; ?>
             </section>
 
             <section class="cad-business-area__section cad-business-area__section--cta">
@@ -223,19 +225,35 @@ get_header();
                         <?php endif; ?>
                     </div>
 
-                    <div class="cad-business-area__cta-actions">
-                        <?php if (!empty($business_area_data['final_cta_primary_label']) && !empty($business_area_data['final_cta_primary_url'])) : ?>
-                            <a class="cad-business-area__cta-primary" href="<?php echo esc_url((string) $business_area_data['final_cta_primary_url']); ?>">
-                                <?php echo esc_html((string) $business_area_data['final_cta_primary_label']); ?>
-                            </a>
-                        <?php endif; ?>
-
-                        <?php if (!empty($business_area_data['final_cta_secondary_label']) && !empty($business_area_data['final_cta_secondary_url'])) : ?>
-                            <a class="cad-business-area__cta-secondary" href="<?php echo esc_url((string) $business_area_data['final_cta_secondary_url']); ?>">
-                                <?php echo esc_html((string) $business_area_data['final_cta_secondary_label']); ?>
-                            </a>
-                        <?php endif; ?>
-                    </div>
+                    <?php if (!empty($business_area_data['cta_buttons']) && is_array($business_area_data['cta_buttons'])) : ?>
+                        <div class="cad-business-area__cta-actions">
+                            <?php foreach ($business_area_data['cta_buttons'] as $cta_button) : ?>
+                                <?php
+                                $button_style = isset($cta_button['style']) && in_array((string) $cta_button['style'], array('solid', 'outline'), true)
+                                    ? (string) $cta_button['style']
+                                    : 'solid';
+                                $button_target = !empty($cta_button['target_blank']) ? '_blank' : '_self';
+                                $button_rel = '_blank' === $button_target ? 'noopener noreferrer' : '';
+                                $button_style_attr = sprintf(
+                                    '--cta-bg:%1$s;--cta-text:%2$s;--cta-border:%3$s;--cta-radius:%4$s;',
+                                    esc_attr(isset($cta_button['bg_color']) ? (string) $cta_button['bg_color'] : ''),
+                                    esc_attr(isset($cta_button['text_color']) ? (string) $cta_button['text_color'] : ''),
+                                    esc_attr(isset($cta_button['border_color']) ? (string) $cta_button['border_color'] : ''),
+                                    esc_attr(isset($cta_button['border_radius']) ? (string) $cta_button['border_radius'] : '10px')
+                                );
+                                ?>
+                                <a
+                                    class="cad-business-area__cta-button is-<?php echo esc_attr($button_style); ?>"
+                                    href="<?php echo esc_url(isset($cta_button['url']) ? (string) $cta_button['url'] : '#'); ?>"
+                                    target="<?php echo esc_attr($button_target); ?>"
+                                    <?php if ($button_rel) : ?>rel="<?php echo esc_attr($button_rel); ?>"<?php endif; ?>
+                                    style="<?php echo esc_attr($button_style_attr); ?>"
+                                >
+                                    <?php echo esc_html(isset($cta_button['label']) ? (string) $cta_button['label'] : ''); ?>
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </section>
         </article>

@@ -926,6 +926,8 @@ function cad_theme_admin_project_assets($hook)
     }
 
     wp_enqueue_media();
+    wp_enqueue_style('wp-color-picker');
+    wp_enqueue_script('wp-color-picker');
     wp_enqueue_style(
         'cad-theme-icons-admin',
         'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0,0',
@@ -941,7 +943,7 @@ function cad_theme_admin_project_assets($hook)
     wp_enqueue_script(
         'cad-theme-project-admin',
         get_template_directory_uri() . '/assets/js/admin-projects.js',
-        array(),
+        array('jquery', 'wp-color-picker'),
         wp_get_theme()->get('Version'),
         true
     );
@@ -1302,6 +1304,7 @@ function cad_theme_business_area_meta_fields()
         'projects_title'            => '_cad_business_projects_title',
         'related_projects'          => '_cad_business_related_projects',
         'final_cta_text'            => '_cad_business_final_cta_text',
+        'cta_buttons'               => '_cad_business_cta_buttons',
         'final_cta_primary_label'   => '_cad_business_final_cta_primary_label',
         'final_cta_primary_url'     => '_cad_business_final_cta_primary_url',
         'final_cta_secondary_label' => '_cad_business_final_cta_secondary_label',
@@ -1430,6 +1433,140 @@ function cad_theme_normalize_business_related_projects($items)
             'year'     => $year,
             'status'   => $status,
             'url'      => $url,
+        );
+    }
+
+    return $normalized;
+}
+
+function cad_theme_get_business_cta_button_defaults($style = 'solid')
+{
+    if ('outline' === $style) {
+        return array(
+            'bg_color'     => 'transparent',
+            'text_color'   => '#1f1712',
+            'border_color' => '#11161c',
+            'border_radius' => '10px',
+        );
+    }
+
+    return array(
+        'bg_color'     => '#11161c',
+        'text_color'   => '#ffffff',
+        'border_color' => '#11161c',
+        'border_radius' => '10px',
+    );
+}
+
+function cad_theme_sanitize_business_cta_button_radius($value)
+{
+    $value = trim((string) $value);
+    if ('' === $value) {
+        return '';
+    }
+
+    if (preg_match('/^\d+(?:\.\d+)?(?:px|rem|em|%)?$/', $value)) {
+        return $value;
+    }
+
+    return '';
+}
+
+function cad_theme_get_legacy_business_cta_buttons($primary_label, $primary_url, $secondary_label, $secondary_url)
+{
+    $buttons = array();
+
+    if ('' !== trim((string) $primary_label) && '' !== trim((string) $primary_url)) {
+        $defaults = cad_theme_get_business_cta_button_defaults('solid');
+        $buttons[] = array(
+            'label'        => sanitize_text_field((string) $primary_label),
+            'url'          => esc_url_raw((string) $primary_url),
+            'target_blank' => '0',
+            'style'        => 'solid',
+            'bg_color'     => $defaults['bg_color'],
+            'text_color'   => $defaults['text_color'],
+            'border_color' => $defaults['border_color'],
+            'border_radius' => $defaults['border_radius'],
+        );
+    }
+
+    if ('' !== trim((string) $secondary_label) && '' !== trim((string) $secondary_url)) {
+        $defaults = cad_theme_get_business_cta_button_defaults('outline');
+        $buttons[] = array(
+            'label'        => sanitize_text_field((string) $secondary_label),
+            'url'          => esc_url_raw((string) $secondary_url),
+            'target_blank' => '0',
+            'style'        => 'outline',
+            'bg_color'     => $defaults['bg_color'],
+            'text_color'   => $defaults['text_color'],
+            'border_color' => $defaults['border_color'],
+            'border_radius' => $defaults['border_radius'],
+        );
+    }
+
+    return $buttons;
+}
+
+function cad_theme_normalize_business_cta_buttons($items)
+{
+    if (!is_array($items)) {
+        return array();
+    }
+
+    $normalized = array();
+
+    foreach ($items as $item) {
+        if (!is_array($item)) {
+            continue;
+        }
+
+        $label = isset($item['label']) ? sanitize_text_field((string) $item['label']) : '';
+        $url = isset($item['url']) ? esc_url_raw((string) $item['url']) : '';
+        $target_blank = !empty($item['target_blank']) ? '1' : '0';
+        $style = isset($item['style']) && in_array((string) $item['style'], array('solid', 'outline'), true)
+            ? (string) $item['style']
+            : 'solid';
+
+        $defaults = cad_theme_get_business_cta_button_defaults($style);
+
+        $raw_bg_color = isset($item['bg_color']) ? strtolower(trim((string) $item['bg_color'])) : '';
+        if ('outline' === $style && 'transparent' === $raw_bg_color) {
+            $bg_color = 'transparent';
+        } else {
+            $bg_color = sanitize_hex_color($raw_bg_color);
+            if (!$bg_color) {
+                $bg_color = $defaults['bg_color'];
+            }
+        }
+
+        $text_color = isset($item['text_color']) ? sanitize_hex_color(trim((string) $item['text_color'])) : '';
+        if (!$text_color) {
+            $text_color = $defaults['text_color'];
+        }
+
+        $border_color = isset($item['border_color']) ? sanitize_hex_color(trim((string) $item['border_color'])) : '';
+        if (!$border_color) {
+            $border_color = $defaults['border_color'];
+        }
+
+        $border_radius = isset($item['border_radius']) ? cad_theme_sanitize_business_cta_button_radius($item['border_radius']) : '';
+        if ('' === $border_radius) {
+            $border_radius = $defaults['border_radius'];
+        }
+
+        if ('' === $label || '' === $url) {
+            continue;
+        }
+
+        $normalized[] = array(
+            'label'        => $label,
+            'url'          => $url,
+            'target_blank' => $target_blank,
+            'style'        => $style,
+            'bg_color'     => $bg_color,
+            'text_color'   => $text_color,
+            'border_color' => $border_color,
+            'border_radius' => $border_radius,
         );
     }
 
@@ -1777,6 +1914,24 @@ function cad_theme_get_business_area_page_data($post_id)
         $related_projects = cad_theme_normalize_business_related_projects($related_projects);
     }
     $data['related_projects'] = $related_projects;
+
+    $show_related_projects = get_post_meta($post_id, '_cad_business_show_related_projects', true);
+    if ('' === $show_related_projects) {
+        $show_related_projects = '1';
+    }
+    $data['show_related_projects'] = '1' === $show_related_projects ? '1' : '0';
+
+    if (metadata_exists('post', $post_id, $fields['cta_buttons'])) {
+        $cta_buttons = cad_theme_normalize_business_cta_buttons(get_post_meta($post_id, $fields['cta_buttons'], true));
+    } else {
+        $cta_buttons = cad_theme_get_legacy_business_cta_buttons(
+            isset($data['final_cta_primary_label']) ? $data['final_cta_primary_label'] : '',
+            isset($data['final_cta_primary_url']) ? $data['final_cta_primary_url'] : '',
+            isset($data['final_cta_secondary_label']) ? $data['final_cta_secondary_label'] : '',
+            isset($data['final_cta_secondary_url']) ? $data['final_cta_secondary_url'] : ''
+        );
+    }
+    $data['cta_buttons'] = $cta_buttons;
 
     $data['hero_image'] = get_the_post_thumbnail_url($post_id, 'full');
     $data['title'] = get_the_title($post);
@@ -2437,15 +2592,6 @@ function cad_theme_business_area_meta_boxes()
         'cad_business_area',
         'normal',
         'high'
-    );
-
-    add_meta_box(
-        'cad-business-area-desc-ambitos',
-        __('Descripcion y ambitos de desarrollo', 'cad-theme'),
-        'cad_theme_business_area_desc_ambitos_box',
-        'cad_business_area',
-        'normal',
-        'default'
     );
 
     add_meta_box(
@@ -3178,8 +3324,72 @@ function cad_theme_render_business_related_project_item($index, $item)
     <?php
 }
 
+function cad_theme_render_business_cta_button_item($index, $item)
+{
+    $style = isset($item['style']) && in_array((string) $item['style'], array('solid', 'outline'), true)
+        ? (string) $item['style']
+        : 'solid';
+    $defaults = cad_theme_get_business_cta_button_defaults($style);
+    $label = isset($item['label']) ? (string) $item['label'] : '';
+    $url = isset($item['url']) ? (string) $item['url'] : '';
+    $target_blank = !empty($item['target_blank']) ? '1' : '0';
+    $bg_color = isset($item['bg_color']) && '' !== (string) $item['bg_color'] ? (string) $item['bg_color'] : $defaults['bg_color'];
+    $text_color = isset($item['text_color']) && '' !== (string) $item['text_color'] ? (string) $item['text_color'] : $defaults['text_color'];
+    $border_color = isset($item['border_color']) && '' !== (string) $item['border_color'] ? (string) $item['border_color'] : $defaults['border_color'];
+    $border_radius = isset($item['border_radius']) && '' !== (string) $item['border_radius'] ? (string) $item['border_radius'] : $defaults['border_radius'];
+    ?>
+    <div class="cad-repeatable__item" data-index="<?php echo esc_attr((string) $index); ?>">
+        <div class="cad-repeatable__fields">
+            <label for="cad-business-cta-label-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('Texto del boton', 'cad-theme'); ?></strong></label>
+            <input type="text" id="cad-business-cta-label-<?php echo esc_attr((string) $index); ?>" name="cad_business_cta_buttons[<?php echo esc_attr((string) $index); ?>][label]" class="widefat" value="<?php echo esc_attr($label); ?>">
+        </div>
+        <div class="cad-repeatable__fields">
+            <label for="cad-business-cta-url-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('URL', 'cad-theme'); ?></strong></label>
+            <input type="url" id="cad-business-cta-url-<?php echo esc_attr((string) $index); ?>" name="cad_business_cta_buttons[<?php echo esc_attr((string) $index); ?>][url]" class="widefat" value="<?php echo esc_attr($url); ?>" placeholder="https://">
+        </div>
+        <div class="cad-repeatable__row" style="align-items:flex-start;">
+            <div class="cad-repeatable__fields" style="flex:1;">
+                <label for="cad-business-cta-style-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('Estilo', 'cad-theme'); ?></strong></label>
+                <select id="cad-business-cta-style-<?php echo esc_attr((string) $index); ?>" name="cad_business_cta_buttons[<?php echo esc_attr((string) $index); ?>][style]" class="widefat">
+                    <option value="solid" <?php selected($style, 'solid'); ?>><?php esc_html_e('Solid', 'cad-theme'); ?></option>
+                    <option value="outline" <?php selected($style, 'outline'); ?>><?php esc_html_e('Outline', 'cad-theme'); ?></option>
+                </select>
+            </div>
+            <div class="cad-repeatable__fields" style="flex:1;">
+                <label for="cad-business-cta-target-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('Comportamiento', 'cad-theme'); ?></strong></label><br>
+                <label for="cad-business-cta-target-<?php echo esc_attr((string) $index); ?>">
+                    <input type="checkbox" id="cad-business-cta-target-<?php echo esc_attr((string) $index); ?>" name="cad_business_cta_buttons[<?php echo esc_attr((string) $index); ?>][target_blank]" value="1" <?php checked($target_blank, '1'); ?>>
+                    <?php esc_html_e('Abrir en nueva pestana', 'cad-theme'); ?>
+                </label>
+            </div>
+        </div>
+        <div class="cad-repeatable__row" style="align-items:flex-start;">
+            <div class="cad-repeatable__fields" style="flex:1;">
+                <label for="cad-business-cta-bg-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('Color de fondo', 'cad-theme'); ?></strong></label>
+                <input type="text" id="cad-business-cta-bg-<?php echo esc_attr((string) $index); ?>" name="cad_business_cta_buttons[<?php echo esc_attr((string) $index); ?>][bg_color]" class="widefat cad-color-picker" value="<?php echo esc_attr($bg_color); ?>">
+            </div>
+            <div class="cad-repeatable__fields" style="flex:1;">
+                <label for="cad-business-cta-text-color-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('Color de texto', 'cad-theme'); ?></strong></label>
+                <input type="text" id="cad-business-cta-text-color-<?php echo esc_attr((string) $index); ?>" name="cad_business_cta_buttons[<?php echo esc_attr((string) $index); ?>][text_color]" class="widefat cad-color-picker" value="<?php echo esc_attr($text_color); ?>">
+            </div>
+            <div class="cad-repeatable__fields" style="flex:1;">
+                <label for="cad-business-cta-border-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('Color de borde', 'cad-theme'); ?></strong></label>
+                <input type="text" id="cad-business-cta-border-<?php echo esc_attr((string) $index); ?>" name="cad_business_cta_buttons[<?php echo esc_attr((string) $index); ?>][border_color]" class="widefat cad-color-picker" value="<?php echo esc_attr($border_color); ?>">
+            </div>
+        </div>
+        <div class="cad-repeatable__fields">
+            <label for="cad-business-cta-radius-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('Border radius', 'cad-theme'); ?></strong></label>
+            <input type="text" id="cad-business-cta-radius-<?php echo esc_attr((string) $index); ?>" name="cad_business_cta_buttons[<?php echo esc_attr((string) $index); ?>][border_radius]" class="widefat" value="<?php echo esc_attr($border_radius); ?>" placeholder="10px">
+        </div>
+        <button type="button" class="button-link cad-repeatable__remove"><?php esc_html_e('Eliminar CTA', 'cad-theme'); ?></button>
+    </div>
+    <?php
+}
+
 function cad_theme_business_area_content_box($post)
 {
+    wp_nonce_field('cad_business_area_meta', 'cad_business_area_meta_nonce');
+
     $fields = cad_theme_business_area_meta_fields();
     $preset = cad_theme_get_business_area_preset($post);
     $icon_options = cad_theme_project_meta_icon_options();
@@ -3208,6 +3418,10 @@ function cad_theme_business_area_content_box($post)
     $final_cta_primary_url = (string) $get_field_value($fields['final_cta_primary_url'], isset($preset['final_cta_primary_url']) ? $preset['final_cta_primary_url'] : '');
     $final_cta_secondary_label = (string) $get_field_value($fields['final_cta_secondary_label'], isset($preset['final_cta_secondary_label']) ? $preset['final_cta_secondary_label'] : '');
     $final_cta_secondary_url = (string) $get_field_value($fields['final_cta_secondary_url'], isset($preset['final_cta_secondary_url']) ? $preset['final_cta_secondary_url'] : '');
+    $show_related_projects = get_post_meta($post->ID, '_cad_business_show_related_projects', true);
+    if ('' === $show_related_projects) {
+        $show_related_projects = '1';
+    }
 
     $subareas = $get_field_value($fields['subareas'], isset($preset['subareas']) ? $preset['subareas'] : array());
     $subareas = cad_theme_normalize_business_subareas($subareas);
@@ -3219,6 +3433,17 @@ function cad_theme_business_area_content_box($post)
     $related_projects = cad_theme_normalize_business_related_projects($related_projects);
     if (empty($related_projects) && !empty($preset['related_projects'])) {
         $related_projects = cad_theme_normalize_business_related_projects($preset['related_projects']);
+    }
+
+    if (metadata_exists('post', $post->ID, $fields['cta_buttons'])) {
+        $cta_buttons = cad_theme_normalize_business_cta_buttons(get_post_meta($post->ID, $fields['cta_buttons'], true));
+    } else {
+        $cta_buttons = cad_theme_get_legacy_business_cta_buttons(
+            $final_cta_primary_label,
+            $final_cta_primary_url,
+            $final_cta_secondary_label,
+            $final_cta_secondary_url
+        );
     }
 
     $gallery_ids = $get_field_value($fields['gallery_ids'], array());
@@ -3268,6 +3493,8 @@ function cad_theme_business_area_content_box($post)
                 <input type="text" id="cad-business-description-label" name="cad_business_description_label" class="widefat" value="<?php echo esc_attr($description_label); ?>" placeholder="<?php esc_attr_e('Capacidad tecnica', 'cad-theme'); ?>">
             </p>
         </div>
+
+        <?php cad_theme_business_area_desc_ambitos_box($post); ?>
 
         <div class="cad-project-meta__section">
             <h4><?php esc_html_e('Estructura del area', 'cad-theme'); ?></h4>
@@ -3321,6 +3548,12 @@ function cad_theme_business_area_content_box($post)
         <div class="cad-project-meta__section">
             <h4><?php esc_html_e('Proyectos relacionados', 'cad-theme'); ?></h4>
             <p>
+                <label>
+                    <input type="checkbox" name="cad_business_show_related_projects" value="1" <?php checked($show_related_projects, '1'); ?>>
+                    <?php esc_html_e('Mostrar proyectos relacionados en el frontend', 'cad-theme'); ?>
+                </label>
+            </p>
+            <p>
                 <label for="cad-business-projects-label"><strong><?php esc_html_e('Label de seccion', 'cad-theme'); ?></strong></label><br>
                 <input type="text" id="cad-business-projects-label" name="cad_business_projects_label" class="widefat" value="<?php echo esc_attr($projects_label); ?>">
             </p>
@@ -3348,24 +3581,20 @@ function cad_theme_business_area_content_box($post)
                 <label for="cad-business-final-cta-text"><strong><?php esc_html_e('Mensaje principal', 'cad-theme'); ?></strong></label><br>
                 <textarea id="cad-business-final-cta-text" name="cad_business_final_cta_text" class="widefat" rows="3"><?php echo esc_textarea($final_cta_text); ?></textarea>
             </p>
-            <div class="cad-repeatable__row">
-                <div class="cad-repeatable__fields" style="flex:1;">
-                    <label for="cad-business-final-cta-primary-label"><strong><?php esc_html_e('Boton principal', 'cad-theme'); ?></strong></label>
-                    <input type="text" id="cad-business-final-cta-primary-label" name="cad_business_final_cta_primary_label" class="widefat" value="<?php echo esc_attr($final_cta_primary_label); ?>">
-                </div>
-                <div class="cad-repeatable__fields" style="flex:1;">
-                    <label for="cad-business-final-cta-primary-url"><strong><?php esc_html_e('URL principal', 'cad-theme'); ?></strong></label>
-                    <input type="url" id="cad-business-final-cta-primary-url" name="cad_business_final_cta_primary_url" class="widefat" value="<?php echo esc_attr($final_cta_primary_url); ?>" placeholder="https://">
-                </div>
-            </div>
-            <div class="cad-repeatable__row">
-                <div class="cad-repeatable__fields" style="flex:1;">
-                    <label for="cad-business-final-cta-secondary-label"><strong><?php esc_html_e('CTA complementario', 'cad-theme'); ?></strong></label>
-                    <input type="text" id="cad-business-final-cta-secondary-label" name="cad_business_final_cta_secondary_label" class="widefat" value="<?php echo esc_attr($final_cta_secondary_label); ?>">
-                </div>
-                <div class="cad-repeatable__fields" style="flex:1;">
-                    <label for="cad-business-final-cta-secondary-url"><strong><?php esc_html_e('URL complementario', 'cad-theme'); ?></strong></label>
-                    <input type="url" id="cad-business-final-cta-secondary-url" name="cad_business_final_cta_secondary_url" class="widefat" value="<?php echo esc_attr($final_cta_secondary_url); ?>" placeholder="https://">
+            <div class="cad-project-meta__section" style="padding:1rem; margin-top:1rem; border:1px solid #dcdcde; border-radius:8px; background:#f6f7f7;">
+                <h5 style="margin:0 0 0.35rem;"><?php esc_html_e('Botones CTA del area', 'cad-theme'); ?></h5>
+                <p class="description" style="margin-top:0;"><?php esc_html_e('Agrega, elimina y personaliza los botones visibles en el bloque CTA del area de negocio.', 'cad-theme'); ?></p>
+                <input type="hidden" name="cad_business_cta_buttons_present" value="1">
+                <div class="cad-repeatable" data-repeatable="business-cta-buttons">
+                    <div class="cad-repeatable__list">
+                        <?php foreach ($cta_buttons as $index => $cta_button) : ?>
+                            <?php cad_theme_render_business_cta_button_item($index, $cta_button); ?>
+                        <?php endforeach; ?>
+                    </div>
+                    <button type="button" class="button cad-repeatable__add" data-repeatable-add="business-cta-buttons"><?php esc_html_e('Agregar CTA', 'cad-theme'); ?></button>
+                    <template class="cad-repeatable__template" data-repeatable-template="business-cta-buttons">
+                        <?php cad_theme_render_business_cta_button_item('__INDEX__', array()); ?>
+                    </template>
                 </div>
             </div>
         </div>
@@ -3378,7 +3607,6 @@ function cad_theme_business_area_content_box($post)
 function cad_theme_business_area_desc_ambitos_box($post)
 {
     $fields = cad_theme_business_area_meta_fields();
-    wp_nonce_field('cad_business_area_meta', 'cad_business_area_meta_nonce');
 
     $title = metadata_exists('post', $post->ID, $fields['desc_ambitos_title'])
         ? (string) get_post_meta($post->ID, $fields['desc_ambitos_title'], true)
@@ -3394,46 +3622,45 @@ function cad_theme_business_area_desc_ambitos_box($post)
 
     $items = cad_theme_normalize_business_desc_ambitos_items($items);
     ?>
-    <div class="cad-project-meta">
-        <div class="cad-project-meta__section">
-            <p>
-                <label for="cad-business-desc-ambitos-title"><strong><?php esc_html_e('Titulo de seccion', 'cad-theme'); ?></strong></label><br>
-                <input type="text" id="cad-business-desc-ambitos-title" name="cad_business_desc_ambitos_title" class="widefat" value="<?php echo esc_attr($title); ?>" placeholder="<?php esc_attr_e('Descripcion y Ambitos', 'cad-theme'); ?>">
-            </p>
-            <p class="description"><?php esc_html_e('Si lo dejas vacio, la seccion se muestra sin encabezado.', 'cad-theme'); ?></p>
-        </div>
+    <div class="cad-project-meta__section">
+        <h4><?php esc_html_e('Descripcion y ambitos de desarrollo', 'cad-theme'); ?></h4>
+        <p>
+            <label for="cad-business-desc-ambitos-title"><strong><?php esc_html_e('Titulo de seccion', 'cad-theme'); ?></strong></label><br>
+            <input type="text" id="cad-business-desc-ambitos-title" name="cad_business_desc_ambitos_title" class="widefat" value="<?php echo esc_attr($title); ?>" placeholder="<?php esc_attr_e('Descripcion y Ambitos', 'cad-theme'); ?>">
+        </p>
+        <p class="description"><?php esc_html_e('Si lo dejas vacio, la seccion se muestra sin encabezado.', 'cad-theme'); ?></p>
+    </div>
 
-        <div class="cad-project-meta__section">
-            <h4><?php esc_html_e('Descripcion izquierda', 'cad-theme'); ?></h4>
-            <p class="description"><?php esc_html_e('Usa parrafos breves para la card principal. El contenido se muestra con formato enriquecido en frontend.', 'cad-theme'); ?></p>
-            <?php
-            wp_editor(
-                $description,
-                'cad_business_desc_ambitos_editor',
-                array(
-                    'textarea_name' => 'cad_business_desc_ambitos_description',
-                    'textarea_rows' => 8,
-                    'media_buttons' => false,
-                    'teeny'         => true,
-                )
-            );
-            ?>
-        </div>
+    <div class="cad-project-meta__section">
+        <h4><?php esc_html_e('Descripcion izquierda', 'cad-theme'); ?></h4>
+        <p class="description"><?php esc_html_e('Usa parrafos breves para la card principal. El contenido se muestra con formato enriquecido en frontend.', 'cad-theme'); ?></p>
+        <?php
+        wp_editor(
+            $description,
+            'cad_business_desc_ambitos_editor',
+            array(
+                'textarea_name' => 'cad_business_desc_ambitos_description',
+                'textarea_rows' => 8,
+                'media_buttons' => false,
+                'teeny'         => true,
+            )
+        );
+        ?>
+    </div>
 
-        <div class="cad-project-meta__section">
-            <h4><?php esc_html_e('Ambitos de desarrollo', 'cad-theme'); ?></h4>
-            <p class="description"><?php esc_html_e('Cada item admite titulo, descripcion y orden manual. El frontend muestra todos los ambitos visibles al cargar.', 'cad-theme'); ?></p>
-            <div class="cad-repeatable" data-repeatable="business-desc-ambitos">
-                <div class="cad-repeatable__list">
-                    <?php foreach ($items as $index => $item) : ?>
-                        <?php cad_theme_render_business_desc_ambitos_item($index, $item); ?>
-                    <?php endforeach; ?>
-                </div>
-                <button type="button" class="button cad-repeatable__add" data-repeatable-add="business-desc-ambitos"><?php esc_html_e('Agregar ambito', 'cad-theme'); ?></button>
-                <template class="cad-repeatable__template" data-repeatable-template="business-desc-ambitos">
-                    <?php cad_theme_render_business_desc_ambitos_item('__INDEX__', array()); ?>
-                </template>
+    <div class="cad-project-meta__section">
+        <h4><?php esc_html_e('Ambitos de desarrollo', 'cad-theme'); ?></h4>
+        <p class="description"><?php esc_html_e('Cada item admite titulo, descripcion y orden manual. El frontend muestra todos los ambitos visibles al cargar.', 'cad-theme'); ?></p>
+        <div class="cad-repeatable" data-repeatable="business-desc-ambitos">
+            <div class="cad-repeatable__list">
+                <?php foreach ($items as $index => $item) : ?>
+                    <?php cad_theme_render_business_desc_ambitos_item($index, $item); ?>
+                <?php endforeach; ?>
             </div>
+            <button type="button" class="button cad-repeatable__add" data-repeatable-add="business-desc-ambitos"><?php esc_html_e('Agregar ambito', 'cad-theme'); ?></button>
+            <template class="cad-repeatable__template" data-repeatable-template="business-desc-ambitos">
+                <?php cad_theme_render_business_desc_ambitos_item('__INDEX__', array()); ?>
+            </template>
         </div>
     </div>
     <?php
@@ -3531,8 +3758,6 @@ function cad_theme_save_business_area_meta($post_id)
         'gallery_title'             => 'cad_business_gallery_title',
         'projects_label'            => 'cad_business_projects_label',
         'projects_title'            => 'cad_business_projects_title',
-        'final_cta_primary_label'   => 'cad_business_final_cta_primary_label',
-        'final_cta_secondary_label' => 'cad_business_final_cta_secondary_label',
     );
 
     foreach ($text_fields as $field_key => $request_key) {
@@ -3546,6 +3771,9 @@ function cad_theme_save_business_area_meta($post_id)
 
     $desc_ambitos_title = isset($_POST['cad_business_desc_ambitos_title']) ? sanitize_text_field(wp_unslash($_POST['cad_business_desc_ambitos_title'])) : '';
     update_post_meta($post_id, $fields['desc_ambitos_title'], $desc_ambitos_title);
+
+    $show_related_projects = isset($_POST['cad_business_show_related_projects']) ? '1' : '0';
+    update_post_meta($post_id, '_cad_business_show_related_projects', $show_related_projects);
 
     $textarea_fields = array(
         'final_cta_text' => 'cad_business_final_cta_text',
@@ -3568,12 +3796,46 @@ function cad_theme_save_business_area_meta($post_id)
     }
 
     $url_fields = array(
-        'final_cta_primary_url'   => 'cad_business_final_cta_primary_url',
-        'final_cta_secondary_url' => 'cad_business_final_cta_secondary_url',
     );
 
     foreach ($url_fields as $field_key => $request_key) {
         $value = isset($_POST[$request_key]) ? esc_url_raw(wp_unslash($_POST[$request_key])) : '';
+        if ($value) {
+            update_post_meta($post_id, $fields[$field_key], $value);
+        } else {
+            delete_post_meta($post_id, $fields[$field_key]);
+        }
+    }
+
+    $legacy_text_fields = array(
+        'final_cta_primary_label'   => 'cad_business_final_cta_primary_label',
+        'final_cta_secondary_label' => 'cad_business_final_cta_secondary_label',
+    );
+
+    foreach ($legacy_text_fields as $field_key => $request_key) {
+        if (!array_key_exists($request_key, $_POST)) {
+            continue;
+        }
+
+        $value = sanitize_text_field(wp_unslash($_POST[$request_key]));
+        if ($value) {
+            update_post_meta($post_id, $fields[$field_key], $value);
+        } else {
+            delete_post_meta($post_id, $fields[$field_key]);
+        }
+    }
+
+    $legacy_url_fields = array(
+        'final_cta_primary_url'   => 'cad_business_final_cta_primary_url',
+        'final_cta_secondary_url' => 'cad_business_final_cta_secondary_url',
+    );
+
+    foreach ($legacy_url_fields as $field_key => $request_key) {
+        if (!array_key_exists($request_key, $_POST)) {
+            continue;
+        }
+
+        $value = esc_url_raw(wp_unslash($_POST[$request_key]));
         if ($value) {
             update_post_meta($post_id, $fields[$field_key], $value);
         } else {
@@ -3609,6 +3871,14 @@ function cad_theme_save_business_area_meta($post_id)
         update_post_meta($post_id, $fields['related_projects'], $related_projects);
     } else {
         delete_post_meta($post_id, $fields['related_projects']);
+    }
+
+    if (isset($_POST['cad_business_cta_buttons_present'])) {
+        $cta_buttons = array();
+        if (isset($_POST['cad_business_cta_buttons']) && is_array($_POST['cad_business_cta_buttons'])) {
+            $cta_buttons = cad_theme_normalize_business_cta_buttons(wp_unslash($_POST['cad_business_cta_buttons']));
+        }
+        update_post_meta($post_id, $fields['cta_buttons'], $cta_buttons);
     }
 
     $gallery_ids = array();
