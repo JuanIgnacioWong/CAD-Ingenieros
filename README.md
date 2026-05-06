@@ -97,6 +97,38 @@ Importante:
 4. En modo `Pull deployment`, usa `Update from Remote` y luego `Deploy HEAD Commit`.
 5. En modo `Push deployment`, agrega el remoto de cPanel a tu repo local y haz `git push` hacia ese remoto.
 
+### Checklist GitHub -> cPanel (deploy completo)
+
+1. Ejecuta preflight local:
+
+```bash
+cd /Users/ignaciowong/Documents/CAD-theme
+bash scripts/preflight-github-cpanel.sh
+```
+
+2. Genera backup SQL para importar en cPanel:
+
+```bash
+cd /Users/ignaciowong/Documents/CAD-theme
+bash scripts/export-db-cpanel.sh
+```
+
+3. Haz push de la rama a GitHub:
+
+```bash
+git push origin main
+```
+
+4. En cPanel (repositorio Git):
+   - `Update from Remote`
+   - `Deploy HEAD Commit`
+
+5. En cPanel (phpMyAdmin), importa el SQL generado en `database/backups/`.
+
+6. Crea o actualiza `public_html/CAD/wp-config.php` usando como base `wp-config.production.example.php`.
+
+7. Si cambias dominio/ruta (por ejemplo `localhost` -> `https://lbcchile.com/CAD`), ejecuta search/replace en base de datos.
+
 ### Archivos de deploy
 
 - `.cpanel.yml`: entrypoint que usa la ruta de cPanel y ejecuta el script.
@@ -128,6 +160,6 @@ Se agrego `.gitignore` para ignorar:
 
 - `.env`
 - `database/backups/`
-- `wordpress/uploads/`
+- `tmp/cpanel-release-*/`
 
-El repo limpio debe versionar `.env.example`, no `.env`, y dejar backups/uploads solo como datos locales.
+El repo limpio debe versionar `.env.example` y `wordpress/uploads/`, no `.env`.
