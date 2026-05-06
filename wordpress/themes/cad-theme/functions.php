@@ -2985,7 +2985,7 @@ function cad_theme_project_meta_icon_options()
         'location_on'   => __('Ubicacion', 'cad-theme'),
         'pin_drop'      => __('Pin', 'cad-theme'),
         'public'        => __('Mundo', 'cad-theme'),
-        'square_foot'   => __('Superficie', 'cad-theme'),
+        'square_foot'   => __('Ano', 'cad-theme'),
         'straighten'    => __('Regla', 'cad-theme'),
         'open_in_full'  => __('Dimension', 'cad-theme'),
         'architecture'  => __('Arquitectura', 'cad-theme'),
@@ -3329,15 +3329,15 @@ function cad_theme_project_assets_box($post)
             );
             ?>
             <p>
-                <label for="cad-project-surface"><strong><?php esc_html_e('Superficie', 'cad-theme'); ?></strong></label><br>
-                <input type="text" id="cad-project-surface" name="cad_project_surface" class="widefat" value="<?php echo esc_attr($surface); ?>" placeholder="<?php esc_attr_e('Ej: 18.500 m2', 'cad-theme'); ?>">
+                <label for="cad-project-surface"><strong><?php esc_html_e('Ano', 'cad-theme'); ?></strong></label><br>
+                <input type="text" id="cad-project-surface" name="cad_project_surface" class="widefat" value="<?php echo esc_attr($surface); ?>" placeholder="<?php esc_attr_e('Ej: 2024', 'cad-theme'); ?>">
             </p>
             <?php
             cad_theme_render_project_icon_picker(
                 'cad-project-surface-icon',
                 'cad_project_surface_icon',
                 $surface_icon,
-                __('Icono superficie', 'cad-theme'),
+                __('Icono ano', 'cad-theme'),
                 $icon_options
             );
             ?>

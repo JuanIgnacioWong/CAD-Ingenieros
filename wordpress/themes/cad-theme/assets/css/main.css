@@ -4166,6 +4166,7 @@ p {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 0;
+    text-align: center;
     margin: 0;
     padding: 0;
     border-radius: 10px;
@@ -4175,6 +4176,7 @@ p {
 }
 
 .cad-project-page .cad-project__meta-item {
+    text-align: center;
     padding: 20px;
     border-right: 1px solid rgba(255, 255, 255, 0.12);
 }
@@ -4204,6 +4206,7 @@ p {
 .cad-project-page .cad-project__meta-tags {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 8px;
 }
 

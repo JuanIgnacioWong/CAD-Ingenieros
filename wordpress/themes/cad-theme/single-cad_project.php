@@ -238,7 +238,7 @@ get_header();
             }
             if (!empty($surface)) {
                 $meta_items[] = array(
-                    'label' => __('Superficie', 'cad-theme'),
+                    'label' => __('Ano', 'cad-theme'),
                     'type'  => 'text',
                     'value' => (string) $surface,
                 );
@@ -351,6 +351,20 @@ get_header();
                             </section>
                         <?php endif; ?>
 
+                        <section class="cad-project-block cad-project-block--description">
+                            <div class="cad-project-block__header">
+                                <span class="cad-project-block__kicker"><?php esc_html_e('Descripcion', 'cad-theme'); ?></span>
+                                <h2><?php esc_html_e('Sobre el proyecto', 'cad-theme'); ?></h2>
+                            </div>
+                            <div class="cad-project-block__content cad-project-main__copy">
+                                <?php if (!empty($description)) : ?>
+                                    <?php echo wp_kses_post($description); ?>
+                                <?php else : ?>
+                                    <?php the_content(); ?>
+                                <?php endif; ?>
+                            </div>
+                        </section>
+
                         <?php if (!empty($gallery_items)) : ?>
                             <section class="cad-project-block cad-project-block--gallery" id="project-gallery">
                                 <div class="cad-project-block__header cad-project-block__header--gallery">
@@ -402,20 +416,6 @@ get_header();
                                 </div>
                             </section>
                         <?php endif; ?>
-
-                        <section class="cad-project-block cad-project-block--description">
-                            <div class="cad-project-block__header">
-                                <span class="cad-project-block__kicker"><?php esc_html_e('Descripcion', 'cad-theme'); ?></span>
-                                <h2><?php esc_html_e('Sobre el proyecto', 'cad-theme'); ?></h2>
-                            </div>
-                            <div class="cad-project-block__content cad-project-main__copy">
-                                <?php if (!empty($description)) : ?>
-                                    <?php echo wp_kses_post($description); ?>
-                                <?php else : ?>
-                                    <?php the_content(); ?>
-                                <?php endif; ?>
-                            </div>
-                        </section>
 
                         <?php if (!empty($video_items)) : ?>
                             <footer class="cad-project__footer">
