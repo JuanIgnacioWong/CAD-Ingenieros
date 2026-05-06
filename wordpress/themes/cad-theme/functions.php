@@ -341,6 +341,42 @@ function cad_theme_register_project_cpt()
 }
 add_action('init', 'cad_theme_register_project_cpt');
 
+function cad_theme_register_cta_block_cpt()
+{
+    $labels = array(
+        'name'               => __('CTAs', 'cad-theme'),
+        'singular_name'      => __('CTA', 'cad-theme'),
+        'add_new'            => __('Agregar', 'cad-theme'),
+        'add_new_item'       => __('Agregar CTA', 'cad-theme'),
+        'edit_item'          => __('Editar CTA', 'cad-theme'),
+        'new_item'           => __('Nuevo CTA', 'cad-theme'),
+        'view_item'          => __('Ver CTA', 'cad-theme'),
+        'search_items'       => __('Buscar CTAs', 'cad-theme'),
+        'not_found'          => __('Sin CTAs', 'cad-theme'),
+        'not_found_in_trash' => __('Sin CTAs', 'cad-theme'),
+        'menu_name'          => __('CTAs', 'cad-theme'),
+    );
+
+    register_post_type(
+        'cad_cta_block',
+        array(
+            'labels'             => $labels,
+            'public'             => false,
+            'show_ui'            => true,
+            'show_in_menu'       => true,
+            'menu_position'      => 29,
+            'menu_icon'          => 'dashicons-megaphone',
+            'supports'           => array('title', 'editor', 'page-attributes'),
+            'exclude_from_search'=> true,
+            'publicly_queryable' => false,
+            'has_archive'        => false,
+            'rewrite'            => false,
+            'show_in_rest'       => true,
+        )
+    );
+}
+add_action('init', 'cad_theme_register_cta_block_cpt');
+
 function cad_theme_register_client_cpt()
 {
     $labels = array(
@@ -921,7 +957,7 @@ function cad_theme_admin_project_assets($hook)
     }
 
     $screen = get_current_screen();
-    if (!$screen || !in_array($screen->post_type, array('cad_project', 'cad_business_area'), true)) {
+    if (!$screen || !in_array($screen->post_type, array('cad_project', 'cad_business_area', 'cad_cta_block'), true)) {
         return;
     }
 
@@ -1571,6 +1607,255 @@ function cad_theme_normalize_business_cta_buttons($items)
     }
 
     return $normalized;
+}
+
+function cad_theme_cta_block_meta_fields()
+{
+    return array(
+        'visible_title' => '_cad_cta_visible_title',
+        'buttons'       => '_cad_cta_buttons',
+        'context'       => '_cad_cta_context',
+        'is_active'     => '_cad_cta_is_active',
+    );
+}
+
+function cad_theme_cta_block_context_options()
+{
+    return array(
+        'general'      => __('General', 'cad-theme'),
+        'area_negocio' => __('Area de negocio', 'cad-theme'),
+        'proyecto'     => __('Proyecto', 'cad-theme'),
+    );
+}
+
+function cad_theme_sanitize_cta_block_context($value)
+{
+    $value = sanitize_key((string) $value);
+    $options = cad_theme_cta_block_context_options();
+
+    if (isset($options[$value])) {
+        return $value;
+    }
+
+    return 'general';
+}
+
+function cad_theme_get_cta_block_data($cta_block_id)
+{
+    $cta_block_id = absint($cta_block_id);
+    if (!$cta_block_id) {
+        return null;
+    }
+
+    $post = get_post($cta_block_id);
+    if (!$post || 'cad_cta_block' !== $post->post_type) {
+        return null;
+    }
+
+    if ('publish' !== get_post_status($cta_block_id)) {
+        return null;
+    }
+
+    $fields = cad_theme_cta_block_meta_fields();
+    $visible_title = get_post_meta($cta_block_id, $fields['visible_title'], true);
+    $buttons = get_post_meta($cta_block_id, $fields['buttons'], true);
+    $context = get_post_meta($cta_block_id, $fields['context'], true);
+    $is_active = get_post_meta($cta_block_id, $fields['is_active'], true);
+
+    if ('0' === (string) $is_active) {
+        return null;
+    }
+
+    $visible_title = sanitize_text_field((string) $visible_title);
+    if ('' === $visible_title) {
+        $visible_title = get_the_title($post);
+    }
+
+    return array(
+        'id'            => $cta_block_id,
+        'visible_title' => $visible_title,
+        'content'       => (string) $post->post_content,
+        'buttons'       => cad_theme_normalize_business_cta_buttons($buttons),
+        'context'       => cad_theme_sanitize_cta_block_context($context),
+        'is_active'     => '0' !== (string) $is_active,
+    );
+}
+
+function cad_theme_get_explicitly_assigned_cta_block_for_post($post_id)
+{
+    $post_id = absint($post_id);
+    if (!$post_id) {
+        return null;
+    }
+
+    $cta_block_id = absint(get_post_meta($post_id, '_cad_assigned_cta_block_id', true));
+    if (!$cta_block_id) {
+        return null;
+    }
+
+    return cad_theme_get_cta_block_data($cta_block_id);
+}
+
+function cad_theme_get_default_cta_block_for_post($post_id = 0)
+{
+    $post_id = absint($post_id);
+    $post_type = $post_id ? get_post_type($post_id) : '';
+    $preferred_context = '';
+
+    if ('cad_business_area' === $post_type) {
+        $preferred_context = 'area_negocio';
+    } elseif ('cad_project' === $post_type) {
+        $preferred_context = 'proyecto';
+    }
+
+    $cta_ids = get_posts(
+        array(
+            'post_type'      => 'cad_cta_block',
+            'post_status'    => 'publish',
+            'posts_per_page' => -1,
+            'fields'         => 'ids',
+            'meta_query'     => array(
+                'relation' => 'OR',
+                array(
+                    'key'     => '_cad_cta_is_active',
+                    'compare' => 'NOT EXISTS',
+                ),
+                array(
+                    'key'     => '_cad_cta_is_active',
+                    'value'   => '1',
+                    'compare' => '=',
+                ),
+            ),
+            'orderby'        => array(
+                'menu_order' => 'ASC',
+                'title'      => 'ASC',
+                'ID'         => 'ASC',
+            ),
+            'order'          => 'ASC',
+        )
+    );
+
+    if (empty($cta_ids)) {
+        return null;
+    }
+
+    $first_any = null;
+    $first_general = null;
+    $first_context = null;
+
+    foreach ($cta_ids as $cta_id) {
+        $cta_data = cad_theme_get_cta_block_data((int) $cta_id);
+        if (!is_array($cta_data)) {
+            continue;
+        }
+
+        if (null === $first_any) {
+            $first_any = $cta_data;
+        }
+
+        $cta_context = isset($cta_data['context']) ? cad_theme_sanitize_cta_block_context($cta_data['context']) : 'general';
+        if (null === $first_general && 'general' === $cta_context) {
+            $first_general = $cta_data;
+        }
+
+        if ($preferred_context && null === $first_context && $preferred_context === $cta_context) {
+            $first_context = $cta_data;
+        }
+
+        if (null !== $first_general && ($preferred_context ? null !== $first_context : true)) {
+            break;
+        }
+    }
+
+    if (is_array($first_general)) {
+        return $first_general;
+    }
+
+    if (is_array($first_context)) {
+        return $first_context;
+    }
+
+    return $first_any;
+}
+
+function cad_theme_get_assigned_cta_block_for_post($post_id)
+{
+    $assigned_cta = cad_theme_get_explicitly_assigned_cta_block_for_post($post_id);
+    if (is_array($assigned_cta)) {
+        return $assigned_cta;
+    }
+
+    return cad_theme_get_default_cta_block_for_post($post_id);
+}
+
+function cad_theme_render_cta_block($cta_block, $args = array())
+{
+    if (!is_array($cta_block)) {
+        return '';
+    }
+
+    $visible_title = isset($cta_block['visible_title']) ? sanitize_text_field((string) $cta_block['visible_title']) : '';
+    $content = isset($cta_block['content']) ? (string) $cta_block['content'] : '';
+    $buttons = isset($cta_block['buttons']) && is_array($cta_block['buttons']) ? $cta_block['buttons'] : array();
+
+    $content_html = '' !== trim((string) wp_strip_all_tags($content)) ? wpautop(wp_kses_post($content)) : '';
+    if ('' === $visible_title && '' === $content_html && empty($buttons)) {
+        return '';
+    }
+
+    $actions_extra_class = '';
+    if (isset($args['actions_extra_class'])) {
+        $actions_extra_class = sanitize_html_class((string) $args['actions_extra_class']);
+    }
+
+    ob_start();
+    ?>
+    <section class="cad-cta-block">
+        <div class="cad-cta-block__content">
+            <?php if ('' !== $visible_title) : ?>
+                <h2><?php echo esc_html($visible_title); ?></h2>
+            <?php endif; ?>
+
+            <?php if ('' !== $content_html) : ?>
+                <div class="cad-cta-block__copy">
+                    <?php echo $content_html; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+
+        <?php if (!empty($buttons)) : ?>
+            <div class="cad-cta-block__actions<?php echo $actions_extra_class ? ' ' . esc_attr($actions_extra_class) : ''; ?>">
+                <?php foreach ($buttons as $cta_button) : ?>
+                    <?php
+                    $button_style = isset($cta_button['style']) && in_array((string) $cta_button['style'], array('solid', 'outline'), true)
+                        ? (string) $cta_button['style']
+                        : 'solid';
+                    $button_target = !empty($cta_button['target_blank']) ? '_blank' : '_self';
+                    $button_rel = '_blank' === $button_target ? 'noopener noreferrer' : '';
+                    $button_style_attr = sprintf(
+                        '--cta-bg:%1$s;--cta-text:%2$s;--cta-border:%3$s;--cta-radius:%4$s;',
+                        esc_attr(isset($cta_button['bg_color']) ? (string) $cta_button['bg_color'] : ''),
+                        esc_attr(isset($cta_button['text_color']) ? (string) $cta_button['text_color'] : ''),
+                        esc_attr(isset($cta_button['border_color']) ? (string) $cta_button['border_color'] : ''),
+                        esc_attr(isset($cta_button['border_radius']) ? (string) $cta_button['border_radius'] : '10px')
+                    );
+                    ?>
+                    <a
+                        class="cad-cta-block__button is-<?php echo esc_attr($button_style); ?>"
+                        href="<?php echo esc_url(isset($cta_button['url']) ? (string) $cta_button['url'] : '#'); ?>"
+                        target="<?php echo esc_attr($button_target); ?>"
+                        <?php if ($button_rel) : ?>rel="<?php echo esc_attr($button_rel); ?>"<?php endif; ?>
+                        style="<?php echo esc_attr($button_style_attr); ?>"
+                    >
+                        <?php echo esc_html(isset($cta_button['label']) ? (string) $cta_button['label'] : ''); ?>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    </section>
+    <?php
+
+    return (string) ob_get_clean();
 }
 
 function cad_theme_business_area_presets()
@@ -2653,6 +2938,41 @@ function cad_theme_project_meta_boxes()
 }
 add_action('add_meta_boxes', 'cad_theme_project_meta_boxes');
 
+function cad_theme_cta_block_meta_boxes()
+{
+    add_meta_box(
+        'cad-cta-block-settings',
+        __('Configuracion del CTA', 'cad-theme'),
+        'cad_theme_cta_block_settings_box',
+        'cad_cta_block',
+        'normal',
+        'high'
+    );
+}
+add_action('add_meta_boxes', 'cad_theme_cta_block_meta_boxes');
+
+function cad_theme_content_cta_assignment_meta_boxes()
+{
+    add_meta_box(
+        'cad-content-cta-assignment',
+        __('Bloque CTA asociado', 'cad-theme'),
+        'cad_theme_content_cta_assignment_box',
+        'cad_business_area',
+        'side',
+        'default'
+    );
+
+    add_meta_box(
+        'cad-content-cta-assignment',
+        __('Bloque CTA asociado', 'cad-theme'),
+        'cad_theme_content_cta_assignment_box',
+        'cad_project',
+        'side',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'cad_theme_content_cta_assignment_meta_boxes');
+
 function cad_theme_project_meta_icon_options()
 {
     return array(
@@ -3324,8 +3644,22 @@ function cad_theme_render_business_related_project_item($index, $item)
     <?php
 }
 
-function cad_theme_render_business_cta_button_item($index, $item)
+function cad_theme_render_cta_button_item($index, $item, $field_prefix = 'cad_business_cta_buttons', $id_prefix = 'cad-business-cta', $remove_label = '')
 {
+    $field_prefix = sanitize_key((string) $field_prefix);
+    if ('' === $field_prefix) {
+        $field_prefix = 'cad_business_cta_buttons';
+    }
+
+    $id_prefix = sanitize_html_class((string) $id_prefix);
+    if ('' === $id_prefix) {
+        $id_prefix = 'cad-business-cta';
+    }
+
+    if ('' === $remove_label) {
+        $remove_label = __('Eliminar CTA', 'cad-theme');
+    }
+
     $style = isset($item['style']) && in_array((string) $item['style'], array('solid', 'outline'), true)
         ? (string) $item['style']
         : 'solid';
@@ -3340,51 +3674,422 @@ function cad_theme_render_business_cta_button_item($index, $item)
     ?>
     <div class="cad-repeatable__item" data-index="<?php echo esc_attr((string) $index); ?>">
         <div class="cad-repeatable__fields">
-            <label for="cad-business-cta-label-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('Texto del boton', 'cad-theme'); ?></strong></label>
-            <input type="text" id="cad-business-cta-label-<?php echo esc_attr((string) $index); ?>" name="cad_business_cta_buttons[<?php echo esc_attr((string) $index); ?>][label]" class="widefat" value="<?php echo esc_attr($label); ?>">
+            <label for="<?php echo esc_attr($id_prefix); ?>-label-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('Texto del boton', 'cad-theme'); ?></strong></label>
+            <input type="text" id="<?php echo esc_attr($id_prefix); ?>-label-<?php echo esc_attr((string) $index); ?>" name="<?php echo esc_attr($field_prefix); ?>[<?php echo esc_attr((string) $index); ?>][label]" class="widefat" value="<?php echo esc_attr($label); ?>">
         </div>
         <div class="cad-repeatable__fields">
-            <label for="cad-business-cta-url-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('URL', 'cad-theme'); ?></strong></label>
-            <input type="url" id="cad-business-cta-url-<?php echo esc_attr((string) $index); ?>" name="cad_business_cta_buttons[<?php echo esc_attr((string) $index); ?>][url]" class="widefat" value="<?php echo esc_attr($url); ?>" placeholder="https://">
+            <label for="<?php echo esc_attr($id_prefix); ?>-url-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('URL', 'cad-theme'); ?></strong></label>
+            <input type="url" id="<?php echo esc_attr($id_prefix); ?>-url-<?php echo esc_attr((string) $index); ?>" name="<?php echo esc_attr($field_prefix); ?>[<?php echo esc_attr((string) $index); ?>][url]" class="widefat" value="<?php echo esc_attr($url); ?>" placeholder="https://">
         </div>
         <div class="cad-repeatable__row" style="align-items:flex-start;">
             <div class="cad-repeatable__fields" style="flex:1;">
-                <label for="cad-business-cta-style-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('Estilo', 'cad-theme'); ?></strong></label>
-                <select id="cad-business-cta-style-<?php echo esc_attr((string) $index); ?>" name="cad_business_cta_buttons[<?php echo esc_attr((string) $index); ?>][style]" class="widefat">
+                <label for="<?php echo esc_attr($id_prefix); ?>-style-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('Estilo', 'cad-theme'); ?></strong></label>
+                <select id="<?php echo esc_attr($id_prefix); ?>-style-<?php echo esc_attr((string) $index); ?>" name="<?php echo esc_attr($field_prefix); ?>[<?php echo esc_attr((string) $index); ?>][style]" class="widefat">
                     <option value="solid" <?php selected($style, 'solid'); ?>><?php esc_html_e('Solid', 'cad-theme'); ?></option>
                     <option value="outline" <?php selected($style, 'outline'); ?>><?php esc_html_e('Outline', 'cad-theme'); ?></option>
                 </select>
             </div>
             <div class="cad-repeatable__fields" style="flex:1;">
-                <label for="cad-business-cta-target-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('Comportamiento', 'cad-theme'); ?></strong></label><br>
-                <label for="cad-business-cta-target-<?php echo esc_attr((string) $index); ?>">
-                    <input type="checkbox" id="cad-business-cta-target-<?php echo esc_attr((string) $index); ?>" name="cad_business_cta_buttons[<?php echo esc_attr((string) $index); ?>][target_blank]" value="1" <?php checked($target_blank, '1'); ?>>
+                <label for="<?php echo esc_attr($id_prefix); ?>-target-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('Comportamiento', 'cad-theme'); ?></strong></label><br>
+                <label for="<?php echo esc_attr($id_prefix); ?>-target-<?php echo esc_attr((string) $index); ?>">
+                    <input type="checkbox" id="<?php echo esc_attr($id_prefix); ?>-target-<?php echo esc_attr((string) $index); ?>" name="<?php echo esc_attr($field_prefix); ?>[<?php echo esc_attr((string) $index); ?>][target_blank]" value="1" <?php checked($target_blank, '1'); ?>>
                     <?php esc_html_e('Abrir en nueva pestana', 'cad-theme'); ?>
                 </label>
             </div>
         </div>
         <div class="cad-repeatable__row" style="align-items:flex-start;">
             <div class="cad-repeatable__fields" style="flex:1;">
-                <label for="cad-business-cta-bg-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('Color de fondo', 'cad-theme'); ?></strong></label>
-                <input type="text" id="cad-business-cta-bg-<?php echo esc_attr((string) $index); ?>" name="cad_business_cta_buttons[<?php echo esc_attr((string) $index); ?>][bg_color]" class="widefat cad-color-picker" value="<?php echo esc_attr($bg_color); ?>">
+                <label for="<?php echo esc_attr($id_prefix); ?>-bg-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('Color de fondo', 'cad-theme'); ?></strong></label>
+                <input type="text" id="<?php echo esc_attr($id_prefix); ?>-bg-<?php echo esc_attr((string) $index); ?>" name="<?php echo esc_attr($field_prefix); ?>[<?php echo esc_attr((string) $index); ?>][bg_color]" class="widefat cad-color-picker" value="<?php echo esc_attr($bg_color); ?>">
             </div>
             <div class="cad-repeatable__fields" style="flex:1;">
-                <label for="cad-business-cta-text-color-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('Color de texto', 'cad-theme'); ?></strong></label>
-                <input type="text" id="cad-business-cta-text-color-<?php echo esc_attr((string) $index); ?>" name="cad_business_cta_buttons[<?php echo esc_attr((string) $index); ?>][text_color]" class="widefat cad-color-picker" value="<?php echo esc_attr($text_color); ?>">
+                <label for="<?php echo esc_attr($id_prefix); ?>-text-color-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('Color de texto', 'cad-theme'); ?></strong></label>
+                <input type="text" id="<?php echo esc_attr($id_prefix); ?>-text-color-<?php echo esc_attr((string) $index); ?>" name="<?php echo esc_attr($field_prefix); ?>[<?php echo esc_attr((string) $index); ?>][text_color]" class="widefat cad-color-picker" value="<?php echo esc_attr($text_color); ?>">
             </div>
             <div class="cad-repeatable__fields" style="flex:1;">
-                <label for="cad-business-cta-border-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('Color de borde', 'cad-theme'); ?></strong></label>
-                <input type="text" id="cad-business-cta-border-<?php echo esc_attr((string) $index); ?>" name="cad_business_cta_buttons[<?php echo esc_attr((string) $index); ?>][border_color]" class="widefat cad-color-picker" value="<?php echo esc_attr($border_color); ?>">
+                <label for="<?php echo esc_attr($id_prefix); ?>-border-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('Color de borde', 'cad-theme'); ?></strong></label>
+                <input type="text" id="<?php echo esc_attr($id_prefix); ?>-border-<?php echo esc_attr((string) $index); ?>" name="<?php echo esc_attr($field_prefix); ?>[<?php echo esc_attr((string) $index); ?>][border_color]" class="widefat cad-color-picker" value="<?php echo esc_attr($border_color); ?>">
             </div>
         </div>
         <div class="cad-repeatable__fields">
-            <label for="cad-business-cta-radius-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('Border radius', 'cad-theme'); ?></strong></label>
-            <input type="text" id="cad-business-cta-radius-<?php echo esc_attr((string) $index); ?>" name="cad_business_cta_buttons[<?php echo esc_attr((string) $index); ?>][border_radius]" class="widefat" value="<?php echo esc_attr($border_radius); ?>" placeholder="10px">
+            <label for="<?php echo esc_attr($id_prefix); ?>-radius-<?php echo esc_attr((string) $index); ?>"><strong><?php esc_html_e('Border radius', 'cad-theme'); ?></strong></label>
+            <input type="text" id="<?php echo esc_attr($id_prefix); ?>-radius-<?php echo esc_attr((string) $index); ?>" name="<?php echo esc_attr($field_prefix); ?>[<?php echo esc_attr((string) $index); ?>][border_radius]" class="widefat" value="<?php echo esc_attr($border_radius); ?>" placeholder="10px">
         </div>
-        <button type="button" class="button-link cad-repeatable__remove"><?php esc_html_e('Eliminar CTA', 'cad-theme'); ?></button>
+        <button type="button" class="button-link cad-repeatable__remove"><?php echo esc_html($remove_label); ?></button>
     </div>
     <?php
 }
+
+function cad_theme_render_business_cta_button_item($index, $item)
+{
+    cad_theme_render_cta_button_item(
+        $index,
+        $item,
+        'cad_business_cta_buttons',
+        'cad-business-cta',
+        __('Eliminar CTA', 'cad-theme')
+    );
+}
+
+function cad_theme_cta_block_settings_box($post)
+{
+    $fields = cad_theme_cta_block_meta_fields();
+    $contexts = cad_theme_cta_block_context_options();
+
+    wp_nonce_field('cad_cta_block_meta', 'cad_cta_block_meta_nonce');
+
+    $visible_title = (string) get_post_meta($post->ID, $fields['visible_title'], true);
+    $context = cad_theme_sanitize_cta_block_context(get_post_meta($post->ID, $fields['context'], true));
+    $buttons = cad_theme_normalize_business_cta_buttons(get_post_meta($post->ID, $fields['buttons'], true));
+    $is_active = get_post_meta($post->ID, $fields['is_active'], true);
+    if ('' === (string) $is_active) {
+        $is_active = '1';
+    }
+    ?>
+    <div class="cad-project-meta">
+        <div class="cad-project-meta__section">
+            <h4><?php esc_html_e('Datos principales', 'cad-theme'); ?></h4>
+            <p>
+                <label for="cad-cta-visible-title"><strong><?php esc_html_e('Titulo visible del CTA', 'cad-theme'); ?></strong></label><br>
+                <input type="text" id="cad-cta-visible-title" name="cad_cta_visible_title" class="widefat" value="<?php echo esc_attr($visible_title); ?>">
+            </p>
+            <p>
+                <label for="cad-cta-context"><strong><?php esc_html_e('Contexto sugerido', 'cad-theme'); ?></strong></label><br>
+                <select id="cad-cta-context" name="cad_cta_context" class="widefat">
+                    <?php foreach ($contexts as $value => $label) : ?>
+                        <option value="<?php echo esc_attr((string) $value); ?>" <?php selected($context, $value); ?>><?php echo esc_html((string) $label); ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </p>
+            <p class="description">
+                <label for="cad-cta-is-active">
+                    <input type="checkbox" id="cad-cta-is-active" name="cad_cta_is_active" value="1" <?php checked((string) $is_active, '1'); ?>>
+                    <?php esc_html_e('CTA activo', 'cad-theme'); ?>
+                </label>
+            </p>
+            <p class="description"><?php esc_html_e('La bajada del CTA se edita en el editor principal del contenido.', 'cad-theme'); ?></p>
+        </div>
+
+        <div class="cad-project-meta__section">
+            <h4><?php esc_html_e('Botones', 'cad-theme'); ?></h4>
+            <input type="hidden" name="cad_cta_buttons_present" value="1">
+            <div class="cad-repeatable" data-repeatable="cta-block-buttons">
+                <div class="cad-repeatable__list">
+                    <?php foreach ($buttons as $index => $cta_button) : ?>
+                        <?php cad_theme_render_cta_button_item($index, $cta_button, 'cad_cta_buttons', 'cad-cta-button', __('Eliminar boton', 'cad-theme')); ?>
+                    <?php endforeach; ?>
+                </div>
+                <button type="button" class="button cad-repeatable__add" data-repeatable-add="cta-block-buttons"><?php esc_html_e('Agregar boton', 'cad-theme'); ?></button>
+                <template class="cad-repeatable__template" data-repeatable-template="cta-block-buttons">
+                    <?php cad_theme_render_cta_button_item('__INDEX__', array(), 'cad_cta_buttons', 'cad-cta-button', __('Eliminar boton', 'cad-theme')); ?>
+                </template>
+            </div>
+        </div>
+    </div>
+    <?php
+}
+
+function cad_theme_content_cta_assignment_box($post)
+{
+    wp_nonce_field('cad_assigned_cta_block_meta', 'cad_assigned_cta_block_meta_nonce');
+
+    $assigned_cta_id = absint(get_post_meta($post->ID, '_cad_assigned_cta_block_id', true));
+    $cta_posts = get_posts(
+        array(
+            'post_type'      => 'cad_cta_block',
+            'post_status'    => 'publish',
+            'posts_per_page' => -1,
+            'meta_query'     => array(
+                'relation' => 'OR',
+                array(
+                    'key'     => '_cad_cta_is_active',
+                    'compare' => 'NOT EXISTS',
+                ),
+                array(
+                    'key'     => '_cad_cta_is_active',
+                    'value'   => '1',
+                    'compare' => '=',
+                ),
+            ),
+            'orderby'        => array(
+                'menu_order' => 'ASC',
+                'title'      => 'ASC',
+            ),
+            'order'          => 'ASC',
+        )
+    );
+
+    $fields = cad_theme_cta_block_meta_fields();
+    $contexts = cad_theme_cta_block_context_options();
+    $default_cta = cad_theme_get_default_cta_block_for_post((int) $post->ID);
+    $default_cta_label = '';
+    if (is_array($default_cta)) {
+        $default_cta_label = isset($default_cta['visible_title']) ? sanitize_text_field((string) $default_cta['visible_title']) : '';
+        if ('' === $default_cta_label) {
+            $default_cta_label = get_the_title((int) $default_cta['id']);
+        }
+    }
+    ?>
+    <p>
+        <label for="cad-assigned-cta-block-id" class="screen-reader-text"><?php esc_html_e('Bloque CTA asociado', 'cad-theme'); ?></label>
+        <select id="cad-assigned-cta-block-id" name="cad_assigned_cta_block_id" class="widefat">
+            <option value="0"><?php esc_html_e('Usar CTA global por defecto', 'cad-theme'); ?></option>
+            <?php foreach ($cta_posts as $cta_post) : ?>
+                <?php
+                $cta_visible_title = (string) get_post_meta($cta_post->ID, $fields['visible_title'], true);
+                $cta_context = cad_theme_sanitize_cta_block_context(get_post_meta($cta_post->ID, $fields['context'], true));
+                $cta_context_label = isset($contexts[$cta_context]) ? (string) $contexts[$cta_context] : $contexts['general'];
+                $cta_title = '' !== trim($cta_visible_title) ? $cta_visible_title : get_the_title($cta_post);
+                $option_label = sprintf('%1$s (%2$s)', $cta_title, $cta_context_label);
+                ?>
+                <option value="<?php echo esc_attr((string) $cta_post->ID); ?>" <?php selected($assigned_cta_id, (int) $cta_post->ID); ?>>
+                    <?php echo esc_html($option_label); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </p>
+    <p class="description">
+        <?php esc_html_e('Solo aparecen CTAs publicados de tipo global.', 'cad-theme'); ?>
+        <?php if ('' !== $default_cta_label) : ?>
+            <?php echo ' ' . esc_html(sprintf(__('CTA global actual por defecto: %s.', 'cad-theme'), $default_cta_label)); ?>
+        <?php endif; ?>
+    </p>
+    <?php
+}
+
+function cad_theme_get_business_area_legacy_cta_payload($post_id)
+{
+    $post_id = absint($post_id);
+    if (!$post_id || 'cad_business_area' !== get_post_type($post_id)) {
+        return null;
+    }
+
+    $legacy_text = '';
+    $legacy_buttons = array();
+    $has_legacy_data = false;
+
+    if (metadata_exists('post', $post_id, '_cad_business_final_cta_text')) {
+        $legacy_text = (string) get_post_meta($post_id, '_cad_business_final_cta_text', true);
+        if ('' !== trim((string) wp_strip_all_tags($legacy_text))) {
+            $has_legacy_data = true;
+        }
+    }
+
+    if (metadata_exists('post', $post_id, '_cad_business_cta_buttons')) {
+        $legacy_buttons = cad_theme_normalize_business_cta_buttons(get_post_meta($post_id, '_cad_business_cta_buttons', true));
+        if (!empty($legacy_buttons)) {
+            $has_legacy_data = true;
+        }
+    } else {
+        $primary_label = metadata_exists('post', $post_id, '_cad_business_final_cta_primary_label')
+            ? (string) get_post_meta($post_id, '_cad_business_final_cta_primary_label', true)
+            : '';
+        $primary_url = metadata_exists('post', $post_id, '_cad_business_final_cta_primary_url')
+            ? (string) get_post_meta($post_id, '_cad_business_final_cta_primary_url', true)
+            : '';
+        $secondary_label = metadata_exists('post', $post_id, '_cad_business_final_cta_secondary_label')
+            ? (string) get_post_meta($post_id, '_cad_business_final_cta_secondary_label', true)
+            : '';
+        $secondary_url = metadata_exists('post', $post_id, '_cad_business_final_cta_secondary_url')
+            ? (string) get_post_meta($post_id, '_cad_business_final_cta_secondary_url', true)
+            : '';
+
+        $legacy_buttons = cad_theme_get_legacy_business_cta_buttons($primary_label, $primary_url, $secondary_label, $secondary_url);
+        if (!empty($legacy_buttons)) {
+            $has_legacy_data = true;
+        }
+    }
+
+    if (!$has_legacy_data) {
+        return null;
+    }
+
+    return array(
+        'visible_title' => __('Siguiente paso', 'cad-theme'),
+        'content'       => wp_kses_post($legacy_text),
+        'buttons'       => $legacy_buttons,
+        'context'       => 'area_negocio',
+        'is_active'     => '1',
+    );
+}
+
+function cad_theme_register_cta_migration_submenu()
+{
+    add_submenu_page(
+        'edit.php?post_type=cad_cta_block',
+        __('Migrar CTAs legacy', 'cad-theme'),
+        __('Migrar legacy', 'cad-theme'),
+        'manage_options',
+        'cad-cta-migration',
+        'cad_theme_render_cta_migration_page'
+    );
+}
+add_action('admin_menu', 'cad_theme_register_cta_migration_submenu');
+
+function cad_theme_get_cta_migration_report()
+{
+    return array(
+        'scanned'                => 0,
+        'created_cta_blocks'     => 0,
+        'assigned_business_areas'=> 0,
+        'skipped_with_assignment'=> 0,
+        'skipped_without_legacy' => 0,
+        'errors'                 => 0,
+    );
+}
+
+function cad_theme_render_cta_migration_page()
+{
+    if (!current_user_can('manage_options')) {
+        wp_die(esc_html__('No tienes permisos para acceder a esta pagina.', 'cad-theme'));
+    }
+
+    $business_areas = get_posts(
+        array(
+            'post_type'      => 'cad_business_area',
+            'post_status'    => array('publish', 'draft', 'pending', 'future', 'private'),
+            'posts_per_page' => -1,
+            'orderby'        => 'ID',
+            'order'          => 'ASC',
+            'fields'         => 'ids',
+        )
+    );
+
+    $total = is_array($business_areas) ? count($business_areas) : 0;
+    $assignable = 0;
+
+    if (!empty($business_areas)) {
+        foreach ($business_areas as $business_area_id) {
+            $assigned_cta = cad_theme_get_explicitly_assigned_cta_block_for_post((int) $business_area_id);
+            if (is_array($assigned_cta)) {
+                continue;
+            }
+
+            $payload = cad_theme_get_business_area_legacy_cta_payload((int) $business_area_id);
+            if (is_array($payload)) {
+                $assignable++;
+            }
+        }
+    }
+
+    $report = null;
+    if (isset($_GET['cad_cta_migration_report'])) {
+        $decoded = json_decode(base64_decode(sanitize_text_field(wp_unslash($_GET['cad_cta_migration_report']))), true);
+        if (is_array($decoded)) {
+            $report = array_merge(cad_theme_get_cta_migration_report(), $decoded);
+        }
+    }
+    ?>
+    <div class="wrap">
+        <h1><?php esc_html_e('Migrar CTAs legacy de Areas de Negocio', 'cad-theme'); ?></h1>
+        <p><?php esc_html_e('Esta herramienta crea CTAs globales en cad_cta_block desde metas antiguas del area y asigna automaticamente el bloque creado a cada area sin CTA asignado.', 'cad-theme'); ?></p>
+        <p><strong><?php echo esc_html(sprintf(__('Areas totales: %1$d | Areas migrables: %2$d', 'cad-theme'), $total, $assignable)); ?></strong></p>
+
+        <?php if (is_array($report)) : ?>
+            <div class="notice notice-success is-dismissible">
+                <p>
+                    <?php
+                    echo esc_html(
+                        sprintf(
+                            __('Resultado: revisadas %1$d, CTAs creados %2$d, areas asignadas %3$d, omitidas con CTA asignado %4$d, omitidas sin CTA legacy %5$d, errores %6$d.', 'cad-theme'),
+                            (int) $report['scanned'],
+                            (int) $report['created_cta_blocks'],
+                            (int) $report['assigned_business_areas'],
+                            (int) $report['skipped_with_assignment'],
+                            (int) $report['skipped_without_legacy'],
+                            (int) $report['errors']
+                        )
+                    );
+                    ?>
+                </p>
+            </div>
+        <?php endif; ?>
+
+        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+            <input type="hidden" name="action" value="cad_migrate_legacy_area_ctas">
+            <?php wp_nonce_field('cad_migrate_legacy_area_ctas', 'cad_migrate_legacy_area_ctas_nonce'); ?>
+            <?php submit_button(__('Migrar ahora', 'cad-theme')); ?>
+        </form>
+    </div>
+    <?php
+}
+
+function cad_theme_handle_cta_migration_action()
+{
+    if (!current_user_can('manage_options')) {
+        wp_die(esc_html__('No tienes permisos para ejecutar esta accion.', 'cad-theme'));
+    }
+
+    check_admin_referer('cad_migrate_legacy_area_ctas', 'cad_migrate_legacy_area_ctas_nonce');
+
+    $report = cad_theme_get_cta_migration_report();
+    $cta_fields = cad_theme_cta_block_meta_fields();
+
+    $business_areas = get_posts(
+        array(
+            'post_type'      => 'cad_business_area',
+            'post_status'    => array('publish', 'draft', 'pending', 'future', 'private'),
+            'posts_per_page' => -1,
+            'orderby'        => 'ID',
+            'order'          => 'ASC',
+            'fields'         => 'ids',
+        )
+    );
+
+    foreach ((array) $business_areas as $business_area_id) {
+        $business_area_id = (int) $business_area_id;
+        $report['scanned']++;
+
+        $assigned_cta = cad_theme_get_explicitly_assigned_cta_block_for_post($business_area_id);
+        if (is_array($assigned_cta)) {
+            $report['skipped_with_assignment']++;
+            continue;
+        }
+
+        $payload = cad_theme_get_business_area_legacy_cta_payload($business_area_id);
+        if (!is_array($payload)) {
+            $report['skipped_without_legacy']++;
+            continue;
+        }
+
+        $cta_post_id = wp_insert_post(
+            array(
+                'post_type'    => 'cad_cta_block',
+                'post_status'  => 'publish',
+                'post_title'   => sprintf(__('CTA migrado: %s', 'cad-theme'), get_the_title($business_area_id)),
+                'post_content' => isset($payload['content']) ? (string) $payload['content'] : '',
+            ),
+            true
+        );
+
+        if (is_wp_error($cta_post_id) || !$cta_post_id) {
+            $report['errors']++;
+            continue;
+        }
+
+        update_post_meta($cta_post_id, $cta_fields['visible_title'], isset($payload['visible_title']) ? sanitize_text_field((string) $payload['visible_title']) : '');
+        update_post_meta($cta_post_id, $cta_fields['buttons'], isset($payload['buttons']) ? cad_theme_normalize_business_cta_buttons($payload['buttons']) : array());
+        update_post_meta($cta_post_id, $cta_fields['context'], isset($payload['context']) ? cad_theme_sanitize_cta_block_context($payload['context']) : 'area_negocio');
+        update_post_meta($cta_post_id, $cta_fields['is_active'], !empty($payload['is_active']) ? '1' : '0');
+
+        update_post_meta($business_area_id, '_cad_assigned_cta_block_id', (int) $cta_post_id);
+        $report['created_cta_blocks']++;
+        $report['assigned_business_areas']++;
+    }
+
+    $redirect_url = add_query_arg(
+        array(
+            'post_type'                 => 'cad_cta_block',
+            'page'                      => 'cad-cta-migration',
+            'cad_cta_migration_report'  => rawurlencode(base64_encode((string) wp_json_encode($report))),
+        ),
+        admin_url('edit.php')
+    );
+
+    wp_safe_redirect($redirect_url);
+    exit;
+}
+add_action('admin_post_cad_migrate_legacy_area_ctas', 'cad_theme_handle_cta_migration_action');
 
 function cad_theme_business_area_content_box($post)
 {
@@ -3413,11 +4118,6 @@ function cad_theme_business_area_content_box($post)
     $gallery_title = (string) $get_field_value($fields['gallery_title'], isset($preset['gallery_title']) ? $preset['gallery_title'] : '');
     $projects_label = (string) $get_field_value($fields['projects_label'], isset($preset['projects_label']) ? $preset['projects_label'] : '');
     $projects_title = (string) $get_field_value($fields['projects_title'], isset($preset['projects_title']) ? $preset['projects_title'] : '');
-    $final_cta_text = (string) $get_field_value($fields['final_cta_text'], isset($preset['final_cta_text']) ? $preset['final_cta_text'] : '');
-    $final_cta_primary_label = (string) $get_field_value($fields['final_cta_primary_label'], isset($preset['final_cta_primary_label']) ? $preset['final_cta_primary_label'] : '');
-    $final_cta_primary_url = (string) $get_field_value($fields['final_cta_primary_url'], isset($preset['final_cta_primary_url']) ? $preset['final_cta_primary_url'] : '');
-    $final_cta_secondary_label = (string) $get_field_value($fields['final_cta_secondary_label'], isset($preset['final_cta_secondary_label']) ? $preset['final_cta_secondary_label'] : '');
-    $final_cta_secondary_url = (string) $get_field_value($fields['final_cta_secondary_url'], isset($preset['final_cta_secondary_url']) ? $preset['final_cta_secondary_url'] : '');
     $show_related_projects = get_post_meta($post->ID, '_cad_business_show_related_projects', true);
     if ('' === $show_related_projects) {
         $show_related_projects = '1';
@@ -3433,17 +4133,6 @@ function cad_theme_business_area_content_box($post)
     $related_projects = cad_theme_normalize_business_related_projects($related_projects);
     if (empty($related_projects) && !empty($preset['related_projects'])) {
         $related_projects = cad_theme_normalize_business_related_projects($preset['related_projects']);
-    }
-
-    if (metadata_exists('post', $post->ID, $fields['cta_buttons'])) {
-        $cta_buttons = cad_theme_normalize_business_cta_buttons(get_post_meta($post->ID, $fields['cta_buttons'], true));
-    } else {
-        $cta_buttons = cad_theme_get_legacy_business_cta_buttons(
-            $final_cta_primary_label,
-            $final_cta_primary_url,
-            $final_cta_secondary_label,
-            $final_cta_secondary_url
-        );
     }
 
     $gallery_ids = $get_field_value($fields['gallery_ids'], array());
@@ -3575,30 +4264,6 @@ function cad_theme_business_area_content_box($post)
             </div>
         </div>
 
-        <div class="cad-project-meta__section">
-            <h4><?php esc_html_e('Franja CTA final', 'cad-theme'); ?></h4>
-            <p>
-                <label for="cad-business-final-cta-text"><strong><?php esc_html_e('Mensaje principal', 'cad-theme'); ?></strong></label><br>
-                <textarea id="cad-business-final-cta-text" name="cad_business_final_cta_text" class="widefat" rows="3"><?php echo esc_textarea($final_cta_text); ?></textarea>
-            </p>
-            <div class="cad-project-meta__section" style="padding:1rem; margin-top:1rem; border:1px solid #dcdcde; border-radius:8px; background:#f6f7f7;">
-                <h5 style="margin:0 0 0.35rem;"><?php esc_html_e('Botones CTA del area', 'cad-theme'); ?></h5>
-                <p class="description" style="margin-top:0;"><?php esc_html_e('Agrega, elimina y personaliza los botones visibles en el bloque CTA del area de negocio.', 'cad-theme'); ?></p>
-                <input type="hidden" name="cad_business_cta_buttons_present" value="1">
-                <div class="cad-repeatable" data-repeatable="business-cta-buttons">
-                    <div class="cad-repeatable__list">
-                        <?php foreach ($cta_buttons as $index => $cta_button) : ?>
-                            <?php cad_theme_render_business_cta_button_item($index, $cta_button); ?>
-                        <?php endforeach; ?>
-                    </div>
-                    <button type="button" class="button cad-repeatable__add" data-repeatable-add="business-cta-buttons"><?php esc_html_e('Agregar CTA', 'cad-theme'); ?></button>
-                    <template class="cad-repeatable__template" data-repeatable-template="business-cta-buttons">
-                        <?php cad_theme_render_business_cta_button_item('__INDEX__', array()); ?>
-                    </template>
-                </div>
-            </div>
-        </div>
-
         <?php cad_theme_render_project_icon_modal($icon_options); ?>
     </div>
     <?php
@@ -3705,6 +4370,74 @@ function cad_theme_business_area_style_box($post)
     <?php
 }
 
+function cad_theme_save_cta_block_meta($post_id)
+{
+    if (!isset($_POST['cad_cta_block_meta_nonce']) || !wp_verify_nonce($_POST['cad_cta_block_meta_nonce'], 'cad_cta_block_meta')) {
+        return;
+    }
+
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+
+    $fields = cad_theme_cta_block_meta_fields();
+
+    $visible_title = isset($_POST['cad_cta_visible_title']) ? sanitize_text_field(wp_unslash($_POST['cad_cta_visible_title'])) : '';
+    if ('' !== $visible_title) {
+        update_post_meta($post_id, $fields['visible_title'], $visible_title);
+    } else {
+        delete_post_meta($post_id, $fields['visible_title']);
+    }
+
+    $context = isset($_POST['cad_cta_context']) ? cad_theme_sanitize_cta_block_context(wp_unslash($_POST['cad_cta_context'])) : 'general';
+    update_post_meta($post_id, $fields['context'], $context);
+    update_post_meta($post_id, $fields['is_active'], !empty($_POST['cad_cta_is_active']) ? '1' : '0');
+
+    if (isset($_POST['cad_cta_buttons_present'])) {
+        $buttons = array();
+        if (isset($_POST['cad_cta_buttons']) && is_array($_POST['cad_cta_buttons'])) {
+            $buttons = cad_theme_normalize_business_cta_buttons(wp_unslash($_POST['cad_cta_buttons']));
+        }
+        update_post_meta($post_id, $fields['buttons'], $buttons);
+    }
+}
+add_action('save_post_cad_cta_block', 'cad_theme_save_cta_block_meta');
+
+function cad_theme_save_assigned_cta_block_meta($post_id)
+{
+    if (!isset($_POST['cad_assigned_cta_block_meta_nonce']) || !wp_verify_nonce($_POST['cad_assigned_cta_block_meta_nonce'], 'cad_assigned_cta_block_meta')) {
+        return;
+    }
+
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+
+    $cta_block_id = isset($_POST['cad_assigned_cta_block_id']) ? absint(wp_unslash($_POST['cad_assigned_cta_block_id'])) : 0;
+    if (!$cta_block_id) {
+        delete_post_meta($post_id, '_cad_assigned_cta_block_id');
+        return;
+    }
+
+    if ('cad_cta_block' !== get_post_type($cta_block_id) || 'publish' !== get_post_status($cta_block_id)) {
+        delete_post_meta($post_id, '_cad_assigned_cta_block_id');
+        return;
+    }
+
+    $cta_meta_fields = cad_theme_cta_block_meta_fields();
+    $cta_is_active = get_post_meta($cta_block_id, $cta_meta_fields['is_active'], true);
+    if ('0' === (string) $cta_is_active) {
+        delete_post_meta($post_id, '_cad_assigned_cta_block_id');
+        return;
+    }
+
+    update_post_meta($post_id, '_cad_assigned_cta_block_id', $cta_block_id);
+}
+
 function cad_theme_save_business_area_meta($post_id)
 {
     if (!isset($_POST['cad_business_area_meta_nonce'])) {
@@ -3775,19 +4508,6 @@ function cad_theme_save_business_area_meta($post_id)
     $show_related_projects = isset($_POST['cad_business_show_related_projects']) ? '1' : '0';
     update_post_meta($post_id, '_cad_business_show_related_projects', $show_related_projects);
 
-    $textarea_fields = array(
-        'final_cta_text' => 'cad_business_final_cta_text',
-    );
-
-    foreach ($textarea_fields as $field_key => $request_key) {
-        $value = isset($_POST[$request_key]) ? sanitize_textarea_field(wp_unslash($_POST[$request_key])) : '';
-        if ($value) {
-            update_post_meta($post_id, $fields[$field_key], $value);
-        } else {
-            delete_post_meta($post_id, $fields[$field_key]);
-        }
-    }
-
     $desc_ambitos_description = isset($_POST['cad_business_desc_ambitos_description']) ? wp_kses_post(wp_unslash($_POST['cad_business_desc_ambitos_description'])) : '';
     if ('' !== trim((string) wp_strip_all_tags($desc_ambitos_description))) {
         update_post_meta($post_id, $fields['desc_ambitos_description'], $desc_ambitos_description);
@@ -3800,42 +4520,6 @@ function cad_theme_save_business_area_meta($post_id)
 
     foreach ($url_fields as $field_key => $request_key) {
         $value = isset($_POST[$request_key]) ? esc_url_raw(wp_unslash($_POST[$request_key])) : '';
-        if ($value) {
-            update_post_meta($post_id, $fields[$field_key], $value);
-        } else {
-            delete_post_meta($post_id, $fields[$field_key]);
-        }
-    }
-
-    $legacy_text_fields = array(
-        'final_cta_primary_label'   => 'cad_business_final_cta_primary_label',
-        'final_cta_secondary_label' => 'cad_business_final_cta_secondary_label',
-    );
-
-    foreach ($legacy_text_fields as $field_key => $request_key) {
-        if (!array_key_exists($request_key, $_POST)) {
-            continue;
-        }
-
-        $value = sanitize_text_field(wp_unslash($_POST[$request_key]));
-        if ($value) {
-            update_post_meta($post_id, $fields[$field_key], $value);
-        } else {
-            delete_post_meta($post_id, $fields[$field_key]);
-        }
-    }
-
-    $legacy_url_fields = array(
-        'final_cta_primary_url'   => 'cad_business_final_cta_primary_url',
-        'final_cta_secondary_url' => 'cad_business_final_cta_secondary_url',
-    );
-
-    foreach ($legacy_url_fields as $field_key => $request_key) {
-        if (!array_key_exists($request_key, $_POST)) {
-            continue;
-        }
-
-        $value = esc_url_raw(wp_unslash($_POST[$request_key]));
         if ($value) {
             update_post_meta($post_id, $fields[$field_key], $value);
         } else {
@@ -3873,14 +4557,6 @@ function cad_theme_save_business_area_meta($post_id)
         delete_post_meta($post_id, $fields['related_projects']);
     }
 
-    if (isset($_POST['cad_business_cta_buttons_present'])) {
-        $cta_buttons = array();
-        if (isset($_POST['cad_business_cta_buttons']) && is_array($_POST['cad_business_cta_buttons'])) {
-            $cta_buttons = cad_theme_normalize_business_cta_buttons(wp_unslash($_POST['cad_business_cta_buttons']));
-        }
-        update_post_meta($post_id, $fields['cta_buttons'], $cta_buttons);
-    }
-
     $gallery_ids = array();
     if (isset($_POST['cad_business_gallery_ids'])) {
         $raw_ids = sanitize_text_field(wp_unslash($_POST['cad_business_gallery_ids']));
@@ -3898,6 +4574,8 @@ function cad_theme_save_business_area_meta($post_id)
     } else {
         delete_post_meta($post_id, $fields['gallery_ids']);
     }
+
+    cad_theme_save_assigned_cta_block_meta($post_id);
 }
 add_action('save_post_cad_business_area', 'cad_theme_save_business_area_meta');
 
@@ -4164,6 +4842,8 @@ function cad_theme_save_project_meta($post_id)
     } else {
         delete_post_meta($post_id, '_cad_project_gallery');
     }
+
+    cad_theme_save_assigned_cta_block_meta($post_id);
 }
 add_action('save_post_cad_project', 'cad_theme_save_project_meta');
 

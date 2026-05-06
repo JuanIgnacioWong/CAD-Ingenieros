@@ -203,6 +203,17 @@ get_header();
                 );
             }
 
+            $assigned_cta_block = function_exists('cad_theme_get_assigned_cta_block_for_post')
+                ? cad_theme_get_assigned_cta_block_for_post(get_the_ID())
+                : null;
+            $assigned_cta_html = '';
+            if (function_exists('cad_theme_render_cta_block') && is_array($assigned_cta_block)) {
+                $assigned_cta_html = cad_theme_render_cta_block(
+                    $assigned_cta_block,
+                    array('actions_extra_class' => 'cad-project__cta-actions')
+                );
+            }
+
             $meta_items = array();
             if (!empty($category_items)) {
                 $meta_items[] = array(
@@ -442,43 +453,52 @@ get_header();
                 </section>
             </article>
 
-            <section class="cad-business-area__section cad-business-area__section--cta">
-                <div class="cad-business-area__inner cad-business-area__cta">
-                    <div class="cad-business-area__cta-copy">
-                        <span class="cad-business-area__cta-kicker"><?php esc_html_e('Siguiente paso', 'cad-theme'); ?></span>
-                        <?php if (!empty($project_cta_text)) : ?>
-                            <p><?php echo esc_html((string) $project_cta_text); ?></p>
-                        <?php endif; ?>
-                    </div>
+            <section class="cad-project__cta-section">
+                <div class="cad-business-area__inner">
+                    <?php if ('' !== $assigned_cta_html) : ?>
+                        <?php echo $assigned_cta_html; ?>
+                    <?php else : ?>
+                        <?php // TODO: retirar este fallback cuando todos los proyectos tengan CTA global asignado. ?>
+                        <section class="cad-cta-block">
+                            <div class="cad-cta-block__content">
+                                <h2><?php esc_html_e('Siguiente paso', 'cad-theme'); ?></h2>
+                                <?php if (!empty($project_cta_text)) : ?>
+                                    <div class="cad-cta-block__copy">
+                                        <?php echo wpautop(esc_html((string) $project_cta_text)); ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
 
-                    <?php if (!empty($project_cta_buttons) && is_array($project_cta_buttons)) : ?>
-                        <div class="cad-business-area__cta-actions">
-                            <?php foreach ($project_cta_buttons as $cta_button) : ?>
-                                <?php
-                                $button_style = isset($cta_button['style']) && in_array((string) $cta_button['style'], array('solid', 'outline'), true)
-                                    ? (string) $cta_button['style']
-                                    : 'solid';
-                                $button_target = !empty($cta_button['target_blank']) ? '_blank' : '_self';
-                                $button_rel = '_blank' === $button_target ? 'noopener noreferrer' : '';
-                                $button_style_attr = sprintf(
-                                    '--cta-bg:%1$s;--cta-text:%2$s;--cta-border:%3$s;--cta-radius:%4$s;',
-                                    esc_attr(isset($cta_button['bg_color']) ? (string) $cta_button['bg_color'] : ''),
-                                    esc_attr(isset($cta_button['text_color']) ? (string) $cta_button['text_color'] : ''),
-                                    esc_attr(isset($cta_button['border_color']) ? (string) $cta_button['border_color'] : ''),
-                                    esc_attr(isset($cta_button['border_radius']) ? (string) $cta_button['border_radius'] : '10px')
-                                );
-                                ?>
-                                <a
-                                    class="cad-business-area__cta-button is-<?php echo esc_attr($button_style); ?>"
-                                    href="<?php echo esc_url(isset($cta_button['url']) ? (string) $cta_button['url'] : '#'); ?>"
-                                    target="<?php echo esc_attr($button_target); ?>"
-                                    <?php if ($button_rel) : ?>rel="<?php echo esc_attr($button_rel); ?>"<?php endif; ?>
-                                    style="<?php echo esc_attr($button_style_attr); ?>"
-                                >
-                                    <?php echo esc_html(isset($cta_button['label']) ? (string) $cta_button['label'] : ''); ?>
-                                </a>
-                            <?php endforeach; ?>
-                        </div>
+                            <?php if (!empty($project_cta_buttons) && is_array($project_cta_buttons)) : ?>
+                                <div class="cad-cta-block__actions cad-project__cta-actions">
+                                    <?php foreach ($project_cta_buttons as $cta_button) : ?>
+                                        <?php
+                                        $button_style = isset($cta_button['style']) && in_array((string) $cta_button['style'], array('solid', 'outline'), true)
+                                            ? (string) $cta_button['style']
+                                            : 'solid';
+                                        $button_target = !empty($cta_button['target_blank']) ? '_blank' : '_self';
+                                        $button_rel = '_blank' === $button_target ? 'noopener noreferrer' : '';
+                                        $button_style_attr = sprintf(
+                                            '--cta-bg:%1$s;--cta-text:%2$s;--cta-border:%3$s;--cta-radius:%4$s;',
+                                            esc_attr(isset($cta_button['bg_color']) ? (string) $cta_button['bg_color'] : ''),
+                                            esc_attr(isset($cta_button['text_color']) ? (string) $cta_button['text_color'] : ''),
+                                            esc_attr(isset($cta_button['border_color']) ? (string) $cta_button['border_color'] : ''),
+                                            esc_attr(isset($cta_button['border_radius']) ? (string) $cta_button['border_radius'] : '10px')
+                                        );
+                                        ?>
+                                        <a
+                                            class="cad-cta-block__button is-<?php echo esc_attr($button_style); ?>"
+                                            href="<?php echo esc_url(isset($cta_button['url']) ? (string) $cta_button['url'] : '#'); ?>"
+                                            target="<?php echo esc_attr($button_target); ?>"
+                                            <?php if ($button_rel) : ?>rel="<?php echo esc_attr($button_rel); ?>"<?php endif; ?>
+                                            style="<?php echo esc_attr($button_style_attr); ?>"
+                                        >
+                                            <?php echo esc_html(isset($cta_button['label']) ? (string) $cta_button['label'] : ''); ?>
+                                        </a>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
+                        </section>
                     <?php endif; ?>
                 </div>
             </section>

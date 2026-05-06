@@ -1780,100 +1780,6 @@ p {
     background: var(--color-accent);
 }
 
-.cad-cta-block {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 1.5rem;
-    width: 100%;
-    padding: 2rem 0;
-}
-
-.cad-cta-block__content h2 {
-    margin: 0;
-    max-width: 34rem;
-    color: #1f1712;
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
-    font-size: clamp(1.35rem, 2.9vw, 2.1rem);
-    font-weight: 700;
-    line-height: 1.08;
-    letter-spacing: -0.03em;
-}
-
-.cad-cta-block__copy {
-    margin-top: 0.65rem;
-}
-
-.cad-cta-block__copy p {
-    margin: 0;
-    max-width: 38rem;
-    color: rgba(20, 16, 12, 0.85);
-}
-
-.cad-cta-block__actions,
-.cad-business-area__cta-actions,
-.cad-project__cta-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 0.85rem;
-}
-
-.cad-cta-block__button,
-.cad-business-area__cta-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 44px;
-    padding: 0.85rem 1.25rem;
-    border-radius: var(--cta-radius, 10px);
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
-    font-size: 0.76rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    text-decoration: none;
-    transition: transform 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease, color 0.22s ease, border-color 0.22s ease;
-}
-
-.cad-cta-block__button.is-solid,
-.cad-business-area__cta-button.is-solid {
-    background: var(--cta-bg, #ef842e);
-    color: var(--cta-text, #ffffff);
-    border: 1px solid var(--cta-border, var(--cta-bg, #ef842e));
-}
-
-.cad-cta-block__button.is-outline,
-.cad-business-area__cta-button.is-outline {
-    background: var(--cta-bg, transparent);
-    color: var(--cta-text, #f8f3ee);
-    border: 1px solid var(--cta-border, #f8f3ee);
-}
-
-.cad-cta-block__button:hover,
-.cad-cta-block__button:focus-visible,
-.cad-business-area__cta-button:hover,
-.cad-business-area__cta-button:focus-visible {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
-}
-
-.cad-business-area__section--cta .cad-cta-block {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-}
-
-.cad-project__cta-section {
-    padding: 0;
-    background: var(--color-accent);
-}
-
-.cad-project__cta-section .cad-cta-block {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-}
-
 .cad-business-area__cta {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
@@ -1897,6 +1803,14 @@ p {
     font-weight: 700;
     line-height: 1.08;
     letter-spacing: -0.03em;
+}
+
+.cad-business-area__cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.85rem;
 }
 
 .cad-business-area__cta-primary,
@@ -1932,6 +1846,40 @@ p {
 .cad-business-area__cta-secondary:hover,
 .cad-business-area__cta-secondary:focus-visible {
     transform: translateY(-2px);
+}
+
+.cad-business-area__cta-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0.85rem 1.25rem;
+    border-radius: var(--cta-radius, 10px);
+    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease, color 0.22s ease, border-color 0.22s ease;
+}
+
+.cad-business-area__cta-button.is-solid {
+    background: var(--cta-bg, #ef842e);
+    color: var(--cta-text, #ffffff);
+    border: 1px solid var(--cta-border, var(--cta-bg, #ef842e));
+}
+
+.cad-business-area__cta-button.is-outline {
+    background: var(--cta-bg, transparent);
+    color: var(--cta-text, #f8f3ee);
+    border: 1px solid var(--cta-border, #f8f3ee);
+}
+
+.cad-business-area__cta-button:hover,
+.cad-business-area__cta-button:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
 }
 
 @media (max-width: 1180px) {
@@ -1974,8 +1922,7 @@ p {
     }
 
     .cad-business-area__structure-grid,
-    .cad-business-area__cta,
-    .cad-cta-block {
+    .cad-business-area__cta {
         grid-template-columns: 1fr;
     }
 
@@ -1988,8 +1935,7 @@ p {
         grid-row: auto;
     }
 
-    .cad-business-area__cta-actions,
-    .cad-project__cta-actions {
+    .cad-business-area__cta-actions {
         justify-content: flex-start;
     }
 }
@@ -2122,8 +2068,7 @@ p {
 
     .cad-business-area__cta-primary,
     .cad-business-area__cta-secondary,
-    .cad-business-area__cta-button,
-    .cad-cta-block__button {
+    .cad-business-area__cta-button {
         width: 100%;
     }
 }
@@ -2159,7 +2104,7 @@ p {
     margin: 0;
 }
 
-.cad-project-page .cad-project {
+.cad-project {
     background: transparent;
     border: 0;
     border-radius: 0;
@@ -2187,7 +2132,7 @@ p {
     margin: 0;
 }
 
-.cad-project-page .cad-project a {
+.cad-project-page a {
     color: inherit;
 }
 
@@ -2195,7 +2140,7 @@ p {
     font-size: 1rem;
 }
 
-.cad-project-page .cad-project__header {
+.cad-project__header {
     position: relative;
     height: 288px;
     min-height: 288px;
@@ -2206,7 +2151,7 @@ p {
     background: #181f28;
 }
 
-.cad-project-page .cad-project__header::after {
+.cad-project__header::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -2214,7 +2159,7 @@ p {
     z-index: 1;
 }
 
-.cad-project-page .cad-project__hero {
+.cad-project__hero {
     position: absolute;
     inset: 0;
     margin: 0;
@@ -2230,7 +2175,7 @@ p {
     object-fit: cover;
 }
 
-.cad-project-page .cad-project__header-content {
+.cad-project__header-content {
     position: relative;
     z-index: 2;
     display: grid;
@@ -2539,7 +2484,7 @@ p {
     text-align: center;
 }
 
-.cad-project-page .cad-project__back {
+.cad-project__back {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
@@ -2558,8 +2503,8 @@ p {
     max-width: fit-content;
 }
 
-.cad-project-page .cad-project__back:hover,
-.cad-project-page .cad-project__back:focus-visible {
+.cad-project__back:hover,
+.cad-project__back:focus-visible {
     color: #2f2117;
     background: rgba(255, 243, 234, 0.96);
     border-color: rgba(255, 243, 234, 0.96);
@@ -3708,26 +3653,21 @@ p {
         font-size: 1.35rem;
     }
 
-    .cad-business-area__cta,
-    .cad-cta-block {
+    .cad-business-area__cta {
         gap: 1rem;
         padding-top: 1.5rem;
         padding-bottom: 1.5rem;
     }
 
-    .cad-business-area__cta-copy p,
-    .cad-cta-block__content h2,
-    .cad-cta-block__copy p {
+    .cad-business-area__cta-copy p {
         max-width: none;
     }
 
-    .cad-business-area__cta-actions,
-    .cad-project__cta-actions {
+    .cad-business-area__cta-actions {
         width: 100%;
     }
 
-    .cad-business-area__cta-button,
-    .cad-cta-block__button {
+    .cad-business-area__cta-button {
         flex: 1 1 100%;
     }
 
@@ -4000,487 +3940,5 @@ p {
     .cad-project__back,
     .cad-project-block__list a {
         font-size: 0.74rem;
-    }
-}
-
-/* CPT Proyectos redesign: clear/gray scoped layer */
-.cad-project-page {
-    --cad-project-sidebar-bg: linear-gradient(180deg, var(--color-sidebar-start) 0%, var(--color-sidebar-mid) 60%, var(--color-sidebar-end) 100%);
-    background: linear-gradient(180deg, var(--color-sidebar-start) 0%, var(--color-sidebar-mid) 60%, var(--color-sidebar-end) 100%);
-    color: var(--color-text);
-}
-
-.cad-project-page.cad-main--generic {
-    padding: 0;
-}
-
-.cad-project-page .cad-shell-wide {
-    width: 100%;
-    max-width: none;
-    margin: 0;
-}
-
-.cad-project-page .cad-project {
-    width: 100%;
-    padding: 0;
-    background: transparent;
-    border-radius: 0;
-    display: grid;
-    gap: 0;
-}
-
-.cad-project-page .cad-project__header {
-    position: relative;
-    min-height: auto;
-    height: auto;
-    align-items: stretch;
-    padding: clamp(32px, 6vw, 64px);
-    border-radius: 0;
-    background: var(--cad-project-sidebar-bg);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    overflow: hidden;
-}
-
-.cad-project-page .cad-project__header::after {
-    background: linear-gradient(180deg, rgba(7, 10, 14, 0.14) 0%, rgba(7, 10, 14, 0.55) 72%);
-}
-
-.cad-project-page .cad-project__hero {
-    opacity: 0.82;
-    filter: grayscale(0.16) saturate(0.88);
-}
-
-.cad-project-page .cad-project__header .cad-business-area__inner {
-    position: relative;
-    z-index: 2;
-}
-
-.cad-project-page .cad-project__header-content {
-    max-width: 880px;
-    margin: 0;
-    padding: 0;
-    gap: 0;
-}
-
-.cad-project-page .cad-project__back {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    margin-bottom: 24px;
-    color: rgba(248, 243, 238, 0.86);
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    text-decoration: none;
-    background: transparent;
-    border: 0;
-    padding: 0;
-    border-radius: 0;
-    box-shadow: none;
-}
-
-.cad-project-page .cad-project__back:hover,
-.cad-project-page .cad-project__back:focus-visible {
-    color: #fff;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-}
-
-.cad-project-page .cad-project__eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    width: fit-content;
-    margin-bottom: 20px;
-    padding: 6px 12px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 999px;
-    color: var(--color-accent-soft);
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-}
-
-.cad-project-page .cad-project__eyebrow span {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #ef8432;
-    flex: 0 0 auto;
-}
-
-.cad-project-page .cad-project__title {
-    color: var(--color-text);
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
-    font-size: clamp(2.2rem, 5vw, 4.5rem);
-    line-height: 0.96;
-    letter-spacing: -0.04em;
-    max-width: 980px;
-    text-shadow: 0 12px 22px rgba(0, 0, 0, 0.28);
-    display: block;
-    overflow: visible;
-    text-overflow: clip;
-    -webkit-line-clamp: unset;
-    -webkit-box-orient: initial;
-    overflow-wrap: anywhere;
-}
-
-.cad-project-page .cad-project__excerpt {
-    max-width: 680px;
-    margin-top: 20px;
-    color: #e2d3c4;
-    font-size: clamp(1rem, 1.4vw, 1.18rem);
-    line-height: 1.7;
-    text-shadow: 0 10px 18px rgba(0, 0, 0, 0.24);
-    display: block;
-    overflow: visible;
-    text-overflow: clip;
-    -webkit-line-clamp: unset;
-    -webkit-box-orient: initial;
-}
-
-.cad-project-page .cad-project__layout {
-    display: block;
-}
-
-.cad-project-page .cad-project-page__section {
-    position: relative;
-    padding: clamp(3.6rem, 7vw, 5.2rem) 0;
-}
-
-.cad-project-page .cad-project-page__section--meta {
-    padding-top: clamp(1.2rem, 2.8vw, 2rem);
-    padding-bottom: 0;
-}
-
-.cad-project-page .cad-project-page__section--content {
-    padding-top: clamp(2rem, 4.6vw, 3.2rem);
-}
-
-.cad-project-page .cad-project__meta {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 0;
-    margin: 0;
-    padding: 0;
-    border-radius: 10px;
-    overflow: hidden;
-    background: var(--cad-project-sidebar-bg);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.cad-project-page .cad-project__meta-item {
-    padding: 20px;
-    border-right: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.cad-project-page .cad-project__meta-item:last-child {
-    border-right: 0;
-}
-
-.cad-project-page .cad-project__meta-item span {
-    display: block;
-    margin-bottom: 6px;
-    color: var(--color-accent-soft);
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-}
-
-.cad-project-page .cad-project__meta-item strong {
-    color: var(--color-text);
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-}
-
-.cad-project-page .cad-project__meta-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.cad-project-page .cad-project__meta-tags a,
-.cad-project-page .cad-project__meta-tags strong {
-    display: inline-flex;
-    align-items: center;
-    min-height: 1.8rem;
-    padding: 0.25rem 0.65rem;
-    border-radius: 999px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    background: rgba(255, 255, 255, 0.08);
-    color: var(--color-text);
-    font-size: 0.75rem;
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
-    letter-spacing: 0.02em;
-    text-transform: none;
-}
-
-.cad-project-page .cad-project__meta-tags a:hover,
-.cad-project-page .cad-project__meta-tags a:focus-visible {
-    border-color: rgba(239, 132, 50, 0.55);
-    color: #fff;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-}
-
-.cad-project-page .cad-project__body {
-    display: grid;
-    gap: clamp(0.9rem, 2vw, 1.25rem);
-    padding: 0;
-}
-
-.cad-project-page a:not(.cad-business-area__cta-button):not(.cad-cta-block__button) {
-    color: var(--color-text);
-}
-
-.cad-project-page .cad-project__body a {
-    color: #f2e8de;
-}
-
-.cad-project-page .cad-project__body a:hover,
-.cad-project-page .cad-project__body a:focus-visible {
-    color: var(--color-accent-soft);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-}
-
-.cad-project-page .cad-project-block {
-    gap: 0;
-    padding: 0;
-    border-top: 0;
-    background: var(--cad-project-sidebar-bg);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.22);
-}
-
-.cad-project-page .cad-project-block__header {
-    max-width: none;
-    padding: 22px 26px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    gap: 0;
-}
-
-.cad-project-page .cad-project-block__header--gallery {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: end;
-    column-gap: 1rem;
-}
-
-.cad-project-page .cad-project-block__header--gallery .cad-project-block__kicker,
-.cad-project-page .cad-project-block__header--gallery h2 {
-    grid-column: 1;
-}
-
-.cad-project-page .cad-project-block__kicker {
-    display: block;
-    margin-bottom: 6px;
-    color: var(--color-accent-soft);
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.13em;
-}
-
-.cad-project-page .cad-project-block h2 {
-    margin: 0;
-    color: var(--color-text);
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
-    font-size: clamp(1.35rem, 2.2vw, 2rem);
-}
-
-.cad-project-page .cad-project-block__content {
-    padding: 24px 26px;
-    color: #decebe;
-    font-size: 1rem;
-    line-height: 1.75;
-}
-
-.cad-project-page .cad-project-main__copy {
-    color: #decebe;
-    font-size: 1rem;
-    line-height: 1.75;
-    max-width: none;
-    gap: 0.9rem;
-}
-
-.cad-project-page .cad-project-main__copy > * {
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-.cad-project-page .cad-project-main__copy p + p {
-    margin-top: 0.8rem;
-}
-
-.cad-project-page .cad-project-block--documents .cad-project-block__list {
-    display: grid;
-    gap: 10px;
-    margin: 0;
-    padding: 24px 26px;
-    list-style: none;
-    overflow: visible;
-}
-
-.cad-project-page .cad-project-block--documents .cad-project-block__list li {
-    flex: initial;
-}
-
-.cad-project-page .cad-project-block__list a {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    width: 100%;
-    max-width: 100%;
-    padding: 14px 16px;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    color: var(--color-text);
-    font-weight: 700;
-    text-decoration: none;
-    white-space: normal;
-}
-
-.cad-project-page .cad-project-block__list a:hover,
-.cad-project-page .cad-project-block__list a:focus-visible {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(239, 132, 50, 0.45);
-    color: #fff;
-}
-
-.cad-project-page .cad-project-block--gallery {
-    background: var(--cad-project-sidebar-bg);
-}
-
-.cad-project-page .cad-project-block__gallery {
-    background: var(--cad-project-sidebar-bg);
-    padding: 16px;
-    height: clamp(22rem, 38vw, 30rem);
-}
-
-.cad-project-page .cad-project-block__gallery-item {
-    border-radius: 10px;
-    overflow: hidden;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.cad-project-page .cad-project-block__gallery-status {
-    color: #d4c1ae;
-}
-
-.cad-project-page .cad-project-block--gallery-empty .cad-project-block__content p {
-    margin: 0;
-}
-
-.cad-project-page .cad-gallery-nav {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: var(--color-text);
-}
-
-.cad-project-page .cad-gallery-nav:hover,
-.cad-project-page .cad-gallery-nav:focus-visible {
-    border-color: rgba(239, 132, 50, 0.35);
-    color: var(--color-accent-soft);
-    background: rgba(255, 255, 255, 0.16);
-}
-
-.cad-project-page .cad-project__footer {
-    display: grid;
-    gap: 16px;
-}
-
-.cad-project-page .cad-project-block__videos {
-    padding: 24px 26px;
-}
-
-.cad-project-page .cad-project-block__video h3 {
-    margin: 0;
-    color: var(--color-text);
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
-}
-
-.cad-project-page .cad-project-block__video-embed {
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    background: var(--cad-project-sidebar-bg);
-}
-
-@media (max-width: 782px) {
-    .cad-project-page {
-        padding: 0;
-    }
-
-    .cad-project-page.cad-main--generic {
-        padding: 0;
-    }
-
-    .cad-project-page .cad-project {
-        padding: 0;
-        border-radius: 0;
-    }
-
-    .cad-project-page .cad-project__header {
-        padding: 32px 22px;
-    }
-
-    .cad-project-page .cad-project-page__section {
-        padding: clamp(2.25rem, 8vw, 3.2rem) 0;
-    }
-
-    .cad-project-page .cad-project-page__section--meta {
-        padding-top: 1rem;
-        padding-bottom: 0;
-    }
-
-    .cad-project-page .cad-project__title {
-        font-size: clamp(2rem, 10vw, 3rem);
-        line-height: 1;
-    }
-
-    .cad-project-page .cad-project__meta {
-        grid-template-columns: 1fr;
-    }
-
-    .cad-project-page .cad-project__meta-item {
-        border-right: 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-    }
-
-    .cad-project-page .cad-project__meta-item:last-child {
-        border-bottom: 0;
-    }
-
-    .cad-project-page .cad-project-block__header,
-    .cad-project-page .cad-project-block__content,
-    .cad-project-page .cad-project-block__list,
-    .cad-project-page .cad-project-block--documents .cad-project-block__list,
-    .cad-project-page .cad-project-block__videos {
-        padding-left: 20px;
-        padding-right: 20px;
-    }
-
-    .cad-project-page .cad-project-block__header--gallery {
-        grid-template-columns: 1fr;
-    }
-
-    .cad-project-page .cad-project-block__gallery-controls {
-        grid-column: 1;
-        grid-row: auto;
-        justify-self: start;
-        margin-top: 10px;
     }
 }
