@@ -19,6 +19,7 @@ Este proyecto contiene una instalacion independiente de WordPress para `CAD Them
 - `wordpress/uploads/`
 
 Nota: el tema local esta normalizado como `wordpress/themes/cad-theme`, y Docker lo monta dentro de WordPress como `wp-content/themes/CAD-theme` para mantener compatibilidad.
+El deploy copia el tema a `wp-content/themes/CAD-theme` y `wp-content/themes/cad-theme` para evitar problemas por mayusculas/minusculas del directorio activo en produccion.
 El core versionado para despliegue vive en `wordpress-core/` y hoy corresponde a WordPress `6.9.1`.
 
 ## Variables de entorno
@@ -87,6 +88,7 @@ Importante:
 - El deploy preserva `wp-config.php`, `.htaccess`, `wp-content/languages/`, `wp-content/cache/` y `wp-content/upgrade/` del servidor.
 - `uploads` se copia desde el repo al servidor. En ese directorio no se usa `--delete`, para no borrar media preexistente solo en produccion.
 - El deploy no publica `database/`, `.env` ni archivos de Docker.
+- Los cambios de contenido en `Proyectos` (CPT) viven en la base de datos; no se publican por Git y requieren exportar/importar SQL.
 - Si el servidor tiene `rsync`, el deploy elimina archivos obsoletos versionados. Si no lo tiene, hace copia simple y los archivos borrados en Git pueden quedar en produccion.
 
 ### Flujo recomendado
