@@ -1051,7 +1051,7 @@ p {
     height: 3.1rem;
     object-fit: contain;
     object-position: center;
-    filter: brightness(0) invert(1);
+    filter: grayscale(1) contrast(1.05);
     opacity: 0.94;
     transition: filter 0.26s ease, opacity 0.26s ease, transform 0.26s ease;
 }
