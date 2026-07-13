@@ -203,7 +203,7 @@ function cad_theme_register_indicator_section_cpt()
             'show_in_menu'       => 'edit.php?post_type=cad_indicator',
             'menu_position'      => 24,
             'menu_icon'          => 'dashicons-chart-area',
-            'supports'           => array('title', 'editor', 'revisions'),
+            'supports'           => array('title', 'editor', 'thumbnail', 'revisions'),
             'has_archive'        => false,
             'exclude_from_search'=> true,
             'publicly_queryable' => false,
@@ -485,7 +485,7 @@ function cad_theme_assets()
 
     wp_enqueue_style(
         'cad-theme-fonts',
-        'https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Barlow:wght@400;500;600;700&display=swap',
+        'https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;700&display=swap',
         array(),
         null
     );
@@ -595,7 +595,7 @@ function cad_theme_login_assets()
 
     wp_enqueue_style(
         'cad-theme-login-fonts',
-        'https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Barlow:wght@400;500;600;700&display=swap',
+        'https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;700&display=swap',
         array(),
         null
     );
@@ -1083,6 +1083,18 @@ function cad_theme_client_featured_image_hint($content, $post_id, $thumbnail_id)
     return $content . $hint;
 }
 add_filter('admin_post_thumbnail_html', 'cad_theme_client_featured_image_hint', 10, 3);
+
+function cad_theme_indicator_section_featured_image_hint($content, $post_id, $thumbnail_id)
+{
+    unset($thumbnail_id);
+    if ('cad_indicator_sec' !== get_post_type($post_id)) {
+        return $content;
+    }
+
+    $hint = '<p style="margin-top:8px;font-weight:700;">' . esc_html__('Esta imagen se utilizara como fondo del bloque derecho de la seccion Indicadores.', 'cad-theme') . '</p>';
+    return $content . $hint;
+}
+add_filter('admin_post_thumbnail_html', 'cad_theme_indicator_section_featured_image_hint', 10, 3);
 
 function cad_theme_validate_client_logo_upload($file)
 {
@@ -2654,13 +2666,7 @@ function cad_theme_get_footer_contact_data()
 
 function cad_theme_get_indicator_section_title()
 {
-    $posts = get_posts(
-        array(
-            'post_type'      => 'cad_indicator_sec',
-            'posts_per_page' => 1,
-            'post_status'    => 'publish',
-        )
-    );
+    $posts = cad_theme_get_indicator_section_posts();
 
     if (!empty($posts)) {
         return get_the_title($posts[0]);
@@ -2672,13 +2678,7 @@ function cad_theme_get_indicator_section_title()
 
 function cad_theme_get_indicator_section_content()
 {
-    $posts = get_posts(
-        array(
-            'post_type'      => 'cad_indicator_sec',
-            'posts_per_page' => 1,
-            'post_status'    => 'publish',
-        )
-    );
+    $posts = cad_theme_get_indicator_section_posts();
 
     if (!empty($posts)) {
         $content = (string) $posts[0]->post_content;
@@ -2696,6 +2696,36 @@ function cad_theme_get_indicator_section_content()
     }
 
     return $fallback;
+}
+
+function cad_theme_get_indicator_section_post_id()
+{
+    $posts = cad_theme_get_indicator_section_posts();
+
+    if (empty($posts)) {
+        return 0;
+    }
+
+    return (int) $posts[0]->ID;
+}
+
+function cad_theme_get_indicator_section_posts()
+{
+    static $posts = null;
+
+    if (null !== $posts) {
+        return $posts;
+    }
+
+    $posts = get_posts(
+        array(
+            'post_type'      => 'cad_indicator_sec',
+            'posts_per_page' => 1,
+            'post_status'    => 'publish',
+        )
+    );
+
+    return $posts;
 }
 
 function cad_theme_get_indicator_cards($limit = 3)

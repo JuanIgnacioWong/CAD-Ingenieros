@@ -14,6 +14,9 @@ $indicator_left_class = 'cad-indicators-left cad-indicators-count-' . $indicator
 $indicator_section_title = cad_theme_get_indicator_section_title();
 $indicator_section_content = cad_theme_get_indicator_section_content();
 $indicator_section_content = preg_replace('/(<(?:li|p)[^>]*>\s*)(?:&#x2714;|&#10004;|&#10003;|✔|✓|•)\s*/u', '$1', (string) $indicator_section_content);
+$indicator_section_post_id = cad_theme_get_indicator_section_post_id();
+$indicator_bg_url = $indicator_section_post_id ? get_the_post_thumbnail_url($indicator_section_post_id, 'large') : '';
+$indicator_bg_style = $indicator_bg_url ? 'background-image:url(' . esc_url($indicator_bg_url) . ');' : '';
 $indicator_logo_id = (int) get_theme_mod('custom_logo');
 $indicator_logo_html = '';
 if ($indicator_logo_id) {
@@ -208,7 +211,7 @@ $hero_class = $has_video ? 'cad-hero' : 'cad-hero is-video-paused';
                     <?php endforeach; ?>
                 </div>
 
-                <div class="cad-indicators-right">
+                <div class="cad-indicators-right"<?php echo $indicator_bg_style ? ' style="' . esc_attr($indicator_bg_style) . '"' : ''; ?>>
                     <div class="cad-indicators-hero">
                         <div>
                             <div class="cad-indicators-eyebrow"><?php esc_html_e('CAD Ingenieros', 'cad-theme'); ?></div>
@@ -218,13 +221,13 @@ $hero_class = $has_video ? 'cad-hero' : 'cad-hero is-video-paused';
                                     <?php echo wp_kses_post(wpautop($indicator_section_content)); ?>
                                 </div>
                             <?php endif; ?>
-                        </div>
 
-                        <?php if ($indicator_logo_html) : ?>
-                            <div class="cad-indicators-footer">
-                                <?php echo $indicator_logo_html; ?>
-                            </div>
-                        <?php endif; ?>
+                            <?php if ($indicator_logo_html) : ?>
+                                <div class="cad-indicators-footer">
+                                    <?php echo $indicator_logo_html; ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 </div>
             </div>

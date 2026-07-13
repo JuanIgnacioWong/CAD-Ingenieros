@@ -3,8 +3,8 @@
     --color-panel: #1e252e;
     --color-panel-soft: #2a3440;
     --color-line: rgba(255, 255, 255, 0.14);
-    --color-text: #f8f3ee;
-    --color-muted: #d4c1ae;
+    --color-text: #fff;
+    --color-muted: #fff;
     --color-red: #ef8432;
     --color-lime: #ef8432;
     --color-accent: #ef8432;
@@ -20,6 +20,9 @@
     --color-light-muted: #7f6a58;
     --color-link: #c9661c;
     --color-link-hover: #a74f0f;
+    --cad-color-aside: #10151A;
+    --cad-color-main: #001640;
+    --cad-color-indicators: #002366;
     --content-max: 1280px;
     --content-narrow: 840px;
     --sidebar-width: 17.5rem;
@@ -36,9 +39,32 @@ html {
 
 body {
     margin: 0;
-    font-family: 'Barlow', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
+    font-weight: 300;
     background: var(--color-bg);
     color: var(--color-text);
+}
+
+button,
+input,
+select,
+textarea {
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
+    font-weight: 300;
+}
+
+p,
+li,
+a,
+span,
+small,
+label,
+div,
+.cad-section__lead,
+.cad-indicators-copy,
+.cad-menu a {
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
+    font-weight: 100;
 }
 
 a {
@@ -59,9 +85,17 @@ h4,
 h5,
 h6 {
     margin: 0;
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-weight: 700;
     line-height: 1.05;
+}
+
+.cad-title,
+.cad-hero__content h1,
+.cad-hero__content h1 span,
+.cad-hero__content h1 strong {
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
+    font-weight: 700;
 }
 
 p {
@@ -99,7 +133,7 @@ p {
     z-index: 50;
     width: var(--sidebar-width);
     height: 100vh;
-    background: linear-gradient(180deg, var(--color-sidebar-start) 0%, var(--color-sidebar-mid) 60%, var(--color-sidebar-end) 100%);
+    background: RGB(16, 21, 26);
     border-right: 1px solid rgba(255, 255, 255, 0.06);
     display: flex;
     flex-direction: column;
@@ -131,15 +165,15 @@ p {
 }
 
 .cad-sidebar__brand-mark {
-    font-family: 'Archivo', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 2.1rem;
-    font-weight: 800;
+    font-weight: 700;
     letter-spacing: 0.1em;
     color: var(--color-red);
 }
 
 .cad-sidebar__brand-sub {
-    font-family: 'Archivo', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.73rem;
     font-weight: 700;
     letter-spacing: 0.2em;
@@ -168,7 +202,7 @@ p {
 .cad-menu > li > a {
     display: block;
     padding: 0.7rem 1rem;
-    font-family: 'Archivo', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.88rem;
     font-weight: 700;
     letter-spacing: 0.06em;
@@ -243,7 +277,7 @@ p {
     gap: 0.6rem;
     color: var(--color-muted);
     font-size: 0.87rem;
-    font-weight: 500;
+    font-weight: 300;
 }
 
 .cad-submenu__link:hover,
@@ -280,10 +314,12 @@ p {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background: var(--cad-color-main);
 }
 
 .cad-main {
     flex: 1;
+    background: var(--cad-color-main);
 }
 
 .cad-main--generic {
@@ -298,6 +334,7 @@ p {
 .cad-shell-narrow {
     width: min(calc(100vw - var(--sidebar-width) - 4rem), var(--content-narrow));
     margin: 0 auto;
+    text-align: center;
 }
 
 .cad-hero {
@@ -336,7 +373,7 @@ p {
 }
 
 .cad-hero__overlay {
-    background: linear-gradient(180deg, rgba(26, 21, 16, 0.38) 0%, rgba(12, 10, 8, 0.8) 100%);
+    background: linear-gradient(180deg, rgb(0, 22, 64, 0.4 ) 2%, rgb(0, 22, 64) 160%);
 }
 
 .cad-hero__content {
@@ -360,33 +397,51 @@ p {
 
 .cad-hero__content h1 span {
     display: block;
-    font-size: clamp(2.8rem, 6vw, 5.4rem);
+    font-size: clamp(2.1rem, 4.5vw, 4.05rem);
     line-height: 0.95;
-    font-weight: 300;
+    font-weight: 700;
 }
 
 .cad-hero__content h1 strong {
     display: block;
-    font-size: clamp(1.8rem, 3.96vw, 3.56rem);
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
+    font-size: clamp(1.35rem, 2.97vw, 2.67rem);
     line-height: 1;
-    font-weight: 700;
+    font-weight: 100;
     margin-top: 0.12em;
 }
 
 .cad-hero__video-btn {
+    position: relative;
+    box-sizing: border-box;
     width: fit-content;
-    border: 1px solid rgba(239, 132, 50, 0.55);
-    border-radius: 999px;
-    background: rgba(18, 12, 8, 0.62);
+    border: 1px solid rgb(239 132 50);
+    border-radius: 5px 11px 5px 10px;
+    corner-shape: bevel;
+    background: transparent;
     color: #fff;
-    font-family: 'Archivo', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.77rem;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    padding: 0.58rem 0.95rem;
+    padding: 0.58rem 1.7rem 0.58rem 0.95rem;
     cursor: pointer;
     transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.cad-hero__video-btn::after {
+    content: "";
+    position: absolute;
+    right: 0.72rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-top: 0.28rem solid transparent;
+    border-bottom: 0.28rem solid transparent;
+    border-left: 0.42rem solid currentColor;
+    pointer-events: none;
 }
 
 .cad-hero__video-btn:hover,
@@ -399,8 +454,8 @@ p {
     position: sticky;
     top: 0;
     z-index: 40;
-    padding: 0.7rem 1rem;
-    background: rgba(20, 24, 31, 0.86);
+    padding: 1.5rem 1rem;
+    background: rgb(0, 22, 64);
     backdrop-filter: blur(8px);
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -423,9 +478,10 @@ p {
 }
 
 .cad-page-nav a {
-    padding: 0.56rem 0.88rem;
-    border-radius: 999px;
-    font-family: 'Archivo', sans-serif;
+    padding: 0.6rem 2rem;
+    border-radius: 5px 11px 5px 10px;
+    corner-shape: bevel;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.07em;
@@ -437,21 +493,21 @@ p {
 .cad-page-nav a:focus-visible,
 .cad-page-nav a.is-active {
     color: #fff;
-    background: rgba(239, 132, 50, 0.22);
+    border: 1px solid rgb(255, 125, 0);
 }
 
 .cad-section {
-    padding: 4.6rem 0;
+    padding: 2.5rem 0;
 }
 
 .cad-section--intro {
-    background: linear-gradient(180deg, #1d232b 0%, #171d24 100%);
+    background: rgb(0, 22, 64);
 }
 
 .cad-section--intro p {
-    font-size: clamp(1.03rem, 1.7vw, 1.38rem);
+    font-size: clamp(1.03rem, 1.7vw, 1.1rem);
     line-height: 1.7;
-    color: #f5e8dc;
+    color: #fff;
 }
 
 .cad-title {
@@ -576,7 +632,7 @@ p {
     border-radius: 999px;
     border: 1px solid rgba(239, 132, 50, 0.42);
     background: rgba(18, 12, 8, 0.58);
-    font-family: 'Archivo', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.74rem;
     font-weight: 700;
     letter-spacing: 0.06em;
@@ -588,11 +644,26 @@ p {
     background: rgba(239, 132, 50, 0.34);
 }
 
+#indicadores {
+    background: rgb(0, 22, 64);
+}
+
+#indicadores .cad-title,
+#indicadores .cad-indicators-right,
+#indicadores .cad-indicators-copy,
+#indicadores .cad-indicators-copy p,
+#indicadores .cad-indicators-copy li {
+    color: #ffffff;
+}
+
 #indicadores .cad-indicators-layout {
     display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    gap: 2rem;
+    grid-template-columns: 1fr 2fr;
+    gap: 1rem;
     align-items: stretch;
+    background: rgb(0, 22, 64);
+    border-radius: 10px;
+    padding: 2rem;
 }
 
 #indicadores .cad-indicators-left {
@@ -620,6 +691,10 @@ p {
     grid-template-rows: 1fr 1fr 1fr;
 }
 
+#indicadores .cad-indicators-left.cad-indicators-count-3 {
+    background: rgb(0, 22, 64);
+}
+
 #indicadores .cad-indicator-card {
     height: 100%;
     position: relative;
@@ -629,9 +704,10 @@ p {
     justify-content: center;
     align-items: center;
     text-align: center;
-    background: linear-gradient(135deg, #FFFFFF 0%, #FFF7ED 58%, #FFFFFF 100%);
-    border: 1px solid rgba(239, 132, 46, 0.18);
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: 10px;
+    color: var(--cad-color-main);
     padding: 1.5rem;
     box-shadow: 0 18px 34px rgba(15, 23, 42, 0.08);
     transition: all 0.3s ease;
@@ -650,7 +726,7 @@ p {
 #indicadores .cad-indicator-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 22px 40px rgba(15, 23, 42, 0.12);
-    border-color: rgba(239, 132, 46, 0.28);
+    border-color: rgba(255, 255, 255, 0.34);
 }
 
 #indicadores .cad-indicator-card.is-no-period {
@@ -664,7 +740,7 @@ p {
     text-align: center;
     color: #6B7280;
     font-size: 0.82rem;
-    font-weight: 700;
+    font-weight: 300;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     margin-bottom: 0.45rem;
@@ -674,11 +750,11 @@ p {
 #indicadores .cad-indicator-card__value {
     width: 100%;
     text-align: center;
-    color: #111827;
+    color: var(--cad-color-main);
     margin: 0.2rem 0 0.7rem;
-    font-family: 'Archivo', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: clamp(2.4rem, 5vw, 3.8rem);
-    font-weight: 800;
+    font-weight: 700;
     line-height: 1;
     will-change: transform, opacity;
     font-variant-numeric: tabular-nums;
@@ -696,7 +772,7 @@ p {
     background: #EF842E;
     color: #FFF7ED;
     font-size: 0.72rem;
-    font-weight: 700;
+    font-weight: 300;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     border: 1px solid rgba(239, 132, 46, 0.22);
@@ -704,35 +780,74 @@ p {
     min-height: 34px;
 }
 
+#indicadores .cad-indicators-left.cad-indicators-count-3 .cad-indicator-card {
+    background: rgb(0, 22, 64);
+    border-color: rgba(255, 255, 255, 0.14);
+}
+
+#indicadores .cad-indicators-left.cad-indicators-count-3 .cad-indicator-card__value {
+    color: #ffffff;
+}
+
+#indicadores .cad-indicators-left.cad-indicators-count-3 .cad-indicator-card__label {
+    color: #ffffff;
+}
+
+#indicadores .cad-indicators-left.cad-indicators-count-3 .cad-indicator-card__period {
+    border-radius: 0;
+    border: 0;
+    background: transparent;
+    color: rgb(255, 125, 0);
+    text-transform: uppercase;
+}
+
 #indicadores .cad-indicators-right {
+    position: relative;
+    overflow: hidden;
     display: flex;
     align-items: stretch;
+    min-height: 100%;
+    width: 100%;
+    background-color: var(--cad-color-main);
+    background-size: auto;
+    background-position: center center;
+    background-repeat: no-repeat;
+    border-radius: 10px;
+}
+
+#indicadores .cad-indicators-right::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 22, 64, 0.74);
+    z-index: 0;
+    pointer-events: none;
+}
+
+#indicadores .cad-indicators-right > * {
+    position: relative;
+    z-index: 1;
 }
 
 #indicadores .cad-indicators-hero {
     width: 100%;
     min-height: 100%;
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     padding: 28px;
     border-radius: 10px;
-    background: #EF842E;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
-    position: relative;
+    border: 1px solid rgb(58, 67, 90);
+    background: rgba(0, 22, 64, 0.18);
+    box-shadow: none;
     overflow: hidden;
+    backdrop-filter: none;
 }
 
 #indicadores .cad-indicators-hero::after {
-    content: "";
-    position: absolute;
-    right: -60px;
-    bottom: -60px;
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.08);
-    pointer-events: none;
+    display: none;
 }
 
 #indicadores .cad-indicators-hero > * {
@@ -740,36 +855,46 @@ p {
     z-index: 1;
 }
 
+#indicadores .cad-indicators-hero > div {
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
 #indicadores .cad-indicators-eyebrow {
     display: inline-flex;
     align-items: center;
+    text-transform: uppercase;
     width: max-content;
     margin-bottom: 18px;
     padding: 10px 14px;
     border-radius: 10px;
-    background: rgba(0, 0, 0, 0.12);
-    color: #FFF7ED;
-    font-family: 'Barlow', sans-serif;
+    /* background: rgba(255, 255, 255, 0.10); */
+    color: rgb(255, 125, 0);
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.9rem;
-    font-weight: 700;
+    font-weight: 300;
     letter-spacing: 0.02em;
 }
 
 #indicadores .cad-indicators-hero .cad-title {
     margin: 0 0 22px;
     max-width: none;
-    font-family: 'Archivo', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: clamp(2.2rem, 4vw, 3.4rem);
     line-height: 1.02;
-    font-weight: 800;
-    color: #111827;
+    font-weight: 700;
+    color: #ffffff;
     text-wrap: pretty;
 }
 
 #indicadores .cad-indicators-copy {
     display: grid;
     gap: 12px;
-    font-family: 'Barlow', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
+    font-weight: 300;
+    color: #ffffff;
 }
 
 #indicadores .cad-indicators-copy ul,
@@ -785,38 +910,45 @@ p {
     margin: 0;
     list-style: none;
     position: relative;
-    padding-left: 42px;
-    font-size: 1.1rem;
-    line-height: 1.35;
-    font-weight: 700;
-    color: #111827;
+    padding-left: 28px;
+    min-height: 16px;
+    display: flex;
+    align-items: center;
+    font-size: 1.05rem;
+    line-height: 2.5;
+    font-weight: 300;
+    color: #ffffff;
 }
 
 #indicadores .cad-indicators-copy p::before,
 #indicadores .cad-indicators-copy li::before {
-    content: "✓";
+    content: "";
     position: absolute;
     left: 0;
-    top: 0.05rem;
-    width: 28px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 999px;
-    background: rgba(255, 247, 237, 0.92);
-    color: #EF842E;
-    font-size: 14px;
-    font-weight: 900;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid rgb(255, 125, 0);
+    background-color: transparent;
+    box-sizing: border-box;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgb(255,125,0)' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='5 13 10 18 20 6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 9px 9px;
+    box-shadow: none;
 }
 
 #indicadores .cad-indicators-footer {
     position: relative;
     z-index: 1;
-    margin-top: 28px;
-    padding-top: 18px;
-    border-top: 1px solid rgba(17, 24, 39, 0.15);
+    margin-top: auto;
+    padding-top: 28px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-top: 0;
 }
 
 #indicadores .cad-indicators-logo {
@@ -825,12 +957,14 @@ p {
     display: block;
     max-width: 180px;
     object-fit: contain;
-    filter: brightness(0) invert(1);
-    opacity: 0.95;
+    filter: none;
+    opacity: 1;
+    position: relative;
+    z-index: 2;
 }
 
 .cad-section--projects {
-    background: linear-gradient(180deg, #1e2430 0%, #171d24 100%);
+    /* background: linear-gradient(180deg, #1e2430 0%, #171d24 100%); */
 }
 
 .cad-anchor-legacy {
@@ -1177,7 +1311,7 @@ p {
 .cad-business-area__badge-context,
 .cad-business-area__kicker,
 .cad-business-area__cta-kicker {
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.14em;
@@ -1384,7 +1518,7 @@ p {
     gap: 16px;
     padding: 0;
     color: #5f544b;
-    font-family: 'Barlow', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 15px;
     line-height: 1.75;
     position: relative;
@@ -1417,7 +1551,7 @@ p {
     display: block;
     margin-bottom: 24px;
     color: #ef842e;
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.14em;
@@ -1432,9 +1566,9 @@ p {
     right: -8px;
     bottom: -18px;
     color: rgba(47, 38, 31, 0.04);
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 120px;
-    font-weight: 800;
+    font-weight: 700;
     line-height: 1;
     white-space: nowrap;
     letter-spacing: -2px;
@@ -1494,9 +1628,9 @@ p {
 .cad-business-area-dev__item-title {
     margin: 0;
     color: #1f2937;
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1.4;
     letter-spacing: 0;
     text-transform: none;
@@ -1506,7 +1640,7 @@ p {
     margin-top: 2px;
     padding-left: 19px;
     color: #5f6b76;
-    font-family: 'Barlow', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 13px;
     line-height: 1.5;
 }
@@ -1674,7 +1808,7 @@ p {
     border-radius: 999px;
     background: rgba(10, 12, 16, 0.54);
     color: #fff;
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.1em;
@@ -1723,7 +1857,7 @@ p {
 
 .cad-business-area__project-number {
     color: rgba(255, 255, 255, 0.34);
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 1.5rem;
     font-weight: 700;
     line-height: 1;
@@ -1756,7 +1890,7 @@ p {
     border-radius: 999px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: #f3e9df;
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.68rem;
     font-weight: 700;
     letter-spacing: 0.1em;
@@ -1793,7 +1927,7 @@ p {
     margin: 0;
     max-width: 34rem;
     color: #1f1712;
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: clamp(1.35rem, 2.9vw, 2.1rem);
     font-weight: 700;
     line-height: 1.08;
@@ -1828,7 +1962,7 @@ p {
     min-height: 44px;
     padding: 0.85rem 1.25rem;
     border-radius: var(--cta-radius, 10px);
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.76rem;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -1892,7 +2026,7 @@ p {
 .cad-business-area__cta-copy p {
     max-width: 34rem;
     color: #1f1712;
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: clamp(1.35rem, 2.9vw, 2.1rem);
     font-weight: 700;
     line-height: 1.08;
@@ -1907,7 +2041,7 @@ p {
     min-height: 3rem;
     padding: 0 1.2rem;
     border-radius: 999px;
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.76rem;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -2337,7 +2471,7 @@ p {
 .cad-project-meta-card__value {
     font-size: 1.02rem;
     color: var(--color-light-text);
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .cad-project-meta-card__tags {
@@ -2609,7 +2743,7 @@ p {
     background: #fffaf6;
     border: 1px solid rgba(106, 74, 45, 0.24);
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 700;
     width: fit-content;
     white-space: nowrap;
 }
@@ -2703,7 +2837,7 @@ p {
 
 .cad-footer {
     border-top: 1px solid rgba(255, 255, 255, 0.08);
-    background: #181f28;
+    background: RGB(16, 21, 26);
     padding: 1rem 1.4rem;
 }
 
@@ -2735,18 +2869,16 @@ p {
     min-height: 2rem;
     padding: 0 0.7rem;
     border-radius: 999px;
-    font-family: 'Archivo', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.71rem;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: #dcc7b4;
 }
 
 .cad-footer-links__link:hover,
 .cad-footer-links__link:focus-visible {
     color: #fff;
-    background: rgba(239, 132, 50, 0.24);
 }
 
 .cad-footer__address {
@@ -2755,7 +2887,6 @@ p {
     gap: 0.15rem;
     font-style: normal;
     font-size: 0.7rem;
-    color: #e7d5c5;
     text-align: right;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -2773,9 +2904,8 @@ p {
 }
 
 .cad-footer__social a {
-    color: #c9b39f;
     font-size: 0.78rem;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .cad-footer__social a:hover,
@@ -2875,7 +3005,7 @@ p {
 
     .cad-mobile-bar__toggle-eyebrow,
     .cad-mobile-bar__toggle-label {
-        font-family: 'Archivo', sans-serif;
+        font-family: 'Montserrat', 'Segoe UI', sans-serif;
         font-weight: 700;
         text-transform: uppercase;
         max-width: 100%;
@@ -2970,16 +3100,16 @@ p {
     }
 
     .cad-mobile-bar__brand-mark {
-        font-family: 'Archivo', sans-serif;
+        font-family: 'Montserrat', 'Segoe UI', sans-serif;
         font-size: 1.15rem;
-        font-weight: 800;
+        font-weight: 700;
         letter-spacing: 0.12em;
         line-height: 1;
         color: var(--color-red);
     }
 
     .cad-mobile-bar__brand-sub {
-        font-family: 'Archivo', sans-serif;
+        font-family: 'Montserrat', 'Segoe UI', sans-serif;
         font-size: 0.58rem;
         font-weight: 700;
         letter-spacing: 0.2em;
@@ -3091,11 +3221,12 @@ p {
     }
 
     .cad-hero__content h1 span {
-        font-size: clamp(2.4rem, 7vw, 4.4rem);
+        font-size: clamp(1.8rem, 5.25vw, 3.3rem);
     }
 
     .cad-hero__content h1 strong {
-        font-size: clamp(1.62rem, 4.5vw, 2.88rem);
+        font-size: clamp(1.22rem, 3.38vw, 2.16rem);
+        font-weight: 100;
     }
 
     .cad-page-nav {
@@ -3390,16 +3521,17 @@ p {
     }
 
     .cad-hero__content h1 span {
-        font-size: clamp(2rem, 9vw, 3rem);
+        font-size: clamp(1.5rem, 6.75vw, 2.25rem);
     }
 
     .cad-hero__content h1 strong {
-        font-size: clamp(1.3rem, 6.3vw, 1.98rem);
+        font-size: clamp(0.98rem, 4.73vw, 1.49rem);
+        font-weight: 100;
     }
 
     .cad-hero__video-btn {
         min-height: 2.75rem;
-        padding: 0.7rem 1rem;
+        padding: 0.7rem 1.8rem 0.7rem 1rem;
     }
 
     .cad-section {
@@ -3531,6 +3663,14 @@ p {
         border-radius: 10px;
     }
 
+    #indicadores .cad-indicators-layout {
+        padding: 1.2rem;
+    }
+
+    #indicadores .cad-indicators-right {
+        min-height: 420px;
+    }
+
     #indicadores .cad-indicator-card {
         padding: 1.2rem;
         border-radius: 10px;
@@ -3557,18 +3697,23 @@ p {
     #indicadores .cad-indicators-copy p,
     #indicadores .cad-indicators-copy li {
         font-size: 1rem;
-        padding-left: 38px;
+        padding-left: 28px;
     }
 
     #indicadores .cad-indicators-copy p::before,
     #indicadores .cad-indicators-copy li::before {
-        width: 24px;
-        height: 24px;
-        font-size: 12px;
+        width: 16px;
+        height: 16px;
+        background-size: 9px 9px;
     }
 
     #indicadores .cad-indicators-logo {
-        height: 38px;
+        height: auto;
+        max-width: 150px;
+    }
+
+    #indicadores .cad-indicators-footer {
+        justify-content: flex-start;
     }
 
     .cad-business-card__cta,
@@ -4068,7 +4213,7 @@ p {
     gap: 0.45rem;
     margin-bottom: 24px;
     color: rgba(248, 243, 238, 0.86);
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -4099,9 +4244,9 @@ p {
     border: 1px solid rgba(255, 255, 255, 0.16);
     border-radius: 999px;
     color: var(--color-accent-soft);
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.7rem;
-    font-weight: 800;
+    font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
 }
@@ -4116,7 +4261,7 @@ p {
 
 .cad-project-page .cad-project__title {
     color: var(--color-text);
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: clamp(2.2rem, 5vw, 4.5rem);
     line-height: 0.96;
     letter-spacing: -0.04em;
@@ -4189,16 +4334,16 @@ p {
     display: block;
     margin-bottom: 6px;
     color: var(--color-accent-soft);
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.7rem;
-    font-weight: 800;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
 }
 
 .cad-project-page .cad-project__meta-item strong {
     color: var(--color-text);
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 1rem;
     font-weight: 700;
 }
@@ -4221,7 +4366,7 @@ p {
     background: rgba(255, 255, 255, 0.08);
     color: var(--color-text);
     font-size: 0.75rem;
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     letter-spacing: 0.02em;
     text-transform: none;
 }
@@ -4289,9 +4434,9 @@ p {
     display: block;
     margin-bottom: 6px;
     color: var(--color-accent-soft);
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.7rem;
-    font-weight: 800;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.13em;
 }
@@ -4299,7 +4444,7 @@ p {
 .cad-project-page .cad-project-block h2 {
     margin: 0;
     color: var(--color-text);
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: clamp(1.35rem, 2.2vw, 2rem);
 }
 
@@ -4414,7 +4559,7 @@ p {
 .cad-project-page .cad-project-block__video h3 {
     margin: 0;
     color: var(--color-text);
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
 }
 
 .cad-project-page .cad-project-block__video-embed {

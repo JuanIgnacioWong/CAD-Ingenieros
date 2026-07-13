@@ -137,7 +137,7 @@
 
 .cad-contact-page__info-label {
     color: var(--color-accent-soft);
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.14em;
@@ -263,7 +263,7 @@
 .cad-contact-form__field label,
 .cad-contact-form__field--checkbox span {
     color: #f8f3ee;
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.82rem;
     font-weight: 700;
     letter-spacing: 0.04em;

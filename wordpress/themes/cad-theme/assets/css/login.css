@@ -8,7 +8,7 @@ body.login {
     justify-content: center;
     position: relative;
     overflow-x: hidden;
-    font-family: 'Barlow', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     color: #fff8f2;
     background:
         radial-gradient(circle at 18% 20%, rgba(239, 132, 50, 0.18), transparent 30%),
@@ -69,9 +69,9 @@ body.login.cad-login--text-logo h1 a {
     height: auto;
     background-image: none !important;
     text-indent: 0;
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: clamp(2rem, 8vw, 3rem);
-    font-weight: 800;
+    font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--cad-login-accent);
@@ -127,7 +127,7 @@ body.login form {
 body.login label {
     display: block;
     margin-bottom: 0.45rem;
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.76rem;
     font-weight: 700;
     letter-spacing: 0.09em;
@@ -174,9 +174,9 @@ body.login .forgetmenot label {
     align-items: center;
     gap: 0.55rem;
     margin-bottom: 0;
-    font-family: 'Barlow', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.97rem;
-    font-weight: 500;
+    font-weight: 300;
     letter-spacing: 0;
     text-transform: none;
     color: var(--cad-login-text);
@@ -209,7 +209,7 @@ body.login .button.button-primary {
     border-radius: 999px;
     background: linear-gradient(135deg, var(--cad-login-accent) 0%, var(--cad-login-accent-hover) 100%);
     box-shadow: 0 1rem 2.25rem rgba(239, 132, 50, 0.28);
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.8rem;
     font-weight: 700;
     letter-spacing: 0.09em;
@@ -292,7 +292,7 @@ body.login .language-switcher .button {
 body.login .cad-login__footer {
     margin: 1rem 0 0;
     text-align: center;
-    font-family: 'Archivo', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.74rem;
     font-weight: 700;
     letter-spacing: 0.18em;
