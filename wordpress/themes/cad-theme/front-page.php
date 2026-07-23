@@ -130,17 +130,109 @@ $hero_class = $has_video ? 'cad-hero' : 'cad-hero is-video-paused';
                 <div class="cad-business-carousel__viewport">
                     <div class="<?php echo esc_attr($business_grid_class); ?>" data-business-track>
                         <?php foreach ($business_cards as $business_card) : ?>
-                            <article class="cad-business-card <?php echo esc_attr((string) $business_card['tone']); ?>">
-                                <div class="cad-business-card__media" style="background-image:url('<?php echo esc_url((string) $business_card['image']); ?>');"></div>
-                                <div class="cad-business-card__overlay"></div>
+                            <?php
+                            $business_title = isset($business_card['title']) ? (string) $business_card['title'] : '';
+                            $business_title_lines = cad_theme_get_business_title_lines($business_title);
+                            $business_description = !empty($business_card['description']) ? trim(wp_strip_all_tags((string) $business_card['description'])) : '';
+                            $business_cta = isset($business_card['cta']) ? (string) $business_card['cta'] : '';
+                            $business_url = isset($business_card['url']) ? (string) $business_card['url'] : '#';
+                            $business_image = isset($business_card['image']) ? (string) $business_card['image'] : '';
+                            ?>
+                            <article class="cad-business-card <?php echo esc_attr((string) $business_card['tone']); ?>" data-business-card>
+                                <?php if ($business_image) : ?>
+                                    <img
+                                        class="cad-business-card__media"
+                                        data-business-card-media
+                                        src="<?php echo esc_url($business_image); ?>"
+                                        alt="<?php echo esc_attr($business_title); ?>"
+                                        loading="lazy"
+                                        decoding="async"
+                                    >
+                                <?php endif; ?>
+                                <div class="cad-business-card__tint" aria-hidden="true"></div>
+                                <div class="cad-business-card__grid" aria-hidden="true"></div>
+                                <div class="cad-business-card__top">
+                                    <svg class="cad-business-card__gear-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+                                        <path d="M24 6 L26.5 6 L27.3 11.2 C29 11.6 30.6 12.3 32 13.2 L36.4 10.2 L39.8 13.6 L36.8 18 C37.7 19.4 38.4 21 38.8 22.7 L44 23.5 L44 26.5 L38.8 27.3 C38.4 29 37.7 30.6 36.8 32 L39.8 36.4 L36.4 39.8 L32 36.8 C30.6 37.7 29 38.4 27.3 38.8 L26.5 44 L23.5 44 L22.7 38.8 C21 38.4 19.4 37.7 18 36.8 L13.6 39.8 L10.2 36.4 L13.2 32 C12.3 30.6 11.6 29 11.2 27.3 L6 26.5 L6 23.5 L11.2 22.7 C11.6 21 12.3 19.4 13.2 18 L10.2 13.6 L13.6 10.2 L18 13.2 C19.4 12.3 21 11.6 22.7 11.2 Z"></path>
+                                        <circle cx="25" cy="25" r="7.5"></circle>
+                                        <path d="M30.5 30.5 L36 36"></path>
+                                    </svg>
+                                    <span class="cad-business-card__top-divider" aria-hidden="true"></span>
+                                    <div class="cad-business-card__labels">
+                                        <span><?php esc_html_e('Diseño', 'cad-theme'); ?></span>
+                                        <span><?php esc_html_e('Cálculo', 'cad-theme'); ?></span>
+                                        <span><?php esc_html_e('Desarrollo', 'cad-theme'); ?></span>
+                                    </div>
+                                </div>
                                 <div class="cad-business-card__content">
-                                    <h3><?php echo esc_html((string) $business_card['title']); ?></h3>
-                                    <?php if (!empty($business_card['description'])) : ?>
-                                        <?php echo $business_card['description']; ?>
+                                    <h3 class="cad-business-card__headline">
+                                        <?php if (!empty($business_title_lines['primary'])) : ?>
+                                            <span class="cad-business-card__title-primary"><?php echo esc_html($business_title_lines['primary']); ?></span>
+                                        <?php endif; ?>
+                                        <?php if (!empty($business_title_lines['secondary'])) : ?>
+                                            <span class="cad-business-card__title-secondary"><?php echo esc_html($business_title_lines['secondary']); ?></span>
+                                        <?php endif; ?>
+                                        <?php if (!empty($business_title_lines['tertiary'])) : ?>
+                                            <span class="cad-business-card__title-tertiary"><?php echo esc_html($business_title_lines['tertiary']); ?></span>
+                                        <?php endif; ?>
+                                    </h3>
+                                    <span class="cad-business-card__accent" aria-hidden="true"></span>
+                                    <?php if ($business_description) : ?>
+                                        <p class="cad-business-card__description"><?php echo esc_html($business_description); ?></p>
                                     <?php endif; ?>
-                                    <?php if (!empty($business_card['cta'])) : ?>
-                                        <a class="cad-business-card__cta" href="<?php echo esc_url((string) $business_card['url']); ?>"><?php echo esc_html((string) $business_card['cta']); ?></a>
+                                    <?php if ($business_cta) : ?>
+                                        <div class="cad-business-card__cta-wrap">
+                                            <a
+                                                class="cad-business-card__cta"
+                                                href="<?php echo esc_url($business_url); ?>"
+                                                aria-label="<?php echo esc_attr(sprintf('%1$s - %2$s', $business_cta, $business_title)); ?>"
+                                            >
+                                                <span><?php echo esc_html($business_cta); ?></span>
+                                                <svg class="cad-business-card__cta-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                                    <path d="M5 12h14M13 6l6 6-6 6"></path>
+                                                </svg>
+                                            </a>
+                                        </div>
                                     <?php endif; ?>
+                                </div>
+                                <div class="cad-business-card__bottom">
+                                    <div class="cad-business-card__bottom-divider" aria-hidden="true"></div>
+                                    <div class="cad-business-card__features">
+                                        <div class="cad-business-card__feature cad-business-card__feature--security">
+                                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                                <path d="M12 3 L19 6 V11 C19 16 16 19.5 12 21 C8 19.5 5 16 5 11 V6 Z"></path>
+                                                <path d="M9 12 L11 14 L15.5 9"></path>
+                                            </svg>
+                                            <span class="cad-business-card__feature-text">
+                                                <span><?php esc_html_e('Seguridad y', 'cad-theme'); ?></span>
+                                                <span><?php esc_html_e('confiabilidad', 'cad-theme'); ?></span>
+                                            </span>
+                                        </div>
+                                        <span class="cad-business-card__feature-divider" aria-hidden="true"></span>
+                                        <div class="cad-business-card__feature cad-business-card__feature--efficiency">
+                                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                                <circle cx="12" cy="12" r="8.2"></circle>
+                                                <circle cx="12" cy="12" r="4.6"></circle>
+                                                <circle class="cad-business-card__feature-dot" cx="12" cy="12" r="1.1"></circle>
+                                            </svg>
+                                            <span class="cad-business-card__feature-text">
+                                                <span><?php esc_html_e('Eficiencia', 'cad-theme'); ?></span>
+                                                <span><?php esc_html_e('operacional', 'cad-theme'); ?></span>
+                                            </span>
+                                        </div>
+                                        <span class="cad-business-card__feature-divider" aria-hidden="true"></span>
+                                        <div class="cad-business-card__feature cad-business-card__feature--custom">
+                                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                                <path d="M12 3 L20 7.5 V16.5 L12 21 L4 16.5 V7.5 Z"></path>
+                                                <path d="M4 7.5 L12 12 L20 7.5"></path>
+                                                <path d="M12 12 V21"></path>
+                                            </svg>
+                                            <span class="cad-business-card__feature-text">
+                                                <span><?php esc_html_e('Soluciones', 'cad-theme'); ?></span>
+                                                <span><?php esc_html_e('a medida', 'cad-theme'); ?></span>
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </article>
                         <?php endforeach; ?>

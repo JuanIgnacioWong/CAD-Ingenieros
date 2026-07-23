@@ -482,6 +482,10 @@ add_action('init', 'cad_theme_register_project_taxonomy');
 function cad_theme_assets()
 {
     $version = wp_get_theme()->get('Version');
+    $main_css_path = get_theme_file_path('/assets/css/main.css');
+    $main_js_path = get_theme_file_path('/assets/js/main.js');
+    $main_css_version = file_exists($main_css_path) ? (string) filemtime($main_css_path) : $version;
+    $main_js_version = file_exists($main_js_path) ? (string) filemtime($main_js_path) : $version;
 
     wp_enqueue_style(
         'cad-theme-fonts',
@@ -501,14 +505,14 @@ function cad_theme_assets()
         'cad-theme-main',
         get_template_directory_uri() . '/assets/css/main.css',
         array('cad-theme-fonts', 'cad-theme-icons'),
-        $version
+        $main_css_version
     );
 
     wp_enqueue_script(
         'cad-theme-main',
         get_template_directory_uri() . '/assets/js/main.js',
         array(),
-        $version,
+        $main_js_version,
         true
     );
 }
@@ -1328,6 +1332,57 @@ function cad_theme_business_area_tones()
         'is-indigo' => __('Indigo', 'cad-theme'),
         'is-slate'  => __('Grafito', 'cad-theme'),
     );
+}
+
+if (!function_exists('cad_theme_get_business_title_lines')) {
+    function cad_theme_get_business_title_lines($title)
+    {
+        $title = trim((string) $title);
+
+        if ($title === '') {
+            return array(
+                'primary'   => '',
+                'secondary' => '',
+                'tertiary'  => '',
+            );
+        }
+
+        $words = preg_split('/\s+/u', $title);
+
+        if (!is_array($words) || empty($words)) {
+            return array(
+                'primary'   => $title,
+                'secondary' => '',
+                'tertiary'  => '',
+            );
+        }
+
+        $primary = array_shift($words);
+
+        if (empty($words)) {
+            return array(
+                'primary'   => $primary,
+                'secondary' => '',
+                'tertiary'  => '',
+            );
+        }
+
+        if (count($words) === 1) {
+            return array(
+                'primary'   => $primary,
+                'secondary' => $words[0],
+                'tertiary'  => '',
+            );
+        }
+
+        $split_index = (int) ceil(count($words) / 2);
+
+        return array(
+            'primary'   => $primary,
+            'secondary' => implode(' ', array_slice($words, 0, $split_index)),
+            'tertiary'  => implode(' ', array_slice($words, $split_index)),
+        );
+    }
 }
 
 function cad_theme_business_area_meta_fields()
