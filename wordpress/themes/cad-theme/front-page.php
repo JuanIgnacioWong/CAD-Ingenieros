@@ -326,52 +326,85 @@ $hero_class = $has_video ? 'cad-hero' : 'cad-hero is-video-paused';
         </div>
     </section>
 
-    <section id="proyectos" class="cad-section cad-section--projects">
+    <section id="proyectos" class="cad-section cad-section--projects" aria-labelledby="proyectos-destacados-title">
         <div class="cad-shell-wide">
             <span id="presencia" class="cad-anchor-legacy" aria-hidden="true"></span>
-            <h2 class="cad-title"><?php esc_html_e('Proyectos', 'cad-theme'); ?></h2>
 
             <?php if ($projects_query->have_posts()) : ?>
-                <div class="cad-projects-carousel" data-projects-carousel>
-                    <button type="button" class="cad-projects-carousel__nav" data-projects-prev aria-label="<?php esc_attr_e('Ver proyectos anteriores', 'cad-theme'); ?>">
-                        <span class="material-symbols-outlined" aria-hidden="true">chevron_left</span>
-                    </button>
-                    <div class="cad-projects-carousel__viewport">
-                        <div class="cad-projects-carousel__track" data-projects-track>
+                <div class="cad-featured-projects" data-featured-projects>
+                    <header class="cad-featured-projects__header">
+                        <h2 id="proyectos-destacados-title" class="cad-featured-projects__title">
+                            <?php esc_html_e('Proyectos destacados', 'cad-theme'); ?>
+                        </h2>
+                        <span class="cad-featured-projects__accent" aria-hidden="true"></span>
+                    </header>
+
+                    <div
+                        class="cad-featured-projects__viewport"
+                        data-featured-projects-viewport
+                        tabindex="0"
+                        aria-label="<?php esc_attr_e('Proyectos destacados', 'cad-theme'); ?>"
+                    >
+                        <div class="cad-featured-projects__track" data-featured-projects-track>
                             <?php while ($projects_query->have_posts()) : $projects_query->the_post(); ?>
                                 <?php
-                                $excerpt = get_the_excerpt();
-                                $excerpt = $excerpt ? wp_trim_words($excerpt, 18) : '';
+                                $project_excerpt = get_the_excerpt();
+                                $project_excerpt = $project_excerpt ? wp_trim_words($project_excerpt, 18) : '';
+                                $project_title = get_the_title();
                                 $thumb_html = get_the_post_thumbnail(get_the_ID(), 'large', array(
-                                    'class'   => 'cad-project-card__image',
-                                    'loading' => 'lazy',
+                                    'class'    => 'cad-featured-project__image',
+                                    'loading'  => 'lazy',
+                                    'decoding' => 'async',
                                 ));
                                 ?>
-                                <a class="cad-project-card" href="<?php the_permalink(); ?>" aria-label="<?php echo esc_attr(get_the_title()); ?>">
-                                    <div class="cad-project-card__media">
+                                <a
+                                    class="cad-featured-project"
+                                    href="<?php echo esc_url(get_permalink()); ?>"
+                                    aria-label="<?php echo esc_attr(sprintf(__('Ver proyecto: %s', 'cad-theme'), $project_title)); ?>"
+                                >
+                                    <div class="cad-featured-project__media">
                                         <?php if ($thumb_html) : ?>
                                             <?php echo $thumb_html; ?>
                                         <?php else : ?>
-                                            <div class="cad-project-card__placeholder"></div>
+                                            <div class="cad-featured-project__placeholder" aria-hidden="true"></div>
                                         <?php endif; ?>
+                                        <span class="cad-featured-project__media-overlay" aria-hidden="true"></span>
                                     </div>
-                                    <div class="cad-project-card__overlay"></div>
-                                    <div class="cad-project-card__content">
-                                        <h3 class="cad-project-card__title"><?php the_title(); ?></h3>
-                                        <?php if ($excerpt) : ?>
-                                            <p class="cad-project-card__excerpt"><?php echo esc_html($excerpt); ?></p>
+
+                                    <div class="cad-featured-project__content">
+                                        <div class="cad-featured-project__heading">
+                                            <h3 class="cad-featured-project__title"><?php echo esc_html($project_title); ?></h3>
+                                            <span class="cad-featured-project__arrow" aria-hidden="true">→</span>
+                                        </div>
+                                        <?php if ($project_excerpt) : ?>
+                                            <p class="cad-featured-project__description"><?php echo esc_html($project_excerpt); ?></p>
                                         <?php endif; ?>
                                     </div>
                                 </a>
                             <?php endwhile; ?>
                         </div>
                     </div>
-                    <button type="button" class="cad-projects-carousel__nav" data-projects-next aria-label="<?php esc_attr_e('Ver proyectos siguientes', 'cad-theme'); ?>">
-                        <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
-                    </button>
+
+                    <div class="cad-featured-projects__controls" data-featured-projects-controls hidden>
+                        <button type="button" class="cad-featured-projects__nav" data-featured-projects-prev aria-label="<?php esc_attr_e('Ver proyecto anterior', 'cad-theme'); ?>">
+                            <span aria-hidden="true">←</span>
+                        </button>
+                        <p class="cad-featured-projects__status" data-featured-projects-status aria-live="polite"></p>
+                        <button type="button" class="cad-featured-projects__nav" data-featured-projects-next aria-label="<?php esc_attr_e('Ver proyecto siguiente', 'cad-theme'); ?>">
+                            <span aria-hidden="true">→</span>
+                        </button>
+                    </div>
                 </div>
             <?php else : ?>
-                <p class="cad-projects-empty"><?php esc_html_e('Pronto compartiremos nuevos proyectos destacados.', 'cad-theme'); ?></p>
+                <div class="cad-featured-projects">
+                    <header class="cad-featured-projects__header">
+                        <h2 id="proyectos-destacados-title" class="cad-featured-projects__title">
+                            <?php esc_html_e('Proyectos destacados', 'cad-theme'); ?>
+                        </h2>
+                        <span class="cad-featured-projects__accent" aria-hidden="true"></span>
+                    </header>
+                    <p class="cad-featured-projects__empty"><?php esc_html_e('Pronto compartiremos nuevos proyectos destacados.', 'cad-theme'); ?></p>
+                </div>
             <?php endif; ?>
             <?php wp_reset_postdata(); ?>
 

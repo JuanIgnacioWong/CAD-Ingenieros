@@ -122,65 +122,130 @@
         });
     }
 
-    function initProjectsCarousel() {
-        var carousels = document.querySelectorAll('[data-projects-carousel]');
+    function initFeaturedProjects() {
+        var carousels = document.querySelectorAll('[data-featured-projects]');
         if (!carousels.length) {
             return;
         }
 
+        var reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
         carousels.forEach(function (carousel) {
-            var track = carousel.querySelector('[data-projects-track]');
-            var prev = carousel.querySelector('[data-projects-prev]');
-            var next = carousel.querySelector('[data-projects-next]');
-            if (!track) {
+            var viewport = carousel.querySelector('[data-featured-projects-viewport]');
+            var track = carousel.querySelector('[data-featured-projects-track]');
+            var controls = carousel.querySelector('[data-featured-projects-controls]');
+            var prev = carousel.querySelector('[data-featured-projects-prev]');
+            var next = carousel.querySelector('[data-featured-projects-next]');
+            var status = carousel.querySelector('[data-featured-projects-status]');
+            var cards = track ? Array.prototype.slice.call(track.querySelectorAll('.cad-featured-project')) : [];
+            var resizeTimer = null;
+
+            if (!viewport || !track || !controls || !prev || !next || !status || !cards.length) {
                 return;
             }
 
-            function getScrollStep() {
-                var card = track.querySelector('.cad-project-card');
-                if (!card) {
-                    return track.clientWidth;
-                }
-                var styles = window.getComputedStyle(track);
-                var gapValue = styles.columnGap || styles.gap || '0';
-                var gap = parseFloat(gapValue) || 0;
-                return card.getBoundingClientRect().width + gap;
+            function getMaxScroll() {
+                return Math.max(0, track.scrollWidth - track.clientWidth - 1);
             }
 
-            function updateButtons() {
-                var maxScroll = track.scrollWidth - track.clientWidth - 1;
-                if (prev) {
-                    prev.disabled = track.scrollLeft <= 0;
-                }
-                if (next) {
-                    next.disabled = track.scrollLeft >= maxScroll;
-                }
+            function hasOverflow() {
+                return getMaxScroll() > 1;
             }
 
-            function scrollByStep(direction) {
-                var amount = getScrollStep();
-                track.scrollBy({ left: direction * amount, behavior: 'smooth' });
+            function getCardScrollLeft(card) {
+                return Math.max(0, card.offsetLeft - track.offsetLeft);
             }
 
-            if (prev) {
-                prev.addEventListener('click', function () {
-                    scrollByStep(-1);
+            function getActiveIndex() {
+                var scrollLeft = track.scrollLeft;
+                var activeIndex = 0;
+                var activeDistance = Infinity;
+
+                cards.forEach(function (card, index) {
+                    var distance = Math.abs(getCardScrollLeft(card) - scrollLeft);
+                    if (distance < activeDistance) {
+                        activeDistance = distance;
+                        activeIndex = index;
+                    }
                 });
+
+                return activeIndex;
             }
 
-            if (next) {
-                next.addEventListener('click', function () {
-                    scrollByStep(1);
+            function scrollToIndex(index) {
+                var targetIndex = Math.min(Math.max(index, 0), cards.length - 1);
+                var target = cards[targetIndex];
+                if (!target) {
+                    return;
+                }
+
+                track.scrollTo({
+                    left: getCardScrollLeft(target),
+                    behavior: reducedMotionQuery.matches ? 'auto' : 'smooth'
                 });
+                requestUpdate();
             }
 
-            track.addEventListener('scroll', updateButtons, { passive: true });
-            window.addEventListener('resize', updateButtons);
-            updateButtons();
+            function updateState() {
+                var overflow = hasOverflow();
+                controls.hidden = !overflow;
+
+                if (!overflow) {
+                    prev.disabled = true;
+                    next.disabled = true;
+                    status.textContent = '';
+                    return;
+                }
+
+                var activeIndex = getActiveIndex();
+                prev.disabled = track.scrollLeft <= 1;
+                next.disabled = track.scrollLeft >= getMaxScroll();
+                status.textContent = String(activeIndex + 1) + ' / ' + String(cards.length);
+            }
+
+            function requestUpdate() {
+                window.clearTimeout(resizeTimer);
+                resizeTimer = window.setTimeout(updateState, 80);
+            }
+
+            prev.addEventListener('click', function () {
+                scrollToIndex(getActiveIndex() - 1);
+            });
+
+            next.addEventListener('click', function () {
+                scrollToIndex(getActiveIndex() + 1);
+            });
+
+            viewport.addEventListener('keydown', function (event) {
+                if (event.key === 'ArrowLeft') {
+                    event.preventDefault();
+                    scrollToIndex(getActiveIndex() - 1);
+                } else if (event.key === 'ArrowRight') {
+                    event.preventDefault();
+                    scrollToIndex(getActiveIndex() + 1);
+                } else if (event.key === 'Home') {
+                    event.preventDefault();
+                    scrollToIndex(0);
+                } else if (event.key === 'End') {
+                    event.preventDefault();
+                    scrollToIndex(cards.length - 1);
+                }
+            });
+
+            track.addEventListener('scroll', requestUpdate, { passive: true });
+            window.addEventListener('resize', requestUpdate);
+
+            if ('ResizeObserver' in window) {
+                var observer = new ResizeObserver(requestUpdate);
+                observer.observe(track);
+                observer.observe(viewport);
+            }
+
+            updateState();
         });
     }
 
-    initProjectsCarousel();
+    initFeaturedProjects();
 
     function initClientsCarousel() {
         var carousels = document.querySelectorAll('[data-clients-carousel]');
