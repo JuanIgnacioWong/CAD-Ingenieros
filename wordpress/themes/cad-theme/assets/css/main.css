@@ -1444,7 +1444,6 @@ p {
 
 #proyectos .cad-featured-projects__title {
     margin: 0;
-    font-family: 'Archivo', 'Montserrat', 'Segoe UI', sans-serif;
     font-size: clamp(1.08rem, 1.4vw, 1.34rem);
     font-weight: 700;
     line-height: 1.16;
@@ -2538,8 +2537,11 @@ p {
 }
 
 .cad-cta-block__copy p {
+    font-weight: 300;
+    font-size: 1.1rem;
     margin: 0;
-    max-width: 38rem;
+    padding: 0.4rem 0 0;
+    max-width: 45rem;
     color: rgba(20, 16, 12, 0.85);
 }
 
@@ -4941,10 +4943,17 @@ p {
     }
 }
 
-/* CPT Proyectos redesign: clear/gray scoped layer */
+/* CPT Proyectos: Paleta de colores del sitio */
 .cad-project-page {
-    --cad-project-sidebar-bg: linear-gradient(180deg, var(--color-sidebar-start) 0%, var(--color-sidebar-mid) 60%, var(--color-sidebar-end) 100%);
-    background: linear-gradient(180deg, var(--color-sidebar-start) 0%, var(--color-sidebar-mid) 60%, var(--color-sidebar-end) 100%);
+    --cad-project-surface: #031b45;
+    --cad-project-surface-deep: #001d4d;
+    --cad-project-bg: linear-gradient(145deg, #001640 0%, #001d4d 52%, #001438 100%);
+    --cad-project-line: rgba(255, 255, 255, 0.12);
+    --cad-project-line-strong: rgba(239, 132, 50, 0.58);
+    --cad-project-copy: rgba(255, 255, 255, 0.72);
+    --cad-project-copy-strong: #fff;
+    --cad-project-accent: #ef8432;
+    background: var(--cad-project-bg);
     color: var(--color-text);
 }
 
@@ -4974,18 +4983,18 @@ p {
     align-items: stretch;
     padding: clamp(32px, 6vw, 64px);
     border-radius: 0;
-    background: var(--cad-project-sidebar-bg);
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: var(--cad-project-bg);
+    border: 1px solid var(--cad-project-line);
     overflow: hidden;
 }
 
 .cad-project-page .cad-project__header::after {
-    background: linear-gradient(180deg, rgba(7, 10, 14, 0.14) 0%, rgba(7, 10, 14, 0.55) 72%);
+    background: linear-gradient(180deg, rgba(0, 22, 64, 0.16) 0%, rgba(0, 22, 64, 0.72) 76%);
 }
 
 .cad-project-page .cad-project__hero {
-    opacity: 0.82;
-    filter: grayscale(0.16) saturate(0.88);
+    opacity: 0.9;
+    filter: saturate(1);
 }
 
 .cad-project-page .cad-project__header .cad-business-area__inner {
@@ -5005,7 +5014,7 @@ p {
     align-items: center;
     gap: 0.45rem;
     margin-bottom: 24px;
-    color: rgba(248, 243, 238, 0.86);
+    color: var(--cad-project-copy);
     font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.75rem;
     font-weight: 700;
@@ -5021,7 +5030,7 @@ p {
 
 .cad-project-page .cad-project__back:hover,
 .cad-project-page .cad-project__back:focus-visible {
-    color: #fff;
+    color: var(--cad-project-accent);
     text-decoration: underline;
     text-underline-offset: 3px;
 }
@@ -5033,10 +5042,10 @@ p {
     width: fit-content;
     margin-bottom: 20px;
     padding: 6px 12px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(3, 27, 69, 0.72);
+    border: 1px solid var(--cad-project-line);
     border-radius: 999px;
-    color: var(--color-accent-soft);
+    color: var(--cad-project-copy-strong);
     font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.7rem;
     font-weight: 700;
@@ -5048,16 +5057,17 @@ p {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: #ef8432;
+    background: var(--cad-project-accent);
     flex: 0 0 auto;
 }
 
 .cad-project-page .cad-project__title {
-    color: var(--color-text);
+    color: var(--cad-project-copy-strong);
     font-family: 'Montserrat', 'Segoe UI', sans-serif;
-    font-size: clamp(2.2rem, 5vw, 4.5rem);
-    line-height: 0.96;
-    letter-spacing: -0.04em;
+    font-size: clamp(2rem, 4.8vw, 4.1rem);
+    font-weight: 700;
+    line-height: 1.02;
+    letter-spacing: 0;
     max-width: 980px;
     text-shadow: 0 12px 22px rgba(0, 0, 0, 0.28);
     display: block;
@@ -5071,9 +5081,11 @@ p {
 .cad-project-page .cad-project__excerpt {
     max-width: 680px;
     margin-top: 20px;
-    color: #e2d3c4;
-    font-size: clamp(1rem, 1.4vw, 1.18rem);
-    line-height: 1.7;
+    color: var(--cad-project-copy);
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
+    font-size: clamp(0.98rem, 1.3vw, 1.12rem);
+    font-weight: 300;
+    line-height: 1.58;
     text-shadow: 0 10px 18px rgba(0, 0, 0, 0.24);
     display: block;
     overflow: visible;
@@ -5109,14 +5121,14 @@ p {
     padding: 0;
     border-radius: 10px;
     overflow: hidden;
-    background: var(--cad-project-sidebar-bg);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: var(--cad-project-surface);
+    border: 1px solid var(--cad-project-line);
 }
 
 .cad-project-page .cad-project__meta-item {
     text-align: center;
     padding: 20px;
-    border-right: 1px solid rgba(255, 255, 255, 0.12);
+    border-right: 1px solid var(--cad-project-line);
 }
 
 .cad-project-page .cad-project__meta-item:last-child {
@@ -5126,7 +5138,7 @@ p {
 .cad-project-page .cad-project__meta-item span {
     display: block;
     margin-bottom: 6px;
-    color: var(--color-accent-soft);
+    color: var(--cad-project-accent);
     font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.7rem;
     font-weight: 700;
@@ -5135,10 +5147,10 @@ p {
 }
 
 .cad-project-page .cad-project__meta-item strong {
-    color: var(--color-text);
+    color: var(--cad-project-copy-strong);
     font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 300;
 }
 
 .cad-project-page .cad-project__meta-tags {
@@ -5155,9 +5167,9 @@ p {
     min-height: 1.8rem;
     padding: 0.25rem 0.65rem;
     border-radius: 999px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid var(--cad-project-line);
     background: rgba(255, 255, 255, 0.08);
-    color: var(--color-text);
+    color: var(--cad-project-copy-strong);
     font-size: 0.75rem;
     font-family: 'Montserrat', 'Segoe UI', sans-serif;
     letter-spacing: 0.02em;
@@ -5166,7 +5178,7 @@ p {
 
 .cad-project-page .cad-project__meta-tags a:hover,
 .cad-project-page .cad-project__meta-tags a:focus-visible {
-    border-color: rgba(239, 132, 50, 0.55);
+    border-color: var(--cad-project-line-strong);
     color: #fff;
     text-decoration: underline;
     text-underline-offset: 3px;
@@ -5183,12 +5195,12 @@ p {
 }
 
 .cad-project-page .cad-project__body a {
-    color: #f2e8de;
+    color: var(--cad-project-copy-strong);
 }
 
 .cad-project-page .cad-project__body a:hover,
 .cad-project-page .cad-project__body a:focus-visible {
-    color: var(--color-accent-soft);
+    color: var(--cad-project-accent);
     text-decoration: underline;
     text-underline-offset: 3px;
 }
@@ -5197,17 +5209,17 @@ p {
     gap: 0;
     padding: 0;
     border-top: 0;
-    background: var(--cad-project-sidebar-bg);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
+    background: var(--cad-project-surface);
+    border: 1px solid var(--cad-project-line);
+    border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.22);
+    box-shadow: 0 18px 34px rgba(0, 0, 0, 0.26);
 }
 
 .cad-project-page .cad-project-block__header {
     max-width: none;
     padding: 22px 26px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid var(--cad-project-line);
     gap: 0;
 }
 
@@ -5226,7 +5238,7 @@ p {
 .cad-project-page .cad-project-block__kicker {
     display: block;
     margin-bottom: 6px;
-    color: var(--color-accent-soft);
+    color: var(--cad-project-accent);
     font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.7rem;
     font-weight: 700;
@@ -5236,29 +5248,42 @@ p {
 
 .cad-project-page .cad-project-block h2 {
     margin: 0;
-    color: var(--color-text);
+    color: var(--cad-project-copy-strong);
     font-family: 'Montserrat', 'Segoe UI', sans-serif;
-    font-size: clamp(1.35rem, 2.2vw, 2rem);
+    font-size: clamp(1.28rem, 2vw, 1.82rem);
+    font-weight: 700;
+    line-height: 1.16;
+    letter-spacing: 0;
 }
 
 .cad-project-page .cad-project-block__content {
     padding: 24px 26px;
-    color: #decebe;
-    font-size: 1rem;
-    line-height: 1.75;
+    color: var(--cad-project-copy);
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
+    font-size: 0.98rem;
+    font-weight: 300;
+    line-height: 1.6;
 }
 
 .cad-project-page .cad-project-main__copy {
-    color: #decebe;
-    font-size: 1rem;
-    line-height: 1.75;
+    color: var(--cad-project-copy);
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 300;
+    line-height: 1.6;
     max-width: none;
-    gap: 0.9rem;
+    gap: 0.5rem;
 }
 
 .cad-project-page .cad-project-main__copy > * {
     margin-top: 0;
     margin-bottom: 0;
+    font-weight: 300;
+}
+
+.cad-project-page .cad-project-main__copy p,
+.cad-project-page .cad-project-main__copy li {
+    font-weight: 300;
 }
 
 .cad-project-page .cad-project-main__copy p + p {
@@ -5288,8 +5313,8 @@ p {
     padding: 14px 16px;
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    color: var(--color-text);
+    border: 1px solid var(--cad-project-line);
+    color: var(--cad-project-copy-strong);
     font-weight: 700;
     text-decoration: none;
     white-space: normal;
@@ -5297,17 +5322,17 @@ p {
 
 .cad-project-page .cad-project-block__list a:hover,
 .cad-project-page .cad-project-block__list a:focus-visible {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(239, 132, 50, 0.45);
-    color: #fff;
+    background: rgba(239, 132, 50, 0.95);
+    border-color: rgba(239, 132, 50, 0.72);
+    color: #001640;
 }
 
 .cad-project-page .cad-project-block--gallery {
-    background: var(--cad-project-sidebar-bg);
+    background: var(--cad-project-surface);
 }
 
 .cad-project-page .cad-project-block__gallery {
-    background: var(--cad-project-sidebar-bg);
+    background: var(--cad-project-surface);
     padding: 16px;
     height: clamp(22rem, 38vw, 30rem);
 }
@@ -5316,11 +5341,11 @@ p {
     border-radius: 10px;
     overflow: hidden;
     background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid var(--cad-project-line);
 }
 
 .cad-project-page .cad-project-block__gallery-status {
-    color: #d4c1ae;
+    color: var(--cad-project-copy);
 }
 
 .cad-project-page .cad-project-block--gallery-empty .cad-project-block__content p {
@@ -5328,16 +5353,16 @@ p {
 }
 
 .cad-project-page .cad-gallery-nav {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: var(--color-text);
+    background: rgba(3, 27, 69, 0.72);
+    border: 1px solid var(--cad-project-line);
+    color: var(--cad-project-copy-strong);
 }
 
 .cad-project-page .cad-gallery-nav:hover,
 .cad-project-page .cad-gallery-nav:focus-visible {
-    border-color: rgba(239, 132, 50, 0.35);
-    color: var(--color-accent-soft);
-    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(239, 132, 50, 0.72);
+    color: #001640;
+    background: rgba(239, 132, 50, 0.95);
 }
 
 .cad-project-page .cad-project__footer {
@@ -5351,13 +5376,13 @@ p {
 
 .cad-project-page .cad-project-block__video h3 {
     margin: 0;
-    color: var(--color-text);
+    color: var(--cad-project-copy-strong);
     font-family: 'Montserrat', 'Segoe UI', sans-serif;
 }
 
 .cad-project-page .cad-project-block__video-embed {
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    background: var(--cad-project-sidebar-bg);
+    border: 1px solid var(--cad-project-line);
+    background: var(--cad-project-surface);
 }
 
 @media (max-width: 782px) {
