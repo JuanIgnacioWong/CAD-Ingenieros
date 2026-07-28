@@ -349,7 +349,7 @@ $hero_class = $has_video ? 'cad-hero' : 'cad-hero is-video-paused';
                             <?php while ($projects_query->have_posts()) : $projects_query->the_post(); ?>
                                 <?php
                                 $project_excerpt = get_the_excerpt();
-                                $project_excerpt = $project_excerpt ? wp_trim_words($project_excerpt, 18) : '';
+                                $project_excerpt = $project_excerpt ? wp_trim_words($project_excerpt, 24) : '';
                                 $project_title = get_the_title();
                                 $thumb_html = get_the_post_thumbnail(get_the_ID(), 'large', array(
                                     'class'    => 'cad-featured-project__image',

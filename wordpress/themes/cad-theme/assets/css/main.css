@@ -1603,7 +1603,7 @@ p {
     display: -webkit-box;
     overflow: hidden;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 4;
     font-family: 'Barlow', 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.94rem;
     font-weight: 300;
