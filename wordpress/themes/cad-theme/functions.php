@@ -1019,12 +1019,25 @@ add_action('admin_enqueue_scripts', 'cad_theme_admin_footer_contact_assets');
 
 function cad_theme_client_logo_requirement_message()
 {
-    return __('Subir únicamente logos en PNG o imágenes con fondo transparente para asegurar una correcta visualización en blanco y hover a color.', 'cad-theme');
+    return __('Subir únicamente logos en PNG o WEBP, idealmente con fondo transparente, para asegurar una correcta visualización en blanco y hover a color.', 'cad-theme');
 }
 
 function cad_theme_client_logo_invalid_notice_message()
 {
-    return __('Se quitó el logo seleccionado porque no es un PNG válido para la sección Clientes.', 'cad-theme');
+    return __('Se quitó el logo seleccionado porque no es un PNG o WEBP válido para la sección Clientes.', 'cad-theme');
+}
+
+function cad_theme_client_logo_allowed_mimes()
+{
+    return array(
+        'image/png',
+        'image/webp',
+    );
+}
+
+function cad_theme_is_client_logo_allowed_mime($mime)
+{
+    return in_array((string) $mime, cad_theme_client_logo_allowed_mimes(), true);
 }
 
 function cad_theme_client_logo_notice_transient_key()
@@ -1113,8 +1126,8 @@ function cad_theme_validate_client_logo_upload($file)
 
     $type = wp_check_filetype_and_ext($file['tmp_name'], $file['name']);
     $mime = isset($type['type']) ? (string) $type['type'] : '';
-    if ('image/png' !== $mime) {
-        $file['error'] = esc_html__('Solo se permiten archivos PNG para los logos de clientes.', 'cad-theme');
+    if (!cad_theme_is_client_logo_allowed_mime($mime)) {
+        $file['error'] = esc_html__('Solo se permiten archivos PNG o WEBP para los logos de clientes.', 'cad-theme');
     }
 
     return $file;
@@ -1146,7 +1159,7 @@ function cad_theme_validate_client_featured_logo_on_save($post_id, $post, $updat
     }
 
     $mime = (string) get_post_mime_type($thumbnail_id);
-    if ('image/png' === $mime) {
+    if (cad_theme_is_client_logo_allowed_mime($mime)) {
         return;
     }
 
