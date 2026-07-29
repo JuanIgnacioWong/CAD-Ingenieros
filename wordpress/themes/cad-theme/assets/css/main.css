@@ -1780,11 +1780,11 @@ p {
 
 .cad-client-card__logo {
     width: 100%;
-    height: 5rem;
+    height: 6rem;
     object-fit: contain;
     object-position: center;
-    filter: grayscale(1) contrast(1.05);
-    opacity: 0.94;
+    filter: grayscale(1) contrast(1.2);
+    opacity: 0.95;
     transition: filter 0.26s ease, opacity 0.26s ease, transform 0.26s ease;
 }
 
