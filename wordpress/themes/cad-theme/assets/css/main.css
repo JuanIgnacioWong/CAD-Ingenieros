@@ -774,7 +774,7 @@ p {
 .cad-business-card__cta-wrap {
     position: absolute;
     left: 0;
-    bottom: 1.2rem;
+    bottom: 2.72rem;
     z-index: 3;
     margin-top: 0;
     opacity: 0;
@@ -841,6 +841,25 @@ p {
     position: relative;
     z-index: 2;
     margin-top: auto;
+}
+
+@media (min-width: 783px) {
+    #business-areas .cad-business-card__top,
+    #business-areas .cad-business-card__bottom {
+        display: none;
+    }
+
+    #business-areas .cad-business-card {
+        min-height: clamp(30rem, 36vw, 34rem);
+        padding-inline: clamp(1rem, 1.5vw, 1.5rem);
+    }
+
+    #business-areas .cad-business-card__content {
+        width: min(78%, 19rem);
+        max-width: 100%;
+        margin-top: clamp(1rem, 2vw, 1.75rem);
+        padding-bottom: clamp(3.8rem, 5vw, 4.6rem);
+    }
 }
 
 .cad-business-card__bottom-divider {
@@ -3880,7 +3899,7 @@ p {
     }
 
     .cad-business-card__cta-wrap {
-        bottom: 1.1rem;
+        bottom: 1.21rem;
     }
 
     #indicadores .cad-indicators-layout {
@@ -4242,7 +4261,7 @@ p {
     }
 
     .cad-business-card__cta-wrap {
-        bottom: 1rem;
+        bottom: 1.1rem;
     }
 
     .cad-business-card__features {
@@ -4879,7 +4898,7 @@ p {
     }
 
     .cad-business-card__cta-wrap {
-        bottom: 0.95rem;
+        bottom: 1.045rem;
     }
 }
 
@@ -4939,7 +4958,7 @@ p {
     }
 
     .cad-business-card__cta-wrap {
-        bottom: 0.9rem;
+        bottom: 0.99rem;
     }
 }
 
