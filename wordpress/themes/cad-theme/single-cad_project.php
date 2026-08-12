@@ -453,7 +453,7 @@ get_header();
                 </section>
             </article>
 
-            <section class="cad-project__cta-section">
+            <section class="cad-project__cta-section cad-cta-section">
                 <div class="cad-business-area__inner">
                     <?php if ('' !== $assigned_cta_html) : ?>
                         <?php echo $assigned_cta_html; ?>

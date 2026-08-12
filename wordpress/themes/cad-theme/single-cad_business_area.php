@@ -278,7 +278,7 @@ get_header();
             </section>
 
             <?php if ('' !== $assigned_cta_html || '' !== $legacy_cta_html) : ?>
-                <section class="cad-business-area__section cad-business-area__section--cta">
+                <section class="cad-business-area__section cad-business-area__section--cta cad-cta-section">
                     <div class="cad-business-area__inner">
                         <?php if ('' !== $assigned_cta_html) : ?>
                             <?php echo $assigned_cta_html; ?>
