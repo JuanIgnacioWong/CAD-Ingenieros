@@ -1094,7 +1094,7 @@ p {
     margin: 0.2rem 0 0.7rem;
     font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: clamp(2.4rem, 5vw, 3.8rem);
-    font-weight: 700;
+    font-weight: 300;
     line-height: 1;
     will-change: transform, opacity;
     font-variant-numeric: tabular-nums;
@@ -1224,7 +1224,7 @@ p {
     font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: clamp(2.2rem, 4vw, 3.4rem);
     line-height: 1.02;
-    font-weight: 700;
+    font-weight: 300;
     color: #ffffff;
     text-wrap: pretty;
 }
@@ -1464,7 +1464,7 @@ p {
 #proyectos .cad-featured-projects__title {
     margin: 0;
     font-size: clamp(1.08rem, 1.4vw, 1.34rem);
-    font-weight: 700;
+    font-weight: 300;
     line-height: 1.16;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -1823,7 +1823,7 @@ p {
 .cad-business-area-page {
     background:
         radial-gradient(circle at top left, rgba(239, 132, 50, 0.08), transparent 30%),
-        linear-gradient(180deg, #11161c 0%, #0c1117 100%);
+        linear-gradient(180deg, var(--color-bg) 0%, var(--cad-color-aside) 100%);
     color: var(--color-text);
     min-height: 100vh;
     overflow-x: hidden;
@@ -1844,9 +1844,9 @@ p {
 
 .cad-business-area__hero {
     position: relative;
-    min-height: min(92vh, 860px);
+    min-height: min(42vh);
     overflow: hidden;
-    background: #0d1218;
+    background: var(--cad-color-main);
 }
 
 .cad-business-area__hero::before,
@@ -1890,20 +1890,20 @@ p {
     background:
         radial-gradient(circle at 18% 22%, rgba(239, 132, 50, 0.2), transparent 28%),
         radial-gradient(circle at 84% 76%, rgba(255, 255, 255, 0.09), transparent 22%),
-        linear-gradient(135deg, #202a34 0%, #131a22 55%, #0b1015 100%);
+        linear-gradient(135deg, var(--color-panel-soft) 0%, var(--color-panel) 55%, var(--cad-color-aside) 100%);
 }
 
 .cad-business-area__hero-overlay {
     background:
-        linear-gradient(90deg, rgba(10, 12, 16, 0.92) 0%, rgba(10, 12, 16, 0.72) 42%, rgba(10, 12, 16, 0.82) 100%),
-        linear-gradient(180deg, rgba(10, 12, 16, 0) 0%, rgba(10, 12, 16, 0.28) 48%, rgba(10, 12, 16, 0.86) 100%);
+        linear-gradient(90deg, rgba(0, 22, 64, 0.92) 0%, rgba(0, 22, 64, 0.72) 42%, rgba(0, 22, 64, 0.82) 100%),
+        linear-gradient(180deg, rgba(0, 22, 64, 0) 0%, rgba(0, 22, 64, 0.28) 48%, rgba(0, 22, 64, 0.86) 100%);
     z-index: 1;
 }
 
 .cad-business-area__hero-inner {
     position: relative;
     z-index: 2;
-    min-height: min(92vh, 860px);
+    min-height: min(42vh, 560px);
     padding: clamp(7.25rem, 14vw, 10rem) 0 clamp(3rem, 6vw, 4.4rem);
     display: flex;
     flex-direction: column;
@@ -1920,7 +1920,7 @@ p {
     padding: 0.7rem 0.95rem;
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 999px;
-    background: rgba(11, 14, 18, 0.62);
+    background: rgba(0, 22, 64, 0.72);
     backdrop-filter: blur(10px);
 }
 
@@ -1948,7 +1948,7 @@ p {
     flex-direction: column;
     gap: 0.25rem;
     max-width: 11.4em;
-    font-size: clamp(3rem, 7vw, 6.25rem);
+    font-size: clamp(2rem, 4vw, 4.25rem);
     text-transform: uppercase;
     letter-spacing: -0.045em;
     line-height: 0.92;
@@ -1997,12 +1997,14 @@ p {
 .cad-business-area__section {
     position: relative;
     padding: clamp(3.6rem, 7vw, 5.2rem) 0;
+    background: var(--cad-color-main);
+    color: var(--color-text);
 }
 
 .cad-business-area__section--intro {
     background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%),
-        linear-gradient(180deg, #121820 0%, #0f141a 100%);
+        linear-gradient(180deg, var(--cad-color-main) 0%, var(--cad-color-indicators) 100%);
 }
 
 .cad-business-area__intro {
@@ -2031,7 +2033,7 @@ p {
 .cad-business-area__intro-copy {
     display: grid;
     gap: 0.9rem;
-    color: #f2e8de;
+    color: var(--color-text);
     font-size: clamp(1.02rem, 1.6vw, 1.28rem);
     line-height: 1.8;
 }
@@ -2044,18 +2046,18 @@ p {
     padding: 48px 24px;
     background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%),
-        linear-gradient(180deg, #10151b 0%, #0e1319 100%);
+        linear-gradient(180deg, var(--cad-color-indicators) 0%, var(--cad-color-main) 100%);
     box-shadow: 0 18px 48px rgba(0, 0, 0, 0.10);
 }
 
 .cad-business-area-dev__header {
     margin-bottom: 1.15rem;
     padding-bottom: 0.7rem;
-    border-bottom: 1px solid rgba(248, 243, 238, 0.06);
+    border-bottom: 1px solid var(--color-line);
 }
 
 .cad-business-area-dev__title {
-    color: var(--color-light-text);
+    color: var(--color-text);
     font-size: clamp(1.7rem, 3.1vw, 2.35rem);
     line-height: 1.04;
     letter-spacing: -0.03em;
@@ -2071,7 +2073,7 @@ p {
     min-height: 480px;
     border-radius: 12px;
     background: transparent;
-    box-shadow: 0 18px 48px rgba(23, 27, 33, 0.12);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.26);
 }
 
 .cad-business-area-dev__grid.is-single-column {
@@ -2088,7 +2090,7 @@ p {
     padding: 48px 40px;
     border: 0;
     border-radius: 0;
-    background: #fff8f2;
+    background: var(--color-panel);
     box-shadow: none;
 }
 
@@ -2100,7 +2102,7 @@ p {
     transform: translateY(-50%);
     width: 80px;
     height: 200px;
-    background-image: radial-gradient(circle, rgba(47, 38, 31, 0.14) 1px, transparent 1px);
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
     background-size: 10px 10px;
     opacity: 0.35;
     pointer-events: none;
@@ -2114,7 +2116,7 @@ p {
     height: 3px;
     margin-bottom: 18px;
     border-radius: 3px;
-    background: #ef842e;
+    background: var(--color-accent);
     z-index: 1;
 }
 
@@ -2134,7 +2136,7 @@ p {
     flex-direction: column;
     gap: 16px;
     padding: 0;
-    color: #5f544b;
+    color: var(--color-text);
     font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 15px;
     line-height: 1.75;
@@ -2143,7 +2145,7 @@ p {
 }
 
 .cad-business-area-dev__description strong {
-    color: #2f261f;
+    color: var(--color-text);
     font-weight: 700;
 }
 
@@ -2159,15 +2161,15 @@ p {
     gap: 0;
     padding: 40px;
     overflow: hidden;
-    border-left: 1px solid rgba(47, 38, 31, 0.08);
-    background: #f2f4f6;
+    border-left: 1px solid var(--color-line);
+    background: var(--color-panel-soft);
 }
 
 .cad-business-area-dev__list::before {
     content: 'ÁMBITOS DE DESARROLLO';
     display: block;
     margin-bottom: 24px;
-    color: #ef842e;
+    color: var(--color-accent);
     font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 12px;
     font-weight: 700;
@@ -2175,21 +2177,6 @@ p {
     text-transform: uppercase;
     position: relative;
     z-index: 1;
-}
-
-.cad-business-area-dev__list::after {
-    content: 'CAD';
-    position: absolute;
-    right: -8px;
-    bottom: -18px;
-    color: rgba(47, 38, 31, 0.04);
-    font-family: 'Montserrat', 'Segoe UI', sans-serif;
-    font-size: 120px;
-    font-weight: 700;
-    line-height: 1;
-    white-space: nowrap;
-    letter-spacing: -2px;
-    pointer-events: none;
 }
 
 .cad-business-area-dev__item {
@@ -2244,7 +2231,7 @@ p {
 
 .cad-business-area-dev__item-title {
     margin: 0;
-    color: #1f2937;
+    color: var(--color-text);
     font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 15px;
     font-weight: 700;
@@ -2256,7 +2243,7 @@ p {
 .cad-business-area-dev__item-body {
     margin-top: 2px;
     padding-left: 19px;
-    color: #5f6b76;
+    color: rgba(255, 255, 255, 0.72);
     font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 13px;
     line-height: 1.5;
@@ -2268,7 +2255,7 @@ p {
     height: 1px;
     margin-top: 28px;
     border: 0;
-    background: rgba(47, 38, 31, 0.12);
+    background: var(--color-line);
 }
 
 .cad-business-area-dev__item-body p {
@@ -2285,7 +2272,9 @@ p {
 .cad-business-area__section-heading h2 {
     font-size: clamp(2rem, 4.4vw, 3.3rem);
     line-height: 1.02;
+    font-weight: 300;
     letter-spacing: -0.03em;
+    color: var(--color-text);
 }
 
 .cad-business-area__structure-grid {
@@ -2298,11 +2287,11 @@ p {
     position: relative;
     min-height: 15rem;
     padding: 1.65rem 1.6rem 1.75rem;
-    border: 1px solid rgba(255, 255, 255, 0.09);
+    border: 1px solid var(--color-line);
     border-radius: 1.1rem;
     background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0) 34%),
-        linear-gradient(165deg, #171e26 0%, #0f151b 100%);
+        linear-gradient(165deg, var(--color-panel) 0%, var(--color-bg) 100%);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
     transition: transform 0.22s ease, border-color 0.22s ease, background-color 0.22s ease;
 }
@@ -2351,14 +2340,13 @@ p {
 .cad-business-area__service-card p {
     margin-top: 0.7rem;
     max-width: 30rem;
-    color: #dbcaba;
+    color: var(--color-accent-soft);
     line-height: 1.65;
 }
 
 .cad-business-area__section--gallery {
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%),
-        linear-gradient(180deg, #10151b 0%, #0e1319 100%);
+    background: var(--cad-color-main);
+    color: var(--color-text);
 }
 
 .cad-business-area__gallery {
@@ -2374,8 +2362,8 @@ p {
     margin: 0;
     overflow: hidden;
     border-radius: 1.1rem;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: #121820;
+    border: 1px solid var(--color-line);
+    background: var(--color-panel);
 }
 
 .cad-business-area__gallery-item--1 {
@@ -2401,7 +2389,7 @@ p {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(8, 10, 12, 0.08) 0%, rgba(8, 10, 12, 0.46) 100%);
+    background: linear-gradient(180deg, rgba(0, 22, 64, 0.08) 0%, rgba(0, 22, 64, 0.46) 100%);
     pointer-events: none;
 }
 
@@ -2413,7 +2401,7 @@ p {
     background:
         linear-gradient(135deg, rgba(239, 132, 50, 0.18) 0%, transparent 36%),
         repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.045) 0, rgba(255, 255, 255, 0.045) 1px, transparent 1px, transparent 18px),
-        linear-gradient(160deg, #202a34 0%, #121820 100%);
+        linear-gradient(160deg, var(--color-panel-soft) 0%, var(--color-panel) 100%);
 }
 
 .cad-business-area__gallery-placeholder span {
@@ -2423,8 +2411,8 @@ p {
     align-items: center;
     padding: 0.5rem 0.72rem;
     border-radius: 999px;
-    background: rgba(10, 12, 16, 0.54);
-    color: #fff;
+    background: rgba(0, 22, 64, 0.72);
+    color: var(--color-text);
     font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.72rem;
     font-weight: 700;
@@ -2435,7 +2423,8 @@ p {
 .cad-business-area__section--projects {
     background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.015) 0%, transparent 100%),
-        linear-gradient(180deg, #0f141a 0%, #0c1015 100%);
+        linear-gradient(145deg, var(--cad-color-main) 0%, #001d4d 52%, #001438 100%);
+    color: var(--color-text);
 }
 
 .cad-business-area__project-list {
@@ -2451,20 +2440,20 @@ p {
     padding: 1.15rem 1.2rem;
     border-left: 3px solid transparent;
     border-radius: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(3, 27, 69, 0.72);
     transition: background-color 0.22s ease, border-color 0.22s ease, transform 0.22s ease;
 }
 
 .cad-business-area__project-item:hover,
 .cad-business-area__project-item:focus-visible {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.14);
+    background: rgba(239, 132, 50, 0.12);
+    border-color: rgba(239, 132, 50, 0.58);
     border-left-color: var(--color-accent);
 }
 
 .cad-business-area__project-item:focus-visible {
-    outline: 2px solid rgba(239, 132, 50, 0.7);
+    outline: 2px solid rgba(239, 132, 50, 0.82);
     outline-offset: 3px;
 }
 
@@ -2488,7 +2477,7 @@ p {
 
 .cad-business-area__project-body p {
     margin-top: 0.25rem;
-    color: #d8c7b7;
+    color: rgba(255, 255, 255, 0.72);
     line-height: 1.55;
 }
 
@@ -2505,8 +2494,8 @@ p {
     min-height: 2rem;
     padding: 0 0.72rem;
     border-radius: 999px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #f3e9df;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--color-text);
     font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.68rem;
     font-weight: 700;
@@ -2526,7 +2515,7 @@ p {
     transform: translate(3px, -3px);
 }
 
-.cad-business-area__section--cta {
+.cad-cta-section {
     padding: 0;
     background: var(--color-accent);
 }
@@ -2613,17 +2602,7 @@ p {
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
 }
 
-.cad-business-area__section--cta .cad-cta-block {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-}
-
-.cad-project__cta-section {
-    padding: 0;
-    background: var(--color-accent);
-}
-
-.cad-project__cta-section .cad-cta-block {
+.cad-cta-section .cad-cta-block {
     padding-top: 2rem;
     padding-bottom: 2rem;
 }
@@ -2640,12 +2619,12 @@ p {
 .cad-business-area__cta-kicker {
     display: inline-block;
     margin-bottom: 0.65rem;
-    color: rgba(20, 16, 12, 0.64);
+    color: rgba(0, 22, 64, 0.64);
 }
 
 .cad-business-area__cta-copy p {
     max-width: 34rem;
-    color: #1f1712;
+    color: var(--cad-color-main);
     font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: clamp(1.35rem, 2.9vw, 2.1rem);
     font-weight: 700;
@@ -2670,15 +2649,15 @@ p {
 }
 
 .cad-business-area__cta-primary {
-    background: #11161c;
-    color: #fff;
-    border: 1px solid #11161c;
+    background: var(--cad-color-main);
+    color: var(--color-text);
+    border: 1px solid var(--cad-color-main);
 }
 
 .cad-business-area__cta-secondary {
     background: rgba(255, 255, 255, 0.12);
-    color: #1f1712;
-    border: 1px solid rgba(17, 22, 28, 0.24);
+    color: var(--cad-color-main);
+    border: 1px solid rgba(0, 22, 64, 0.24);
 }
 
 .cad-business-area__cta-primary:hover,
@@ -2773,12 +2752,6 @@ p {
 
     .cad-business-area-dev__list {
         padding: 24px 18px;
-    }
-
-    .cad-business-area-dev__list::after {
-        font-size: 72px;
-        right: -4px;
-        bottom: -12px;
     }
 
     .cad-business-area-dev__item-title {
@@ -4488,8 +4461,8 @@ p {
 
     .cad-business-area__hero-overlay {
         background:
-            linear-gradient(180deg, rgba(10, 12, 16, 0.22) 0%, rgba(10, 12, 16, 0.7) 54%, rgba(10, 12, 16, 0.92) 100%),
-            linear-gradient(110deg, rgba(10, 12, 16, 0.96) 0%, rgba(10, 12, 16, 0.72) 44%, rgba(10, 12, 16, 0.84) 100%);
+            linear-gradient(180deg, rgba(0, 22, 64, 0.22) 0%, rgba(0, 22, 64, 0.7) 54%, rgba(0, 22, 64, 0.92) 100%),
+            linear-gradient(110deg, rgba(0, 22, 64, 0.96) 0%, rgba(0, 22, 64, 0.72) 44%, rgba(0, 22, 64, 0.84) 100%);
     }
 
     .cad-business-area__hero-inner {
