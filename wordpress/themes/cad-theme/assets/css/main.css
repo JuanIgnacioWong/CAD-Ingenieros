@@ -95,7 +95,7 @@ h6 {
 .cad-hero__content h1 span,
 .cad-hero__content h1 strong {
     font-family: 'Montserrat', 'Segoe UI', sans-serif;
-    font-weight: 700;
+    font-weight: 300;
 }
 
 p {
@@ -399,7 +399,7 @@ p {
     display: block;
     font-size: clamp(2.1rem, 4.5vw, 4.05rem);
     line-height: 0.95;
-    font-weight: 700;
+    font-weight: 300;
 }
 
 .cad-hero__content h1 strong {
@@ -706,7 +706,7 @@ p {
     display: block;
     font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 2.25rem;
-    font-weight: 700;
+    font-weight: 300;
     line-height: 1.08;
     letter-spacing: 0;
 }
@@ -1770,8 +1770,8 @@ p {
     min-height: 6.4rem;
     border-radius: 0.8rem;
     border: 1px solid rgba(255, 255, 255, 0.09);
-    background: rgba(255, 255, 255, 0.03);
-    padding: 1rem;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 0.9rem;
     display: flex;
     align-items: center;
     justify-content: center;
