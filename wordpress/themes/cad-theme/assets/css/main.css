@@ -2350,74 +2350,165 @@ p {
 }
 
 .cad-business-area__gallery {
-    display: grid;
-    grid-template-columns: 1.55fr 1fr;
-    grid-template-rows: repeat(2, minmax(16rem, 1fr));
-    gap: 1rem;
+    column-width: 300px;
+    column-gap: 12px;
 }
 
 .cad-business-area__gallery-item {
-    position: relative;
-    min-height: 16rem;
-    margin: 0;
+    display: inline-block;
+    width: 100%;
+    margin: 0 0 12px;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    vertical-align: top;
     overflow: hidden;
-    border-radius: 1.1rem;
+    border-radius: 8px;
     border: 1px solid var(--color-line);
     background: var(--color-panel);
 }
 
-.cad-business-area__gallery-item--1 {
-    grid-row: 1 / span 2;
-}
-
-.cad-business-area__gallery-item img,
-.cad-business-area__gallery-placeholder {
+.cad-business-area__gallery-trigger {
+    display: block;
     width: 100%;
-    height: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: zoom-in;
+    text-align: left;
 }
 
-.cad-business-area__gallery-item img {
-    object-fit: cover;
-    transition: transform 0.4s ease;
+.cad-business-area__gallery-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    transition: transform 0.35s ease, filter 0.35s ease;
 }
 
-.cad-business-area__gallery-item:hover img {
-    transform: scale(1.04);
+.cad-business-area__gallery-trigger:hover .cad-business-area__gallery-image,
+.cad-business-area__gallery-trigger:focus-visible .cad-business-area__gallery-image {
+    transform: scale(1.025);
 }
 
-.cad-business-area__gallery-item::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(0, 22, 64, 0.08) 0%, rgba(0, 22, 64, 0.46) 100%);
-    pointer-events: none;
+.cad-business-area__gallery-trigger:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: -3px;
 }
 
-.cad-business-area__gallery-placeholder {
+.cad-business-area__gallery-caption {
+    padding: 0.55rem 0.7rem 0.65rem;
+    color: var(--color-muted);
+    font-family: 'Barlow', 'Segoe UI', sans-serif;
+    font-size: 0.82rem;
+    line-height: 1.35;
+}
+
+.cad-business-area__lightbox {
+    width: min(92vw, 1100px);
+    max-width: none;
+    max-height: 92vh;
+    margin: auto;
+    padding: 0;
+    border: 1px solid var(--color-line);
+    border-radius: 8px;
+    background: var(--cad-color-main);
+    color: var(--color-text);
+    overflow: hidden;
+}
+
+.cad-business-area__lightbox::backdrop {
+    background: rgba(0, 8, 24, 0.86);
+}
+
+.cad-business-area__lightbox-content {
     position: relative;
-    display: flex;
-    align-items: flex-end;
-    padding: 1.15rem;
-    background:
-        linear-gradient(135deg, rgba(239, 132, 50, 0.18) 0%, transparent 36%),
-        repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.045) 0, rgba(255, 255, 255, 0.045) 1px, transparent 1px, transparent 18px),
-        linear-gradient(160deg, var(--color-panel-soft) 0%, var(--color-panel) 100%);
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
 }
 
-.cad-business-area__gallery-placeholder span {
-    position: relative;
-    z-index: 1;
+.cad-business-area__lightbox-image-wrap {
+    min-width: 0;
+    text-align: center;
+}
+
+.cad-business-area__lightbox-image {
+    width: 100%;
+    max-height: 78vh;
+    margin: 0 auto;
+    object-fit: contain;
+}
+
+.cad-business-area__lightbox-close,
+.cad-business-area__lightbox-nav {
     display: inline-flex;
     align-items: center;
-    padding: 0.5rem 0.72rem;
+    justify-content: center;
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+    padding: 0.4rem;
+    border: 1px solid var(--color-line);
     border-radius: 999px;
-    background: rgba(0, 22, 64, 0.72);
+    background: rgba(255, 255, 255, 0.08);
     color: var(--color-text);
-    font-family: 'Montserrat', 'Segoe UI', sans-serif;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.cad-business-area__lightbox-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 1;
+}
+
+.cad-business-area__lightbox-close:hover,
+.cad-business-area__lightbox-close:focus-visible,
+.cad-business-area__lightbox-nav:hover,
+.cad-business-area__lightbox-nav:focus-visible {
+    border-color: var(--color-accent);
+    background: rgba(239, 132, 50, 0.18);
+}
+
+.cad-business-area__lightbox-caption {
+    margin: 0.65rem 3rem 0;
+    color: var(--color-muted);
+    font-family: 'Barlow', 'Segoe UI', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.cad-business-area__lightbox-status {
+    display: block;
+    margin-top: 0.45rem;
+    color: var(--color-muted);
+    font-size: 0.75rem;
+    text-align: center;
+}
+
+.cad-business-area__lightbox .screen-reader-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+body.cad-business-area-lightbox-open {
+    overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cad-business-area__gallery-image {
+        transition: none;
+    }
 }
 
 .cad-business-area__section--projects {
@@ -2713,17 +2804,20 @@ p {
     }
 
     .cad-business-area__gallery {
-        grid-template-columns: 1fr;
-        grid-template-rows: repeat(3, minmax(15rem, 1fr));
-    }
-
-    .cad-business-area__gallery-item--1 {
-        grid-row: auto;
+        column-count: 2;
+        column-width: auto;
     }
 
     .cad-business-area__cta-actions,
     .cad-project__cta-actions {
         justify-content: flex-start;
+    }
+}
+
+@media (max-width: 600px) {
+    .cad-business-area__gallery {
+        column-count: 1;
+        column-width: auto;
     }
 }
 
@@ -2785,8 +2879,7 @@ p {
         padding-left: 1rem;
     }
 
-    .cad-business-area__service-card,
-    .cad-business-area__gallery-item {
+    .cad-business-area__service-card {
         min-height: 14rem;
     }
 
@@ -4500,7 +4593,7 @@ p {
     }
 
     .cad-business-area__gallery {
-        gap: 0.75rem;
+        column-gap: 0.75rem;
     }
 
     .cad-business-area__project-list {

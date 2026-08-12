@@ -2243,9 +2243,10 @@ function cad_theme_get_business_area_page_data($post_id)
     $gallery_ids = array_values(array_filter(array_map('absint', $gallery_ids)));
 
     $gallery = array();
-    foreach (array_slice($gallery_ids, 0, 3) as $gallery_id) {
-        $image_url = wp_get_attachment_image_url($gallery_id, 'full');
-        if (!$image_url) {
+    foreach ($gallery_ids as $gallery_id) {
+        $image_url = wp_get_attachment_image_url($gallery_id, 'medium_large');
+        $full_image_url = wp_get_attachment_image_url($gallery_id, 'full');
+        if (!$image_url || !$full_image_url) {
             continue;
         }
 
@@ -2257,18 +2258,10 @@ function cad_theme_get_business_area_page_data($post_id)
         $gallery[] = array(
             'id'          => $gallery_id,
             'url'         => $image_url,
+            'full_url'    => $full_image_url,
             'alt'         => (string) $alt,
+            'caption'     => (string) wp_get_attachment_caption($gallery_id),
             'placeholder' => false,
-        );
-    }
-
-    while (count($gallery) < 3) {
-        $slot = count($gallery) + 1;
-        $gallery[] = array(
-            'id'          => 0,
-            'url'         => '',
-            'alt'         => sprintf(__('Muestra %02d', 'cad-theme'), $slot),
-            'placeholder' => true,
         );
     }
     $data['gallery'] = $gallery;

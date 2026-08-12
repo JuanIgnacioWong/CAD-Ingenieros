@@ -537,6 +537,131 @@
 
     initProjectGallery();
 
+    function initBusinessAreaGalleryLightbox() {
+        var galleries = document.querySelectorAll('[data-business-gallery]');
+        if (!galleries.length || typeof document.createElement('dialog').showModal !== 'function') {
+            return;
+        }
+
+        galleries.forEach(function (gallery, galleryIndex) {
+            var triggers = Array.prototype.slice.call(gallery.querySelectorAll('[data-business-gallery-trigger]'));
+            if (!triggers.length) {
+                return;
+            }
+
+            var dialog = document.createElement('dialog');
+            var titleId = 'cad-business-gallery-lightbox-title-' + String(galleryIndex);
+            dialog.className = 'cad-business-area__lightbox';
+            dialog.setAttribute('aria-labelledby', titleId);
+            dialog.innerHTML =
+                '<div class="cad-business-area__lightbox-content">' +
+                    '<button type="button" class="cad-business-area__lightbox-close" aria-label="Cerrar imagen">&times;</button>' +
+                    '<button type="button" class="cad-business-area__lightbox-nav" data-lightbox-prev aria-label="Imagen anterior">&larr;</button>' +
+                    '<div class="cad-business-area__lightbox-image-wrap">' +
+                        '<h2 id="' + titleId + '" class="screen-reader-text">Imagen ampliada</h2>' +
+                        '<img class="cad-business-area__lightbox-image" alt="">' +
+                        '<p class="cad-business-area__lightbox-caption"></p>' +
+                        '<span class="cad-business-area__lightbox-status" aria-live="polite"></span>' +
+                    '</div>' +
+                    '<button type="button" class="cad-business-area__lightbox-nav" data-lightbox-next aria-label="Imagen siguiente">&rarr;</button>' +
+                '</div>';
+            document.body.appendChild(dialog);
+
+            var image = dialog.querySelector('.cad-business-area__lightbox-image');
+            var caption = dialog.querySelector('.cad-business-area__lightbox-caption');
+            var status = dialog.querySelector('.cad-business-area__lightbox-status');
+            var closeButton = dialog.querySelector('.cad-business-area__lightbox-close');
+            var previousButton = dialog.querySelector('[data-lightbox-prev]');
+            var nextButton = dialog.querySelector('[data-lightbox-next]');
+            var currentIndex = 0;
+            var activeTrigger = null;
+
+            if (triggers.length < 2) {
+                previousButton.hidden = true;
+                nextButton.hidden = true;
+            }
+
+            function updateImage(index) {
+                currentIndex = (index + triggers.length) % triggers.length;
+                var trigger = triggers[currentIndex];
+                var source = trigger.getAttribute('data-full-src');
+                var thumbnail = trigger.querySelector('img');
+
+                image.src = source || '';
+                image.alt = thumbnail ? thumbnail.getAttribute('alt') || '' : '';
+                caption.textContent = trigger.getAttribute('data-caption') || '';
+                status.textContent = String(currentIndex + 1) + ' / ' + String(triggers.length);
+            }
+
+            function closeDialog() {
+                if (dialog.open) {
+                    dialog.close();
+                    return;
+                }
+                document.body.classList.remove('cad-business-area-lightbox-open');
+            }
+
+            triggers.forEach(function (trigger, index) {
+                trigger.addEventListener('click', function () {
+                    activeTrigger = trigger;
+                    updateImage(index);
+                    dialog.showModal();
+                    document.body.classList.add('cad-business-area-lightbox-open');
+                    closeButton.focus();
+                });
+            });
+
+            closeButton.addEventListener('click', closeDialog);
+            previousButton.addEventListener('click', function () {
+                updateImage(currentIndex - 1);
+            });
+            nextButton.addEventListener('click', function () {
+                updateImage(currentIndex + 1);
+            });
+
+            dialog.addEventListener('click', function (event) {
+                if (event.target === dialog) {
+                    closeDialog();
+                }
+            });
+
+            dialog.addEventListener('cancel', function (event) {
+                event.preventDefault();
+                closeDialog();
+            });
+
+            dialog.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape' || event.key === 'Esc') {
+                    event.preventDefault();
+                    closeDialog();
+                } else if (event.key === 'ArrowLeft') {
+                    event.preventDefault();
+                    updateImage(currentIndex - 1);
+                } else if (event.key === 'ArrowRight') {
+                    event.preventDefault();
+                    updateImage(currentIndex + 1);
+                }
+            });
+
+            document.addEventListener('keydown', function (event) {
+                if ((event.key === 'Escape' || event.key === 'Esc') && dialog.open) {
+                    event.preventDefault();
+                    closeDialog();
+                }
+            });
+
+            dialog.addEventListener('close', function () {
+                document.body.classList.remove('cad-business-area-lightbox-open');
+                image.removeAttribute('src');
+                if (activeTrigger) {
+                    activeTrigger.focus();
+                }
+            });
+        });
+    }
+
+    initBusinessAreaGalleryLightbox();
+
     function initIndicatorCounters() {
         var section = document.querySelector('#indicadores');
         if (!section) {
