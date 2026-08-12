@@ -17,21 +17,6 @@ $indicator_section_content = preg_replace('/(<(?:li|p)[^>]*>\s*)(?:&#x2714;|&#10
 $indicator_section_post_id = cad_theme_get_indicator_section_post_id();
 $indicator_bg_url = $indicator_section_post_id ? get_the_post_thumbnail_url($indicator_section_post_id, 'large') : '';
 $indicator_bg_style = $indicator_bg_url ? 'background-image:url(' . esc_url($indicator_bg_url) . ');' : '';
-$indicator_logo_id = (int) get_theme_mod('custom_logo');
-$indicator_logo_html = '';
-if ($indicator_logo_id) {
-    $indicator_logo_html = wp_get_attachment_image(
-        $indicator_logo_id,
-        'full',
-        false,
-        array(
-            'class'    => 'cad-indicators-logo',
-            'loading'  => 'lazy',
-            'decoding' => 'async',
-            'alt'      => __('CAD Ingenieros', 'cad-theme'),
-        )
-    );
-}
 $clients = cad_theme_get_clients();
 $projects_query = new WP_Query(
     array(
@@ -314,11 +299,6 @@ $hero_class = $has_video ? 'cad-hero' : 'cad-hero is-video-paused';
                                 </div>
                             <?php endif; ?>
 
-                            <?php if ($indicator_logo_html) : ?>
-                                <div class="cad-indicators-footer">
-                                    <?php echo $indicator_logo_html; ?>
-                                </div>
-                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
