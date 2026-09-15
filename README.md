@@ -76,14 +76,14 @@ En WordPress:
 
 Este repo ya incluye `.cpanel.yml` para que cPanel despliegue una instalacion completa de WordPress hacia:
 
-`$HOME/public_html/CAD`
+`$HOME/public_html`
 
 Importante:
 
 - El core de WordPress se versiona en `wordpress-core/`.
 - El contenido editable del proyecto se mantiene en `wordpress/` y se publica dentro de `wp-content/`.
 - `wordpress/uploads/` ahora forma parte del deploy para incluir las imagenes cargadas localmente.
-- `wp-config.php` no se versiona ni se despliega desde Git; debe existir en el servidor o crearse una vez en `public_html/CAD`.
+- `wp-config.php` no se versiona ni se despliega desde Git; debe existir en el servidor o crearse una vez en `public_html`.
 - El repo incluye `wp-config.production.example.php` como base editable para produccion.
 - El deploy preserva `wp-config.php`, `.htaccess`, `wp-content/languages/`, `wp-content/cache/` y `wp-content/upgrade/` del servidor.
 - `uploads` se copia desde el repo al servidor. En ese directorio no se usa `--delete`, para no borrar media preexistente solo en produccion.
@@ -127,14 +127,14 @@ git push origin main
 
 5. En cPanel (phpMyAdmin), importa el SQL generado en `database/backups/`.
 
-6. Crea o actualiza `public_html/CAD/wp-config.php` usando como base `wp-config.production.example.php`.
+6. Crea o actualiza `public_html/wp-config.php` usando como base `wp-config.production.example.php`.
 
-7. Si cambias dominio/ruta (por ejemplo `localhost` -> `https://lbcchile.com/CAD`), ejecuta search/replace en base de datos.
+7. Si cambias dominio/ruta (por ejemplo `localhost` -> `https://tu-dominio.cl`), ejecuta search/replace en base de datos.
 
 ### Archivos de deploy
 
 - `.cpanel.yml`: entrypoint que usa la ruta de cPanel y ejecuta el script.
-- `scripts/cpanel-deploy-wordpress.sh`: publica core + `wp-content` del proyecto a `public_html/CAD`.
+- `scripts/cpanel-deploy-wordpress.sh`: publica core + `wp-content` del proyecto a `public_html`.
 - `scripts/sync-wordpress-core-from-docker.sh`: refresca `wordpress-core/` desde el contenedor local.
 
 ### Prueba local del script

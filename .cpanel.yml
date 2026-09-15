@@ -1,5 +1,5 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH="$HOME/public_html/CAD"
+    - export DEPLOYPATH="$HOME/public_html"
     - /bin/bash scripts/cpanel-deploy-wordpress.sh

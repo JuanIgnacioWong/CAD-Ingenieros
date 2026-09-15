@@ -2,7 +2,7 @@
 /**
  * Plantilla base para produccion en cPanel.
  *
- * Usar como base para public_html/CAD/wp-config.php y reemplazar todos los
+ * Usar como base para public_html/wp-config.php y reemplazar todos los
  * valores marcados antes de publicar.
  */
 
@@ -31,8 +31,8 @@ define('WP_DEBUG_DISPLAY', false);
 define('DISALLOW_FILE_EDIT', true);
 
 // Descomenta estas lineas si quieres fijar la URL del sitio desde config.
-// define('WP_HOME', 'https://tu-dominio.cl/CAD');
-// define('WP_SITEURL', 'https://tu-dominio.cl/CAD');
+// define('WP_HOME', 'https://tu-dominio.cl');
+// define('WP_SITEURL', 'https://tu-dominio.cl');
 
 // Soporte basico si el hosting queda detras de proxy o CDN.
 if (

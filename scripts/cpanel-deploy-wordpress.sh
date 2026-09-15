@@ -4,7 +4,7 @@ set -euo pipefail
 
 CORE_DIR="wordpress-core"
 CONTENT_DIR="wordpress"
-TARGET_DIR="${DEPLOYPATH:-$HOME/public_html/CAD}"
+TARGET_DIR="${DEPLOYPATH:-$HOME/public_html}"
 THEME_SOURCE_DIR="$CONTENT_DIR/themes/cad-theme"
 THEME_TARGET_PRIMARY="$TARGET_DIR/wp-content/themes/CAD-theme"
 THEME_TARGET_SECONDARY="$TARGET_DIR/wp-content/themes/cad-theme"
