@@ -72,24 +72,16 @@ En WordPress:
 1. `Apariencia > Temas`
 2. Activar `CAD Theme`
 
-## Git Deploy en cPanel
+## Git Deploy del tema y ACF en cPanel
 
-Este repo ya incluye `.cpanel.yml` para que cPanel despliegue una instalacion completa de WordPress hacia:
+El hosting mantiene su propia instalacion de WordPress en `public_html`. Este repositorio despliega exclusivamente:
 
-`$HOME/public_html`
+- el tema hacia `$HOME/public_html/wp-content/themes/CAD-theme`;
+- Advanced Custom Fields 6.8.10 hacia `$HOME/public_html/wp-content/plugins/advanced-custom-fields`.
 
-Importante:
+Al terminar, el deploy activa ACF con WP-CLI; si no esta disponible, usa PHP CLI. El deploy falla antes de copiar si no detecta una instalacion completa de WordPress en `public_html`.
 
-- El core de WordPress se versiona en `wordpress-core/`.
-- El contenido editable del proyecto se mantiene en `wordpress/` y se publica dentro de `wp-content/`.
-- `wordpress/uploads/` ahora forma parte del deploy para incluir las imagenes cargadas localmente.
-- `wp-config.php` no se versiona ni se despliega desde Git; debe existir en el servidor o crearse una vez en `public_html`.
-- El repo incluye `wp-config.production.example.php` como base editable para produccion.
-- El deploy preserva `wp-config.php`, `.htaccess`, `wp-content/languages/`, `wp-content/cache/` y `wp-content/upgrade/` del servidor.
-- `uploads` se copia desde el repo al servidor. En ese directorio no se usa `--delete`, para no borrar media preexistente solo en produccion.
-- El deploy no publica `database/`, `.env` ni archivos de Docker.
-- Los cambios de contenido en `Proyectos` (CPT) viven en la base de datos; no se publican por Git y requieren exportar/importar SQL.
-- Si el servidor tiene `rsync`, el deploy elimina archivos obsoletos versionados. Si no lo tiene, hace copia simple y los archivos borrados en Git pueden quedar en produccion.
+No copia ni elimina WordPress, `wp-config.php`, `.htaccess`, base de datos, otros plugins, mu-plugins, idiomas, cache ni uploads. Con `rsync` disponible, solo se eliminan archivos obsoletos dentro de las carpetas del tema y ACF.
 
 ### Flujo recomendado
 
@@ -99,7 +91,7 @@ Importante:
 4. En modo `Pull deployment`, usa `Update from Remote` y luego `Deploy HEAD Commit`.
 5. En modo `Push deployment`, agrega el remoto de cPanel a tu repo local y haz `git push` hacia ese remoto.
 
-### Checklist GitHub -> cPanel (deploy completo)
+### Checklist GitHub -> cPanel (tema y ACF)
 
 1. Ejecuta preflight local:
 
@@ -108,52 +100,28 @@ cd /Users/ignaciowong/Documents/CAD-theme
 bash scripts/preflight-github-cpanel.sh
 ```
 
-2. Genera backup SQL para importar en cPanel:
-
-```bash
-cd /Users/ignaciowong/Documents/CAD-theme
-bash scripts/export-db-cpanel.sh
-```
-
-3. Haz push de la rama a GitHub:
+2. Haz push de la rama a GitHub:
 
 ```bash
 git push origin main
 ```
 
-4. En cPanel (repositorio Git):
+3. En cPanel (repositorio Git):
    - `Update from Remote`
    - `Deploy HEAD Commit`
 
-5. En cPanel (phpMyAdmin), importa el SQL generado en `database/backups/`.
+4. Verifica en `Plugins` que **Advanced Custom Fields** aparezca activo. Activa **CAD Theme** desde `Apariencia > Temas`.
 
-6. Crea o actualiza `public_html/wp-config.php` usando como base `wp-config.production.example.php`.
+### Archivos del deploy
 
-7. Si cambias dominio/ruta (por ejemplo `localhost` -> `https://tu-dominio.cl`), ejecuta search/replace en base de datos.
-
-### Archivos de deploy
-
-- `.cpanel.yml`: entrypoint que usa la ruta de cPanel y ejecuta el script.
-- `scripts/cpanel-deploy-wordpress.sh`: publica core + `wp-content` del proyecto a `public_html`.
-- `scripts/sync-wordpress-core-from-docker.sh`: refresca `wordpress-core/` desde el contenedor local.
+- `.cpanel.yml`: fija el destino del tema y ejecuta el script.
+- `scripts/cpanel-deploy-wordpress.sh`: sincroniza el tema y ACF, luego activa ACF.
 
 ### Prueba local del script
 
 ```bash
 cd /Users/ignaciowong/Documents/CAD-theme
-DEPLOYPATH=/tmp/CAD bash scripts/cpanel-deploy-wordpress.sh
-```
-
-### Uploads locales
-
-- `docker-compose.yml` monta `wordpress/uploads/` en `wp-content/uploads`, asi que nuevas imagenes subidas localmente quedan en el repo.
-- Las imagenes existentes del volumen local ya fueron exportadas a `wordpress/uploads/`.
-
-### Refrescar el core versionado
-
-```bash
-cd /Users/ignaciowong/Documents/CAD-theme
-bash scripts/sync-wordpress-core-from-docker.sh
+WP_ROOT_DIR=/ruta/a/wordpress SKIP_ACF_ACTIVATION=1 bash scripts/cpanel-deploy-wordpress.sh
 ```
 
 ### Git ignore base
@@ -164,4 +132,4 @@ Se agrego `.gitignore` para ignorar:
 - `database/backups/`
 - `tmp/cpanel-release-*/`
 
-El repo limpio debe versionar `.env.example` y `wordpress/uploads/`, no `.env`.
+El repo limpio debe versionar `.env.example`, no `.env`.

@@ -8,8 +8,8 @@ cd "${ROOT_DIR}"
 required_paths=(
     ".cpanel.yml"
     "scripts/cpanel-deploy-wordpress.sh"
-    "wordpress-core"
     "wordpress/themes/cad-theme"
+    "wordpress/plugins/advanced-custom-fields/acf.php"
 )
 
 for path in "${required_paths[@]}"; do
@@ -19,8 +19,8 @@ for path in "${required_paths[@]}"; do
     fi
 done
 
-if ! grep -q "scripts/cpanel-deploy-wordpress.sh" .cpanel.yml; then
-    echo "ERROR: .cpanel.yml no referencia scripts/cpanel-deploy-wordpress.sh"
+if ! grep -q "WP_ROOT_DIR" .cpanel.yml || ! grep -q "scripts/cpanel-deploy-wordpress.sh" .cpanel.yml; then
+    echo "ERROR: .cpanel.yml no configura el deploy del tema y ACF"
     exit 1
 fi
 

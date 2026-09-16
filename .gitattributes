@@ -1,0 +1,2 @@
+# The vendor release retains upstream trailing whitespace; do not rewrite it.
+wordpress/plugins/advanced-custom-fields/** -whitespace
