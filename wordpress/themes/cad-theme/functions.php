@@ -694,8 +694,8 @@ add_action('login_footer', 'cad_theme_login_footer_note');
 function cad_theme_video_banner_defaults()
 {
     return array(
-        'mp4'         => 'https://ebco.cl/assets/ebco-final-2022-720.mp4',
-        'webm'        => 'https://ebco.cl/assets/ebco-final-2022-720.webm',
+        'mp4'         => '',
+        'webm'        => '',
         'fallback'    => 'https://ebco.cl/assets/pages/home/bg-static-video-home.jpg',
         'youtube'     => '',
         'headline_1'  => __('Creamos espacios para', 'cad-theme'),
