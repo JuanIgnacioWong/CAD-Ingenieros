@@ -537,6 +537,110 @@
 
     initProjectGallery();
 
+    function initProjectGalleryLightbox() {
+        var galleries = document.querySelectorAll('[data-project-gallery-grid]');
+        if (!galleries.length || typeof document.createElement('dialog').showModal !== 'function') {
+            return;
+        }
+
+        galleries.forEach(function (gallery, galleryIndex) {
+            var triggers = Array.prototype.slice.call(gallery.querySelectorAll('[data-project-gallery-trigger]'));
+            if (!triggers.length) {
+                return;
+            }
+
+            var dialog = document.createElement('dialog');
+            var titleId = 'cad-project-gallery-lightbox-title-' + String(galleryIndex);
+            dialog.className = 'cad-project-gallery__lightbox';
+            dialog.setAttribute('aria-labelledby', titleId);
+            dialog.innerHTML =
+                '<div class="cad-project-gallery__lightbox-content">' +
+                    '<button type="button" class="cad-project-gallery__lightbox-close" aria-label="Cerrar imagen">&times;</button>' +
+                    '<button type="button" class="cad-project-gallery__lightbox-nav" data-project-lightbox-prev aria-label="Imagen anterior">&larr;</button>' +
+                    '<div class="cad-project-gallery__lightbox-image-wrap">' +
+                        '<h2 id="' + titleId + '" class="screen-reader-text">Imagen ampliada</h2>' +
+                        '<img class="cad-project-gallery__lightbox-image" alt="">' +
+                        '<span class="cad-project-gallery__lightbox-status" aria-live="polite"></span>' +
+                    '</div>' +
+                    '<button type="button" class="cad-project-gallery__lightbox-nav" data-project-lightbox-next aria-label="Imagen siguiente">&rarr;</button>' +
+                '</div>';
+            document.body.appendChild(dialog);
+
+            var image = dialog.querySelector('.cad-project-gallery__lightbox-image');
+            var status = dialog.querySelector('.cad-project-gallery__lightbox-status');
+            var closeButton = dialog.querySelector('.cad-project-gallery__lightbox-close');
+            var previousButton = dialog.querySelector('[data-project-lightbox-prev]');
+            var nextButton = dialog.querySelector('[data-project-lightbox-next]');
+            var currentIndex = 0;
+            var activeTrigger = null;
+
+            if (triggers.length < 2) {
+                previousButton.hidden = true;
+                nextButton.hidden = true;
+            }
+
+            function updateImage(index) {
+                currentIndex = (index + triggers.length) % triggers.length;
+                var trigger = triggers[currentIndex];
+                var thumbnail = trigger.querySelector('img');
+
+                image.src = trigger.getAttribute('data-full-src') || '';
+                image.alt = thumbnail ? thumbnail.getAttribute('alt') || '' : '';
+                status.textContent = String(currentIndex + 1) + ' / ' + String(triggers.length);
+            }
+
+            function closeDialog() {
+                if (dialog.open) {
+                    dialog.close();
+                }
+            }
+
+            triggers.forEach(function (trigger, index) {
+                trigger.addEventListener('click', function () {
+                    activeTrigger = trigger;
+                    updateImage(index);
+                    dialog.showModal();
+                    document.body.classList.add('cad-project-gallery-lightbox-open');
+                    closeButton.focus();
+                });
+            });
+
+            closeButton.addEventListener('click', closeDialog);
+            previousButton.addEventListener('click', function () {
+                updateImage(currentIndex - 1);
+            });
+            nextButton.addEventListener('click', function () {
+                updateImage(currentIndex + 1);
+            });
+
+            dialog.addEventListener('click', function (event) {
+                if (event.target === dialog) {
+                    closeDialog();
+                }
+            });
+
+            dialog.addEventListener('keydown', function (event) {
+                if (event.key === 'ArrowLeft') {
+                    event.preventDefault();
+                    updateImage(currentIndex - 1);
+                } else if (event.key === 'ArrowRight') {
+                    event.preventDefault();
+                    updateImage(currentIndex + 1);
+                }
+            });
+
+            dialog.addEventListener('close', function () {
+                document.body.classList.remove('cad-project-gallery-lightbox-open');
+                image.removeAttribute('src');
+                if (activeTrigger) {
+                    activeTrigger.focus();
+                }
+            });
+        });
+    }
+
+    initProjectGalleryLightbox();
+
     function initBusinessAreaGalleryLightbox() {
         var galleries = document.querySelectorAll('[data-business-gallery]');
         if (!galleries.length || typeof document.createElement('dialog').showModal !== 'function') {

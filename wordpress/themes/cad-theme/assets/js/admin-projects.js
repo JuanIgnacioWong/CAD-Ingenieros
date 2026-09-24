@@ -3,6 +3,8 @@
     var iconPickerModal = document.getElementById('cad-project-icon-modal');
     var iconPickerActiveField = null;
     var iconPickerActiveTrigger = null;
+    var galleryPreviewModal = null;
+    var galleryPreviewTrigger = null;
 
     function initializeColorPickers(context) {
         if (typeof jQuery === 'undefined' || !jQuery.fn || typeof jQuery.fn.wpColorPicker !== 'function') {
@@ -158,14 +160,24 @@
                     }
                     ids.push(String(attachment.id));
 
-                    var url = attachment.url;
+                    var fullUrl = attachment.url;
+                    var url = fullUrl;
                     if (attachment.sizes && attachment.sizes.thumbnail) {
                         url = attachment.sizes.thumbnail.url;
                     }
 
-                    var item = document.createElement('div');
+                    var item = document.createElement('button');
+                    item.type = 'button';
                     item.className = 'cad-project-gallery__item';
-                    item.innerHTML = '<img src="' + url + '" alt="">';
+                    item.setAttribute('data-gallery-preview-open', '');
+                    item.setAttribute('data-gallery-preview-url', fullUrl || url);
+                    item.setAttribute('data-gallery-preview-alt', attachment.alt || '');
+                    item.setAttribute('aria-label', 'Previsualizar imagen');
+
+                    var image = document.createElement('img');
+                    image.src = url;
+                    image.alt = attachment.alt || '';
+                    item.appendChild(image);
                     preview.appendChild(item);
                 });
 
@@ -193,6 +205,83 @@
         }
         if (preview) {
             preview.innerHTML = '';
+        }
+    }
+
+    function getGalleryPreviewModal() {
+        if (galleryPreviewModal) {
+            return galleryPreviewModal;
+        }
+
+        galleryPreviewModal = document.createElement('div');
+        galleryPreviewModal.className = 'cad-project-gallery-preview-modal';
+        galleryPreviewModal.hidden = true;
+        galleryPreviewModal.setAttribute('role', 'dialog');
+        galleryPreviewModal.setAttribute('aria-modal', 'true');
+        galleryPreviewModal.setAttribute('aria-label', 'Previsualizacion de imagen');
+
+        var backdrop = document.createElement('div');
+        backdrop.className = 'cad-project-gallery-preview-modal__backdrop';
+        backdrop.setAttribute('data-gallery-preview-close', '');
+
+        var content = document.createElement('div');
+        content.className = 'cad-project-gallery-preview-modal__content';
+
+        var close = document.createElement('button');
+        close.type = 'button';
+        close.className = 'cad-project-gallery-preview-modal__close';
+        close.setAttribute('data-gallery-preview-close', '');
+        close.setAttribute('aria-label', 'Cerrar previsualizacion');
+        close.textContent = '\u00d7';
+
+        var image = document.createElement('img');
+        image.className = 'cad-project-gallery-preview-modal__image';
+        image.setAttribute('data-gallery-preview-image', '');
+        image.alt = '';
+
+        content.appendChild(close);
+        content.appendChild(image);
+        galleryPreviewModal.appendChild(backdrop);
+        galleryPreviewModal.appendChild(content);
+        document.body.appendChild(galleryPreviewModal);
+
+        return galleryPreviewModal;
+    }
+
+    function closeGalleryPreview() {
+        if (!galleryPreviewModal || galleryPreviewModal.hidden) {
+            return;
+        }
+
+        galleryPreviewModal.hidden = true;
+        if (galleryPreviewTrigger) {
+            galleryPreviewTrigger.focus();
+        }
+        galleryPreviewTrigger = null;
+    }
+
+    function handleGalleryPreview(event) {
+        var trigger = event.target.closest('[data-gallery-preview-open]');
+        if (trigger) {
+            event.preventDefault();
+            var url = trigger.getAttribute('data-gallery-preview-url');
+            if (!url) {
+                return;
+            }
+
+            var modal = getGalleryPreviewModal();
+            var image = modal.querySelector('[data-gallery-preview-image]');
+            image.src = url;
+            image.alt = trigger.getAttribute('data-gallery-preview-alt') || '';
+            galleryPreviewTrigger = trigger;
+            modal.hidden = false;
+            modal.querySelector('button[data-gallery-preview-close]').focus();
+            return;
+        }
+
+        if (event.target.closest('[data-gallery-preview-close]')) {
+            event.preventDefault();
+            closeGalleryPreview();
         }
     }
 
@@ -309,6 +398,7 @@
     function handleIconPickerKeydown(event) {
         if ('Escape' === event.key) {
             closeIconPicker();
+            closeGalleryPreview();
         }
     }
 
@@ -319,6 +409,7 @@
         handleDocumentMedia(event);
         handleGallerySelect(event);
         handleGalleryClear(event);
+        handleGalleryPreview(event);
     });
 
     document.addEventListener('keydown', handleIconPickerKeydown);

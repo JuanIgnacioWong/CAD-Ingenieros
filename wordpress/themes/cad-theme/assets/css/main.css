@@ -3439,6 +3439,21 @@ body.cad-business-area-lightbox-open {
     display: none;
 }
 
+.cad-project-block__gallery-trigger {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: zoom-in;
+}
+
+.cad-project-block__gallery-trigger:focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: -3px;
+}
+
 .cad-project-block__gallery-item img {
     width: 100%;
     height: 100%;
@@ -3465,6 +3480,86 @@ body.cad-business-area-lightbox-open {
 .cad-project-block__gallery-item[data-pattern='4'] {
     grid-column: span 2;
     grid-row: span 1;
+}
+
+.cad-project-gallery__lightbox {
+    width: min(92vw, 1100px);
+    max-width: none;
+    max-height: 92vh;
+    margin: auto;
+    padding: 0;
+    border: 1px solid var(--color-line);
+    border-radius: 8px;
+    background: var(--cad-color-main);
+    color: var(--color-text);
+    overflow: hidden;
+}
+
+.cad-project-gallery__lightbox::backdrop {
+    background: rgba(0, 8, 24, 0.86);
+}
+
+.cad-project-gallery__lightbox-content {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+}
+
+.cad-project-gallery__lightbox-image-wrap {
+    min-width: 0;
+    text-align: center;
+}
+
+.cad-project-gallery__lightbox-image {
+    width: 100%;
+    max-height: 78vh;
+    margin: 0 auto;
+    object-fit: contain;
+}
+
+.cad-project-gallery__lightbox-close,
+.cad-project-gallery__lightbox-nav {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+    padding: 0.4rem;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--color-text);
+    cursor: pointer;
+}
+
+.cad-project-gallery__lightbox-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 1;
+}
+
+.cad-project-gallery__lightbox-close:hover,
+.cad-project-gallery__lightbox-close:focus-visible,
+.cad-project-gallery__lightbox-nav:hover,
+.cad-project-gallery__lightbox-nav:focus-visible {
+    border-color: var(--color-accent);
+    background: rgba(239, 132, 50, 0.18);
+}
+
+.cad-project-gallery__lightbox-status {
+    display: block;
+    margin-top: 0.45rem;
+    color: var(--color-muted);
+    font-size: 0.75rem;
+    text-align: center;
+}
+
+body.cad-project-gallery-lightbox-open {
+    overflow: hidden;
 }
 
 .cad-project-block__videos {

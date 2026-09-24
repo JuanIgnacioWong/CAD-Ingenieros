@@ -3369,7 +3369,7 @@ function cad_theme_project_assets_box($post)
     if (!is_array($gallery_ids)) {
         $gallery_ids = array();
     }
-    $gallery_ids = array_values(array_filter(array_map('absint', $gallery_ids)));
+    $gallery_ids = cad_theme_filter_project_gallery_attachment_ids($gallery_ids);
     $gallery_value = implode(',', $gallery_ids);
     $gallery_title = get_post_meta($post->ID, '_cad_project_gallery_title', true);
     if (!is_string($gallery_title)) {
@@ -3495,9 +3495,22 @@ function cad_theme_project_assets_box($post)
                 <input type="hidden" id="cad-project-gallery-ids" name="cad_project_gallery_ids" value="<?php echo esc_attr($gallery_value); ?>" data-gallery-ids-input>
                 <div class="cad-project-gallery__preview" data-project-gallery-preview>
                     <?php foreach ($gallery_ids as $image_id) : ?>
-                        <div class="cad-project-gallery__item">
+                        <?php
+                        $image_url = wp_get_attachment_image_url($image_id, 'large');
+                        $image_alt = get_post_meta($image_id, '_wp_attachment_image_alt', true);
+                        ?>
+                        <?php if ($image_url) : ?>
+                        <button
+                            type="button"
+                            class="cad-project-gallery__item"
+                            data-gallery-preview-open
+                            data-gallery-preview-url="<?php echo esc_url($image_url); ?>"
+                            data-gallery-preview-alt="<?php echo esc_attr($image_alt); ?>"
+                            aria-label="<?php echo esc_attr(sprintf(__('Previsualizar imagen: %s', 'cad-theme'), $image_alt ? $image_alt : __('sin titulo', 'cad-theme'))); ?>"
+                        >
                             <?php echo wp_get_attachment_image($image_id, 'thumbnail'); ?>
-                        </div>
+                        </button>
+                        <?php endif; ?>
                     <?php endforeach; ?>
                 </div>
                 <div class="cad-project-gallery__actions">
@@ -4927,6 +4940,7 @@ function cad_theme_save_project_meta($post_id)
             }
         }
     }
+    $gallery_ids = cad_theme_filter_project_gallery_attachment_ids($gallery_ids);
 
     if (!empty($gallery_ids)) {
         update_post_meta($post_id, '_cad_project_gallery', $gallery_ids);
@@ -5854,284 +5868,23 @@ function cad_theme_backfill_business_area_images()
 }
 add_action('admin_init', 'cad_theme_backfill_business_area_images');
 
-function cad_theme_project_gallery_seed_palette()
+/**
+ * Generated gallery placeholders from earlier versions must never be rendered
+ * or saved as project-gallery content. The original media remains untouched.
+ */
+function cad_theme_filter_project_gallery_attachment_ids($attachment_ids)
 {
-    return array(
-        array('#dbeafe', '#93c5fd'),
-        array('#ffe4e6', '#fda4af'),
-        array('#dcfce7', '#86efac'),
-        array('#fef3c7', '#fcd34d'),
-        array('#ede9fe', '#c4b5fd'),
-        array('#cffafe', '#67e8f9'),
-        array('#ffe8cc', '#fdba74'),
-        array('#fef9c3', '#fde047'),
-        array('#d1fae5', '#6ee7b7'),
-        array('#e0f2fe', '#7dd3fc'),
-        array('#e2e8f0', '#94a3b8'),
-        array('#fde68a', '#f59e0b'),
-        array('#fecdd3', '#fb7185'),
-        array('#ddd6fe', '#a78bfa'),
-        array('#bae6fd', '#38bdf8'),
-    );
-}
+    $attachment_ids = array_values(array_filter(array_map('absint', (array) $attachment_ids)));
 
-function cad_theme_hex_to_rgb($hex)
-{
-    $hex = ltrim((string) $hex, '#');
-    if (3 === strlen($hex)) {
-        $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
-    }
-
-    if (6 !== strlen($hex)) {
-        return array(148, 163, 184);
-    }
-
-    return array(
-        hexdec(substr($hex, 0, 2)),
-        hexdec(substr($hex, 2, 2)),
-        hexdec(substr($hex, 4, 2)),
-    );
-}
-
-function cad_theme_generate_project_gallery_seed_binary($index)
-{
-    if (!function_exists('imagecreatetruecolor')) {
-        return '';
-    }
-
-    $palette = cad_theme_project_gallery_seed_palette();
-    if (empty($palette)) {
-        return '';
-    }
-
-    $slot = max(1, (int) $index) - 1;
-    $colors = $palette[$slot % count($palette)];
-    $start_rgb = cad_theme_hex_to_rgb(isset($colors[0]) ? $colors[0] : '#dbeafe');
-    $end_rgb = cad_theme_hex_to_rgb(isset($colors[1]) ? $colors[1] : '#93c5fd');
-
-    $width = 1600;
-    $height = 1000;
-    $image = imagecreatetruecolor($width, $height);
-    if (!$image) {
-        return '';
-    }
-
-    for ($y = 0; $y < $height; $y++) {
-        $ratio = $height > 1 ? ($y / ($height - 1)) : 0;
-        $red = (int) round($start_rgb[0] + (($end_rgb[0] - $start_rgb[0]) * $ratio));
-        $green = (int) round($start_rgb[1] + (($end_rgb[1] - $start_rgb[1]) * $ratio));
-        $blue = (int) round($start_rgb[2] + (($end_rgb[2] - $start_rgb[2]) * $ratio));
-        $line_color = imagecolorallocate($image, $red, $green, $blue);
-        imageline($image, 0, $y, $width, $y, $line_color);
-    }
-
-    $glow_a = imagecolorallocatealpha($image, 255, 255, 255, 95);
-    imagefilledellipse($image, (int) ($width * 0.2), (int) ($height * 0.22), (int) ($width * 0.36), (int) ($width * 0.36), $glow_a);
-    $glow_b = imagecolorallocatealpha($image, 15, 23, 42, 112);
-    imagefilledellipse($image, (int) ($width * 0.8), (int) ($height * 0.82), (int) ($width * 0.42), (int) ($width * 0.42), $glow_b);
-
-    $text_color = imagecolorallocate($image, 15, 23, 42);
-    $label = sprintf('Proyecto %02d', max(1, (int) $index));
-    imagestring($image, 5, 26, 26, $label, $text_color);
-
-    ob_start();
-    imagepng($image);
-    $binary = (string) ob_get_clean();
-    imagedestroy($image);
-
-    return $binary;
-}
-
-function cad_theme_create_project_gallery_seed_attachment($index)
-{
-    $index = max(1, (int) $index);
-    $binary = cad_theme_generate_project_gallery_seed_binary($index);
-    if ('' === $binary) {
-        return 0;
-    }
-
-    if (!function_exists('wp_upload_bits')) {
-        require_once ABSPATH . 'wp-admin/includes/file.php';
-    }
-    if (!function_exists('wp_generate_attachment_metadata')) {
-        require_once ABSPATH . 'wp-admin/includes/image.php';
-    }
-
-    $filename = sprintf('cad-project-gallery-%02d.png', $index);
-    $upload = wp_upload_bits($filename, null, $binary);
-    if (!empty($upload['error'])) {
-        return 0;
-    }
-
-    $filetype = wp_check_filetype($upload['file'], null);
-    $attachment_id = wp_insert_attachment(
-        array(
-            'post_mime_type' => !empty($filetype['type']) ? $filetype['type'] : 'image/png',
-            'post_title'     => sprintf(__('Galeria proyecto %02d', 'cad-theme'), $index),
-            'post_status'    => 'inherit',
-        ),
-        $upload['file']
-    );
-
-    if (is_wp_error($attachment_id) || !$attachment_id) {
-        return 0;
-    }
-
-    $metadata = wp_generate_attachment_metadata($attachment_id, $upload['file']);
-    if (!empty($metadata)) {
-        wp_update_attachment_metadata($attachment_id, $metadata);
-    }
-
-    update_post_meta($attachment_id, '_cad_project_seed_gallery', '1');
-    update_post_meta($attachment_id, '_cad_project_seed_gallery_index', $index);
-
-    return (int) $attachment_id;
-}
-
-function cad_theme_get_project_gallery_seed_attachment_ids($count = 15)
-{
-    $count = max(1, (int) $count);
-    $ids = array();
-
-    for ($index = 1; $index <= $count; $index++) {
-        $existing = get_posts(
-            array(
-                'post_type'      => 'attachment',
-                'post_status'    => 'inherit',
-                'posts_per_page' => 1,
-                'fields'         => 'ids',
-                'meta_query'     => array(
-                    'relation' => 'AND',
-                    array(
-                        'key'   => '_cad_project_seed_gallery',
-                        'value' => '1',
-                    ),
-                    array(
-                        'key'   => '_cad_project_seed_gallery_index',
-                        'value' => (string) $index,
-                    ),
-                ),
-            )
-        );
-
-        if (!empty($existing)) {
-            $ids[] = (int) $existing[0];
-            continue;
-        }
-
-        $created_id = cad_theme_create_project_gallery_seed_attachment($index);
-        if ($created_id) {
-            $ids[] = $created_id;
-        }
-    }
-
-    return array_values(array_filter(array_map('absint', $ids)));
-}
-
-function cad_theme_backfill_project_gallery_media()
-{
-    if (get_option('cad_projects_gallery_media_backfilled')) {
-        return;
-    }
-
-    $project_ids = get_posts(
-        array(
-            'post_type'      => 'cad_project',
-            'posts_per_page' => -1,
-            'post_status'    => array('publish', 'draft', 'pending', 'private'),
-            'fields'         => 'ids',
+    return array_values(
+        array_filter(
+            $attachment_ids,
+            static function ($attachment_id) {
+                return '1' !== get_post_meta($attachment_id, '_cad_project_seed_gallery', true);
+            }
         )
     );
-
-    if (empty($project_ids)) {
-        update_option('cad_projects_gallery_media_backfilled', 1);
-        return;
-    }
-
-    $seed_ids = cad_theme_get_project_gallery_seed_attachment_ids(15);
-    if (empty($seed_ids)) {
-        return;
-    }
-
-    foreach ($project_ids as $project_id) {
-        $gallery_ids = get_post_meta($project_id, '_cad_project_gallery', true);
-        if (!is_array($gallery_ids)) {
-            $gallery_ids = array();
-        }
-        $gallery_ids = array_values(array_filter(array_map('absint', $gallery_ids)));
-
-        if (count($gallery_ids) >= 15) {
-            continue;
-        }
-
-        $updated_gallery = $gallery_ids;
-        foreach ($seed_ids as $seed_id) {
-            if (in_array($seed_id, $updated_gallery, true)) {
-                continue;
-            }
-
-            $updated_gallery[] = $seed_id;
-            if (count($updated_gallery) >= 15) {
-                break;
-            }
-        }
-
-        if ($updated_gallery !== $gallery_ids) {
-            update_post_meta($project_id, '_cad_project_gallery', $updated_gallery);
-        }
-    }
-
-    update_option('cad_projects_gallery_media_backfilled', 1);
 }
-add_action('admin_init', 'cad_theme_backfill_project_gallery_media');
-
-function cad_theme_autofill_project_gallery_media_on_save($post_id, $post, $update)
-{
-    if (!$post || 'cad_project' !== $post->post_type) {
-        return;
-    }
-    if ($update && wp_is_post_revision($post_id)) {
-        return;
-    }
-    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-        return;
-    }
-    if (!current_user_can('edit_post', $post_id)) {
-        return;
-    }
-
-    $gallery_ids = get_post_meta($post_id, '_cad_project_gallery', true);
-    if (!is_array($gallery_ids)) {
-        $gallery_ids = array();
-    }
-    $gallery_ids = array_values(array_filter(array_map('absint', $gallery_ids)));
-
-    if (count($gallery_ids) >= 15) {
-        return;
-    }
-
-    $seed_ids = cad_theme_get_project_gallery_seed_attachment_ids(15);
-    if (empty($seed_ids)) {
-        return;
-    }
-
-    $updated_gallery = $gallery_ids;
-    foreach ($seed_ids as $seed_id) {
-        if (in_array($seed_id, $updated_gallery, true)) {
-            continue;
-        }
-
-        $updated_gallery[] = $seed_id;
-        if (count($updated_gallery) >= 15) {
-            break;
-        }
-    }
-
-    if ($updated_gallery !== $gallery_ids) {
-        update_post_meta($post_id, '_cad_project_gallery', $updated_gallery);
-    }
-}
-add_action('save_post_cad_project', 'cad_theme_autofill_project_gallery_media_on_save', 20, 3);
 
 function cad_theme_seed_business_areas_if_missing()
 {

@@ -77,6 +77,8 @@ get_header();
                 }
             }
 
+            $gallery_ids = cad_theme_filter_project_gallery_attachment_ids($gallery_ids);
+
             $gallery_items = array();
             foreach ($gallery_ids as $gallery_id) {
                 $gallery_items[] = array(
@@ -397,9 +399,34 @@ get_header();
                                             <?php echo $is_hidden ? 'hidden' : ''; ?>
                                         >
                                             <?php if ('attachment' === $gallery_item['type']) : ?>
-                                                <?php echo wp_get_attachment_image((int) $gallery_item['id'], 'large', false, array('loading' => 'lazy')); ?>
+                                                <?php
+                                                $gallery_image_id = (int) $gallery_item['id'];
+                                                $gallery_image_full_url = wp_get_attachment_image_url($gallery_image_id, 'full');
+                                                $gallery_image_alt = get_post_meta($gallery_image_id, '_wp_attachment_image_alt', true);
+                                                ?>
+                                                <?php if ($gallery_image_full_url) : ?>
+                                                    <button
+                                                        type="button"
+                                                        class="cad-project-block__gallery-trigger"
+                                                        data-project-gallery-trigger
+                                                        data-full-src="<?php echo esc_url($gallery_image_full_url); ?>"
+                                                        aria-haspopup="dialog"
+                                                        aria-label="<?php echo esc_attr(sprintf(__('Ampliar imagen: %s', 'cad-theme'), $gallery_image_alt ? $gallery_image_alt : __('sin titulo', 'cad-theme'))); ?>"
+                                                    >
+                                                        <?php echo wp_get_attachment_image($gallery_image_id, 'large', false, array('loading' => 'lazy')); ?>
+                                                    </button>
+                                                <?php endif; ?>
                                             <?php else : ?>
-                                                <img src="<?php echo esc_url((string) $gallery_item['url']); ?>" alt="<?php echo esc_attr((string) $gallery_item['alt']); ?>" loading="lazy">
+                                                <button
+                                                    type="button"
+                                                    class="cad-project-block__gallery-trigger"
+                                                    data-project-gallery-trigger
+                                                    data-full-src="<?php echo esc_url((string) $gallery_item['url']); ?>"
+                                                    aria-haspopup="dialog"
+                                                    aria-label="<?php echo esc_attr(sprintf(__('Ampliar imagen: %s', 'cad-theme'), !empty($gallery_item['alt']) ? (string) $gallery_item['alt'] : __('sin titulo', 'cad-theme'))); ?>"
+                                                >
+                                                    <img src="<?php echo esc_url((string) $gallery_item['url']); ?>" alt="<?php echo esc_attr((string) $gallery_item['alt']); ?>" loading="lazy">
+                                                </button>
                                             <?php endif; ?>
                                         </figure>
                                     <?php endforeach; ?>

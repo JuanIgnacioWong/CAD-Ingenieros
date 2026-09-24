@@ -21,7 +21,8 @@ $clients = cad_theme_get_clients();
 $projects_query = new WP_Query(
     array(
         'post_type'      => 'cad_project',
-        'posts_per_page' => 12,
+        // Keep the carousel in sync with every published project as the catalogue grows.
+        'posts_per_page' => -1,
         'post_status'    => 'publish',
         'orderby'        => array(
             'menu_order' => 'ASC',
