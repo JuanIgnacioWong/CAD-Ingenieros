@@ -51,6 +51,14 @@ if [ "${SKIP_ACF_ACTIVATION:-0}" = "1" ]; then
     exit 0
 fi
 
+# A vanilla WordPress archive from wordpress.org has wp-load.php but no
+# wp-config.php yet. Copy the theme and ACF now, and defer activation until
+# the administrator finishes the WordPress installation and database setup.
+if [ ! -f "$WP_ROOT_DIR/wp-config.php" ]; then
+    echo "Theme y ACF copiados; wp-config.php no existe, activacion de ACF pendiente."
+    exit 0
+fi
+
 if command -v wp >/dev/null 2>&1; then
     wp --path="$WP_ROOT_DIR" plugin activate advanced-custom-fields
     exit 0

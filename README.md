@@ -74,14 +74,14 @@ En WordPress:
 
 ## Git Deploy del tema y ACF en cPanel
 
-El hosting mantiene su propia instalacion de WordPress en `public_html`. Este repositorio despliega exclusivamente:
+El administrador sube primero el core oficial de WordPress desde `wordpress.org` a `public_html` sin modificar los archivos descargados. Este repositorio despliega exclusivamente:
 
 - el tema hacia `$HOME/public_html/wp-content/themes/CAD-theme`;
 - Advanced Custom Fields 6.8.10 hacia `$HOME/public_html/wp-content/plugins/advanced-custom-fields`.
 
-Al terminar, el deploy activa ACF con WP-CLI; si no esta disponible, usa PHP CLI. El deploy falla antes de copiar si no detecta una instalacion completa de WordPress en `public_html`.
+Si el core aun no tiene `wp-config.php`, el deploy copia el theme y ACF y deja la activacion de ACF pendiente. Una vez terminada la instalacion de WordPress y conectada la base de datos, se puede ejecutar nuevamente el deploy para activar ACF con WP-CLI o PHP CLI.
 
-No copia ni elimina WordPress, `wp-config.php`, `.htaccess`, base de datos, otros plugins, mu-plugins, idiomas, cache ni uploads. Con `rsync` disponible, solo se eliminan archivos obsoletos dentro de las carpetas del tema y ACF.
+No copia ni elimina el core oficial de WordPress, `wp-config.php`, `.htaccess`, base de datos, otros plugins, mu-plugins, idiomas, cache ni uploads. Con `rsync` disponible, solo se eliminan archivos obsoletos dentro de las carpetas del tema y ACF.
 
 ### Flujo recomendado
 
