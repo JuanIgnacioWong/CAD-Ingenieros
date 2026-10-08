@@ -843,21 +843,60 @@ p {
 }
 
 @media (min-width: 783px) {
+    #business-areas .cad-business-grid.cad-business-grid--3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
     #business-areas .cad-business-card__top,
     #business-areas .cad-business-card__bottom {
         display: none;
     }
 
     #business-areas .cad-business-card {
-        min-height: clamp(30rem, 36vw, 34rem);
-        padding-inline: clamp(1.25rem, 2vw, 2rem);
+        min-height: 0;
+        aspect-ratio: 1;
+        padding: clamp(1.25rem, 2vw, 1.5rem);
+    }
+
+    #business-areas .cad-business-card__media {
+        object-position: 53% center;
     }
 
     #business-areas .cad-business-card__content {
-        width: min(76%, 18rem);
+        width: min(60%, 11.5rem);
         max-width: 100%;
-        margin-top: clamp(1.25rem, 2vw, 1.5rem);
-        padding-bottom: clamp(3.75rem, 5vw, 4.25rem);
+        margin-top: 0.55rem;
+        padding-bottom: 4.5rem;
+    }
+
+    #business-areas .cad-business-card__title-primary {
+        font-size: 1.5rem;
+    }
+
+    #business-areas .cad-business-card__title-secondary,
+    #business-areas .cad-business-card__title-tertiary {
+        font-size: 1.25rem;
+    }
+
+    #business-areas .cad-business-card__accent {
+        width: 2.5rem;
+        margin: 0.7rem 0;
+    }
+
+    #business-areas .cad-business-card__description {
+        max-width: 11.5rem;
+        -webkit-line-clamp: 4;
+        font-size: 0.7rem;
+        line-height: 1.4;
+    }
+
+    #business-areas .cad-business-card__cta-wrap {
+        bottom: 1.5rem;
+    }
+
+    #business-areas .cad-business-card__cta {
+        padding: 0.7rem 1rem;
+        font-size: 0.625rem;
     }
 }
 
