@@ -1469,6 +1469,7 @@ p {
 #proyectos .cad-featured-projects {
     --cad-featured-gap: 20px;
     --cad-featured-columns: 3;
+    --cad-featured-content-height: 11.2rem;
     display: grid;
     gap: 1.55rem;
 }
@@ -1529,7 +1530,7 @@ p {
     height: clamp(500px, 38vw, 560px);
     min-width: 0;
     display: grid;
-    grid-template-rows: minmax(0, 1fr) auto;
+    grid-template-rows: minmax(0, 1fr) var(--cad-featured-content-height);
     overflow: hidden;
     scroll-snap-align: start;
     border: 1px solid rgba(255, 255, 255, 0.12);
@@ -1589,11 +1590,14 @@ p {
 }
 
 #proyectos .cad-featured-project__content {
-    min-height: 9.5rem;
+    min-height: 0;
+    height: var(--cad-featured-content-height);
+    box-sizing: border-box;
     display: grid;
     align-content: start;
     gap: 0.75rem;
     padding: 1.15rem 1.15rem 1.25rem;
+    overflow: hidden;
     background: #031b45;
 }
 
@@ -4384,13 +4388,13 @@ body.cad-project-gallery-lightbox-open {
     }
 
     #proyectos .cad-featured-project {
+        --cad-featured-content-height: 9.1rem;
         flex-basis: 88%;
         height: clamp(450px, 118vw, 480px);
         scroll-snap-align: start;
     }
 
     #proyectos .cad-featured-project__content {
-        min-height: 9.1rem;
         padding: 1rem;
     }
 
@@ -5071,12 +5075,12 @@ body.cad-project-gallery-lightbox-open {
 
 @media (max-width: 380px) {
     #proyectos .cad-featured-project {
+        --cad-featured-content-height: 8.8rem;
         flex-basis: 88%;
         height: 450px;
     }
 
     #proyectos .cad-featured-project__content {
-        min-height: 8.8rem;
         padding: 0.9rem;
     }
 
