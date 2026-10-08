@@ -572,8 +572,8 @@ p {
     --cad-card-gray-200: #cdd5e3;
     --cad-card-gray-400: #8a96ad;
     --cad-card-radius: 30px;
-    --cad-card-media-scale: 1.02;
-    --cad-card-media-hover-scale: 1.06;
+    --cad-card-media-scale: 1;
+    --cad-card-media-hover-scale: 1.035;
     width: 100%;
     min-height: 34rem;
     aspect-ratio: 1075 / 1244;
@@ -581,7 +581,7 @@ p {
     isolation: isolate;
     display: flex;
     flex-direction: column;
-    padding: 2rem 1rem 0;
+    padding: 2.25rem 1.5rem 0;
     border: 1px solid var(--cad-card-line);
     border-radius: var(--cad-card-radius);
     background: var(--cad-card-navy-950);
@@ -684,10 +684,10 @@ p {
     position: relative;
     z-index: 2;
     flex: 1 1 auto;
-    width: 76%;
-    max-width: 76%;
-    margin-top: 1.9rem;
-    padding-bottom: 4.6rem;
+    width: 74%;
+    max-width: 74%;
+    margin-top: 1.5rem;
+    padding-bottom: 4.25rem;
 }
 
 .cad-business-card__headline {
@@ -697,7 +697,7 @@ p {
     line-height: 1.12;
     text-transform: uppercase;
     color: var(--cad-card-white);
-    overflow-wrap: anywhere;
+    overflow-wrap: normal;
     word-break: normal;
     text-wrap: balance;
 }
@@ -705,7 +705,7 @@ p {
 .cad-business-card__title-primary {
     display: block;
     font-family: 'Montserrat', 'Segoe UI', sans-serif;
-    font-size: 2.25rem;
+    font-size: 1.875rem;
     font-weight: 300;
     line-height: 1.08;
     letter-spacing: 0;
@@ -715,7 +715,7 @@ p {
 .cad-business-card__title-tertiary {
     display: inline;
     font-family: 'Montserrat', 'Segoe UI', sans-serif;
-    font-size: 1.9rem;
+    font-size: 1.6rem;
     font-weight: 300;
     line-height: 1.1;
     letter-spacing: 0;
@@ -745,7 +745,7 @@ p {
     display: block;
     width: 3.375rem;
     height: 3px;
-    margin: 1.125rem 0;
+    margin: 1rem 0;
     background: var(--cad-card-orange);
     opacity: 0;
     transform: scaleX(0);
@@ -755,16 +755,15 @@ p {
 
 .cad-business-card__description {
     display: -webkit-box;
-    max-width: 15.75rem;
+    max-width: 14rem;
     margin: 0;
     overflow: hidden;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 5;
-    /*line-clamp: 3;*/
+    -webkit-line-clamp: 4;
     font-family: 'Montserrat', 'Segoe UI', sans-serif;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     font-weight: 300;
-    line-height: 1.35;
+    line-height: 1.5;
     color: var(--cad-card-gray-200);
     opacity: 0;
     transform: translateY(10px);
@@ -851,14 +850,14 @@ p {
 
     #business-areas .cad-business-card {
         min-height: clamp(30rem, 36vw, 34rem);
-        padding-inline: clamp(1rem, 1.5vw, 1.5rem);
+        padding-inline: clamp(1.25rem, 2vw, 2rem);
     }
 
     #business-areas .cad-business-card__content {
-        width: min(78%, 19rem);
+        width: min(76%, 18rem);
         max-width: 100%;
-        margin-top: clamp(1rem, 2vw, 1.75rem);
-        padding-bottom: clamp(3.8rem, 5vw, 4.6rem);
+        margin-top: clamp(1.25rem, 2vw, 1.5rem);
+        padding-bottom: clamp(3.75rem, 5vw, 4.25rem);
     }
 }
 
@@ -4369,7 +4368,7 @@ body.cad-project-gallery-lightbox-open {
         --cad-card-media-scale: 1.01;
         --cad-card-media-hover-scale: 1.04;
         min-height: 31rem;
-        padding: 1.75rem 1.625rem 0;
+        padding: 2rem 1.875rem 0;
         border-radius: var(--cad-card-radius);
     }
 
@@ -4378,24 +4377,24 @@ body.cad-project-gallery-lightbox-open {
     }
 
     .cad-business-card__content {
-        width: 82%;
-        max-width: 82%;
-        margin-top: 1.5rem;
-        padding-bottom: 4.15rem;
+        width: 74%;
+        max-width: 74%;
+        margin-top: 1.35rem;
+        padding-bottom: 3.9rem;
     }
 
     .cad-business-card__title-primary {
-        font-size: 2.125rem;
+        font-size: 2rem;
     }
 
     .cad-business-card__title-secondary,
     .cad-business-card__title-tertiary {
-        font-size: 1.875rem;
+        font-size: 1.7rem;
     }
 
     .cad-business-card__description {
-        font-size: 0.8125rem;
-        line-height: 1.55;
+        font-size: 0.75rem;
+        line-height: 1.5;
     }
 
     .cad-business-card__cta-wrap {
@@ -4998,28 +4997,28 @@ body.cad-project-gallery-lightbox-open {
 
     .cad-business-card {
         min-height: 30rem;
-        padding: 1.75rem 1.625rem 0;
+        padding: 2rem 1.5rem 0;
     }
 
     .cad-business-card__content {
-        width: 86%;
-        max-width: 86%;
-        margin-top: 1.35rem;
-        padding-bottom: 4rem;
+        width: 78%;
+        max-width: 78%;
+        margin-top: 1.25rem;
+        padding-bottom: 3.8rem;
     }
 
     .cad-business-card__title-primary {
-        font-size: 2rem;
+        font-size: 1.85rem;
     }
 
     .cad-business-card__title-secondary,
     .cad-business-card__title-tertiary {
-        font-size: 1.75rem;
+        font-size: 1.6rem;
     }
 
     .cad-business-card__description {
-        font-size: 0.8125rem;
-        line-height: 1.55;
+        font-size: 0.75rem;
+        line-height: 1.5;
     }
 
     .cad-business-card__cta {
@@ -5067,6 +5066,15 @@ body.cad-project-gallery-lightbox-open {
 
     .cad-business-card__labels {
         font-size: 0.625rem;
+    }
+
+    .cad-business-card__title-primary {
+        font-size: 1.75rem;
+    }
+
+    .cad-business-card__title-secondary,
+    .cad-business-card__title-tertiary {
+        font-size: 1.5rem;
     }
 
     .cad-business-card__feature-text {
