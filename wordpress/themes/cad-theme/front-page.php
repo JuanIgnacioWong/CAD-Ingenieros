@@ -390,7 +390,23 @@ $hero_class = $has_video ? 'cad-hero' : 'cad-hero is-video-paused';
             <?php wp_reset_postdata(); ?>
 
             <div id="clientes" class="cad-clients">
-                <h3><?php esc_html_e('Clientes', 'cad-theme'); ?></h3>
+                <div class="cad-clients__header">
+                    <h3><?php esc_html_e('Clientes', 'cad-theme'); ?></h3>
+                    <?php if (!empty($clients)) : ?>
+                        <button
+                            type="button"
+                            class="cad-clients__autoplay"
+                            data-clients-autoplay
+                            data-label-pause="<?php esc_attr_e('Pausar carrusel de clientes', 'cad-theme'); ?>"
+                            data-label-resume="<?php esc_attr_e('Reanudar carrusel de clientes', 'cad-theme'); ?>"
+                            aria-pressed="false"
+                            aria-label="<?php esc_attr_e('Pausar carrusel de clientes', 'cad-theme'); ?>"
+                        >
+                            <span class="material-symbols-outlined" data-clients-autoplay-icon aria-hidden="true">pause</span>
+                            <span data-clients-autoplay-label><?php esc_html_e('Pausar', 'cad-theme'); ?></span>
+                        </button>
+                    <?php endif; ?>
+                </div>
                 <?php if (!empty($clients)) : ?>
                     <div class="cad-clients-carousel" data-clients-carousel>
                         <button type="button" class="cad-clients-carousel__nav" data-clients-prev aria-label="<?php esc_attr_e('Ver clientes anteriores', 'cad-theme'); ?>">
