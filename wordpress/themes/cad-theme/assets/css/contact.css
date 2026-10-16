@@ -1,7 +1,12 @@
 .cad-contact-page {
+    --cad-contact-surface: #031b45;
+    --cad-contact-surface-deep: #001d4d;
+    --cad-contact-copy: rgba(255, 255, 255, 0.72);
+    --cad-contact-copy-strong: #fff;
     background:
         radial-gradient(circle at 10% 0%, rgba(239, 132, 50, 0.08), transparent 24%),
-        linear-gradient(180deg, #11161c 0%, #0f141a 100%);
+        linear-gradient(180deg, var(--cad-color-main) 0%, var(--cad-color-aside) 100%);
+    color: var(--cad-contact-copy-strong);
 }
 
 .cad-contact-page__hero {
@@ -69,6 +74,7 @@
     min-height: auto;
     border-radius: 1.2rem;
     padding: clamp(1.35rem, 2vw, 1.9rem);
+    background: linear-gradient(145deg, var(--cad-contact-surface) 0%, var(--cad-contact-surface-deep) 100%);
 }
 
 .cad-contact-page__panel {
@@ -83,7 +89,7 @@
 
 .cad-contact-page__panel-copy {
     margin-top: 0.95rem;
-    color: #dbcaba;
+    color: var(--cad-contact-copy);
     line-height: 1.72;
     max-width: 38rem;
 }
@@ -112,7 +118,7 @@
 .cad-contact-page__info-card a,
 .cad-contact-page__info-card strong,
 .cad-contact-page__stack {
-    color: #f8f3ee;
+    color: var(--cad-contact-copy-strong);
     font-size: 1rem;
     line-height: 1.55;
     overflow-wrap: anywhere;
@@ -156,7 +162,7 @@
 }
 
 .cad-contact-page__whatsapp p {
-    color: #dbcaba;
+    color: var(--cad-contact-copy);
     line-height: 1.65;
     max-width: 34rem;
 }
@@ -165,7 +171,7 @@
     width: fit-content;
     margin-top: 0.2rem;
     background: var(--color-accent);
-    color: #11161c;
+    color: var(--cad-color-main);
     border-color: var(--color-accent);
 }
 
@@ -201,7 +207,7 @@
 }
 
 .cad-contact-page__form-header p {
-    color: #dbcaba;
+    color: var(--cad-contact-copy);
     line-height: 1.65;
 }
 
@@ -262,7 +268,7 @@
 
 .cad-contact-form__field label,
 .cad-contact-form__field--checkbox span {
-    color: #f8f3ee;
+    color: var(--cad-contact-copy-strong);
     font-family: 'Montserrat', 'Segoe UI', sans-serif;
     font-size: 0.82rem;
     font-weight: 700;
@@ -274,8 +280,8 @@
     width: 100%;
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 0.95rem;
-    background: rgba(255, 255, 255, 0.035);
-    color: #f8f3ee;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--cad-contact-copy-strong);
     padding: 1rem 1.05rem;
     font: inherit;
     font-size: 1rem;
@@ -290,7 +296,7 @@
 
 .cad-contact-form__field input::placeholder,
 .cad-contact-form__field textarea::placeholder {
-    color: rgba(248, 243, 238, 0.46);
+    color: rgba(255, 255, 255, 0.46);
 }
 
 .cad-contact-form__field input:hover,
@@ -311,7 +317,7 @@
     display: flex;
     align-items: flex-start;
     gap: 0.8rem;
-    color: #dbcaba;
+    color: var(--cad-contact-copy);
     line-height: 1.6;
 }
 
@@ -343,7 +349,7 @@
 .cad-contact-form__submit {
     cursor: pointer;
     background: var(--color-accent);
-    color: #11161c;
+    color: var(--cad-color-main);
     border-color: var(--color-accent);
 }
 
@@ -353,7 +359,7 @@
 .cad-contact-form__submit:focus-visible {
     background: var(--color-accent-hover);
     border-color: var(--color-accent-hover);
-    color: #11161c;
+    color: var(--cad-color-main);
 }
 
 @media (max-width: 1080px) {
