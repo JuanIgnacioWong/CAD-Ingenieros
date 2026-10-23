@@ -402,7 +402,7 @@ function cad_theme_register_client_cpt()
             'show_in_menu'       => true,
             'menu_position'      => 27,
             'menu_icon'          => 'dashicons-groups',
-            'supports'           => array('title', 'thumbnail', 'page-attributes', 'revisions'),
+            'supports'           => array('title', 'thumbnail', 'revisions'),
             'has_archive'        => false,
             'exclude_from_search'=> true,
             'publicly_queryable' => false,
@@ -1072,6 +1072,7 @@ function cad_theme_client_admin_notices()
     ?>
     <div class="notice notice-info">
         <p><strong><?php echo esc_html(cad_theme_client_logo_requirement_message()); ?></strong></p>
+        <p><?php esc_html_e('Define la prioridad de cada cliente al editarlo: 1 es el logo mas importante y se muestra primero en el carrusel. Si varios clientes tienen la misma prioridad, se conserva un orden estable por fecha.', 'cad-theme'); ?></p>
     </div>
     <?php
 
@@ -5748,6 +5749,113 @@ function cad_theme_maybe_seed_clients()
 }
 add_action('admin_init', 'cad_theme_maybe_seed_clients');
 
+function cad_theme_client_priority_meta_boxes()
+{
+    add_meta_box(
+        'cad-client-priority',
+        __('Prioridad de visualizacion', 'cad-theme'),
+        'cad_theme_client_priority_box',
+        'cad_client',
+        'side',
+        'high'
+    );
+}
+add_action('add_meta_boxes', 'cad_theme_client_priority_meta_boxes');
+
+function cad_theme_client_priority_box($post)
+{
+    $is_new = 'auto-draft' === $post->post_status;
+    $priority = $is_new ? '' : max(1, (int) get_post_field('menu_order', $post->ID) + 1);
+
+    wp_nonce_field('cad_client_priority_action', 'cad_client_priority_nonce');
+    ?>
+    <p><?php esc_html_e('Usa numeros consecutivos para definir la importancia. 1 aparece primero en el carrusel.', 'cad-theme'); ?></p>
+    <label for="cad-client-priority-field">
+        <strong><?php esc_html_e('Numero de prioridad', 'cad-theme'); ?></strong>
+    </label>
+    <input
+        id="cad-client-priority-field"
+        name="cad_client_priority"
+        type="number"
+        min="1"
+        step="1"
+        class="small-text"
+        value="<?php echo esc_attr((string) $priority); ?>"
+        placeholder="<?php esc_attr_e('Automatica al guardar', 'cad-theme'); ?>"
+    />
+    <p class="description"><?php esc_html_e('Si lo dejas vacio al crear un cliente, se agregara al final.', 'cad-theme'); ?></p>
+    <?php
+}
+
+function cad_theme_get_next_client_menu_order($excluded_post_id = 0)
+{
+    $client_ids = get_posts(
+        array(
+            'post_type'      => 'cad_client',
+            'post_status'    => array('publish', 'draft', 'pending', 'private', 'future'),
+            'posts_per_page' => -1,
+            'fields'         => 'ids',
+            'exclude'        => $excluded_post_id ? array(absint($excluded_post_id)) : array(),
+        )
+    );
+    $max_order = -1;
+
+    foreach ($client_ids as $client_id) {
+        $max_order = max($max_order, (int) get_post_field('menu_order', $client_id));
+    }
+
+    return $max_order + 1;
+}
+
+function cad_theme_save_client_priority($post_id, $post, $update)
+{
+    unset($update);
+    static $saving = false;
+
+    if ($saving || !$post || 'cad_client' !== $post->post_type) {
+        return;
+    }
+
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    if (wp_is_post_revision($post_id) || !current_user_can('edit_post', $post_id)) {
+        return;
+    }
+
+    $nonce = isset($_POST['cad_client_priority_nonce']) && is_scalar($_POST['cad_client_priority_nonce'])
+        ? (string) wp_unslash($_POST['cad_client_priority_nonce'])
+        : '';
+    if (!$nonce || !wp_verify_nonce($nonce, 'cad_client_priority_action')) {
+        return;
+    }
+
+    $raw_priority = isset($_POST['cad_client_priority']) && is_scalar($_POST['cad_client_priority'])
+        ? trim((string) wp_unslash($_POST['cad_client_priority']))
+        : '';
+    $priority = absint($raw_priority);
+    if ($priority < 1) {
+        $menu_order = cad_theme_get_next_client_menu_order($post_id);
+    } else {
+        $menu_order = $priority - 1;
+    }
+
+    if ((int) get_post_field('menu_order', $post_id) === $menu_order) {
+        return;
+    }
+
+    $saving = true;
+    wp_update_post(
+        array(
+            'ID'         => $post_id,
+            'menu_order' => $menu_order,
+        )
+    );
+    $saving = false;
+}
+add_action('save_post_cad_client', 'cad_theme_save_client_priority', 30, 3);
+
 function cad_theme_client_admin_columns($columns)
 {
     $result = array();
@@ -5755,7 +5863,7 @@ function cad_theme_client_admin_columns($columns)
         $result[$key] = $label;
         if ('title' === $key) {
             $result['cad_client_logo'] = __('Logo', 'cad-theme');
-            $result['menu_order'] = __('Orden', 'cad-theme');
+            $result['menu_order'] = __('Prioridad', 'cad-theme');
         }
     }
 
@@ -5787,7 +5895,7 @@ function cad_theme_client_admin_column_content($column, $post_id)
     }
 
     if ('menu_order' === $column) {
-        echo esc_html((string) ((int) get_post_field('menu_order', $post_id)));
+        echo esc_html((string) ((int) get_post_field('menu_order', $post_id) + 1));
     }
 }
 add_action('manage_cad_client_posts_custom_column', 'cad_theme_client_admin_column_content', 10, 2);
