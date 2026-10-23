@@ -2243,28 +2243,9 @@ function cad_theme_get_business_area_page_data($post_id)
     }
     $gallery_ids = array_values(array_unique(array_filter(array_map('absint', $gallery_ids))));
 
-    $gallery = array();
-    foreach ($gallery_ids as $gallery_id) {
-        $image_url = wp_get_attachment_image_url($gallery_id, 'medium_large');
-        $full_image_url = wp_get_attachment_image_url($gallery_id, 'full');
-        if (!$image_url || !$full_image_url) {
-            continue;
-        }
-
-        $alt = get_post_meta($gallery_id, '_wp_attachment_image_alt', true);
-        if (!$alt) {
-            $alt = get_the_title($gallery_id);
-        }
-
-        $gallery[] = array(
-            'id'          => $gallery_id,
-            'url'         => $image_url,
-            'full_url'    => $full_image_url,
-            'alt'         => (string) $alt,
-            'caption'     => (string) wp_get_attachment_caption($gallery_id),
-            'placeholder' => false,
-        );
-    }
+    $gallery = function_exists('cad_theme_get_masonry_gallery_items')
+        ? cad_theme_get_masonry_gallery_items($gallery_ids, 'large')
+        : array();
     $data['gallery'] = $gallery;
 
     $related_projects = cad_theme_normalize_business_related_projects($data['related_projects']);
@@ -6343,4 +6324,5 @@ function cad_theme_render_default_footer_menu($args = array())
     echo '</ul>';
 }
 
+require_once get_template_directory() . '/inc/modules/masonry-gallery.php';
 require_once get_template_directory() . '/inc/contact/bootstrap.php';

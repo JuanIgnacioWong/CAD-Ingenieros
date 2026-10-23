@@ -43,11 +43,8 @@ get_header();
                 }
             }
 
-            $gallery_ids = get_post_meta(get_the_ID(), '_cad_project_gallery', true);
-            if (!is_array($gallery_ids)) {
-                $gallery_ids = array();
-            }
-            $gallery_ids = array_values(array_filter(array_map('absint', $gallery_ids)));
+            $gallery_ids = cad_theme_masonry_gallery_project_ids(get_the_ID());
+            $gallery_items = cad_theme_get_masonry_gallery_items($gallery_ids, 'large');
             $gallery_title = get_post_meta(get_the_ID(), '_cad_project_gallery_title', true);
             if (!is_string($gallery_title)) {
                 $gallery_title = '';
@@ -56,40 +53,6 @@ get_header();
             if ('' === $gallery_title) {
                 $gallery_title = __('Imagenes del proyecto', 'cad-theme');
             }
-
-            if (function_exists('get_field')) {
-                $acf_gallery = get_field('galeria_proyecto');
-                if (!empty($acf_gallery)) {
-                    $acf_ids = array();
-                    foreach ((array) $acf_gallery as $item) {
-                        if (is_numeric($item)) {
-                            $acf_ids[] = absint($item);
-                            continue;
-                        }
-                        if (is_array($item) && isset($item['ID'])) {
-                            $acf_ids[] = absint($item['ID']);
-                        }
-                    }
-                    $acf_ids = array_values(array_filter($acf_ids));
-                    if (!empty($acf_ids)) {
-                        $gallery_ids = array_values(array_unique(array_merge($gallery_ids, $acf_ids)));
-                    }
-                }
-            }
-
-            $gallery_ids = cad_theme_filter_project_gallery_attachment_ids($gallery_ids);
-
-            $gallery_items = array();
-            foreach ($gallery_ids as $gallery_id) {
-                $gallery_items[] = array(
-                    'type' => 'attachment',
-                    'id'   => absint($gallery_id),
-                );
-            }
-
-            $gallery_total = count($gallery_items);
-            $gallery_per_page = 5;
-            $gallery_pages = (int) ceil($gallery_total / $gallery_per_page);
 
             $videos = get_post_meta(get_the_ID(), '_cad_project_videos', true);
             if (!is_array($videos)) {
@@ -368,80 +331,16 @@ get_header();
                         </section>
 
                         <?php if (!empty($gallery_items)) : ?>
-                            <section class="cad-project-block cad-project-block--gallery" id="project-gallery">
-                                <div class="cad-project-block__header cad-project-block__header--gallery">
-                                    <span class="cad-project-block__kicker"><?php esc_html_e('Galeria', 'cad-theme'); ?></span>
-                                    <h2><?php echo esc_html($gallery_title); ?></h2>
-                                    <?php if ($gallery_pages > 1) : ?>
-                                        <div class="cad-project-block__gallery-controls">
-                                            <button type="button" class="cad-gallery-nav cad-gallery-nav--prev" data-gallery-prev aria-label="<?php esc_attr_e('Ver imagenes anteriores', 'cad-theme'); ?>" disabled>
-                                                <span aria-hidden="true">&larr;</span>
-                                            </button>
-                                            <span class="cad-project-block__gallery-status" data-gallery-status aria-live="polite">1 / <?php echo esc_html((string) $gallery_pages); ?></span>
-                                            <button type="button" class="cad-gallery-nav cad-gallery-nav--next" data-gallery-next aria-label="<?php esc_attr_e('Ver imagenes siguientes', 'cad-theme'); ?>">
-                                                <span aria-hidden="true">&rarr;</span>
-                                            </button>
-                                        </div>
-                                    <?php endif; ?>
-                                </div>
-                                <div class="cad-project-block__gallery" data-project-gallery-grid data-gallery-per-page="<?php echo esc_attr((string) $gallery_per_page); ?>">
-                                    <?php foreach ($gallery_items as $index => $gallery_item) : ?>
-                                        <?php
-                                        $page = (int) floor($index / $gallery_per_page);
-                                        $pattern = $index % $gallery_per_page;
-                                        $is_hidden = $page > 0;
-                                        ?>
-                                        <figure
-                                            class="cad-project-block__gallery-item"
-                                            data-gallery-item
-                                            data-page="<?php echo esc_attr((string) $page); ?>"
-                                            data-pattern="<?php echo esc_attr((string) $pattern); ?>"
-                                            <?php echo $is_hidden ? 'hidden' : ''; ?>
-                                        >
-                                            <?php if ('attachment' === $gallery_item['type']) : ?>
-                                                <?php
-                                                $gallery_image_id = (int) $gallery_item['id'];
-                                                $gallery_image_full_url = wp_get_attachment_image_url($gallery_image_id, 'full');
-                                                $gallery_image_alt = get_post_meta($gallery_image_id, '_wp_attachment_image_alt', true);
-                                                ?>
-                                                <?php if ($gallery_image_full_url) : ?>
-                                                    <button
-                                                        type="button"
-                                                        class="cad-project-block__gallery-trigger"
-                                                        data-project-gallery-trigger
-                                                        data-full-src="<?php echo esc_url($gallery_image_full_url); ?>"
-                                                        aria-haspopup="dialog"
-                                                        aria-label="<?php echo esc_attr(sprintf(__('Ampliar imagen: %s', 'cad-theme'), $gallery_image_alt ? $gallery_image_alt : __('sin titulo', 'cad-theme'))); ?>"
-                                                    >
-                                                        <?php echo wp_get_attachment_image($gallery_image_id, 'large', false, array('loading' => 'lazy')); ?>
-                                                    </button>
-                                                <?php endif; ?>
-                                            <?php else : ?>
-                                                <button
-                                                    type="button"
-                                                    class="cad-project-block__gallery-trigger"
-                                                    data-project-gallery-trigger
-                                                    data-full-src="<?php echo esc_url((string) $gallery_item['url']); ?>"
-                                                    aria-haspopup="dialog"
-                                                    aria-label="<?php echo esc_attr(sprintf(__('Ampliar imagen: %s', 'cad-theme'), !empty($gallery_item['alt']) ? (string) $gallery_item['alt'] : __('sin titulo', 'cad-theme'))); ?>"
-                                                >
-                                                    <img src="<?php echo esc_url((string) $gallery_item['url']); ?>" alt="<?php echo esc_attr((string) $gallery_item['alt']); ?>" loading="lazy">
-                                                </button>
-                                            <?php endif; ?>
-                                        </figure>
-                                    <?php endforeach; ?>
-                                </div>
-                            </section>
-                        <?php else : ?>
-                            <section class="cad-project-block cad-project-block--gallery cad-project-block--gallery-empty" id="project-gallery">
-                                <div class="cad-project-block__header">
-                                    <span class="cad-project-block__kicker"><?php esc_html_e('Galeria', 'cad-theme'); ?></span>
-                                    <h2><?php echo esc_html($gallery_title); ?></h2>
-                                </div>
-                                <div class="cad-project-block__content">
-                                    <p><?php esc_html_e('Aun no hay imagenes disponibles para este proyecto.', 'cad-theme'); ?></p>
-                                </div>
-                            </section>
+                            <?php
+                            echo cad_theme_render_masonry_gallery(
+                                $gallery_items,
+                                array(
+                                    'id'     => 'project-gallery',
+                                    'kicker' => __('Galeria', 'cad-theme'),
+                                    'title'  => $gallery_title,
+                                )
+                            );
+                            ?>
                         <?php endif; ?>
 
                         <?php if (!empty($video_items)) : ?>
