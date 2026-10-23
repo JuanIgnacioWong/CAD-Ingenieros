@@ -2240,7 +2240,7 @@ function cad_theme_get_business_area_page_data($post_id)
     if (!is_array($gallery_ids)) {
         $gallery_ids = array();
     }
-    $gallery_ids = array_values(array_filter(array_map('absint', $gallery_ids)));
+    $gallery_ids = array_values(array_unique(array_filter(array_map('absint', $gallery_ids))));
 
     $gallery = array();
     foreach ($gallery_ids as $gallery_id) {
@@ -4314,6 +4314,7 @@ function cad_theme_business_area_content_box($post)
 
         <div class="cad-project-meta__section">
             <h4><?php esc_html_e('Galeria editorial', 'cad-theme'); ?></h4>
+            <p class="description"><strong><?php esc_html_e('Recomendacion:', 'cad-theme'); ?></strong> <?php esc_html_e('agrega siempre un minimo de 3 imagenes por galeria para aprovechar la composicion editorial completa. Con menos imagenes el sitio mantendra un fallback seguro.', 'cad-theme'); ?></p>
             <p>
                 <label for="cad-business-gallery-label"><strong><?php esc_html_e('Label de seccion', 'cad-theme'); ?></strong></label><br>
                 <input type="text" id="cad-business-gallery-label" name="cad_business_gallery_label" class="widefat" value="<?php echo esc_attr($gallery_label); ?>">
@@ -4672,6 +4673,8 @@ function cad_theme_save_business_area_meta($post_id)
             }
         }
     }
+
+    $gallery_ids = array_values(array_unique($gallery_ids));
 
     if (!empty($gallery_ids)) {
         update_post_meta($post_id, $fields['gallery_ids'], $gallery_ids);

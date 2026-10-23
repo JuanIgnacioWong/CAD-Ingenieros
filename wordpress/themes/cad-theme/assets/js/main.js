@@ -905,6 +905,75 @@
         });
     }
 
+    function initBusinessAreaGalleryCarousel() {
+        var galleries = document.querySelectorAll('[data-business-gallery]');
+
+        galleries.forEach(function (gallery) {
+            if (gallery.classList.contains('cad-business-area__gallery--grid')) {
+                return;
+            }
+
+            var source = gallery.querySelector('[data-gallery-items]');
+            var primary = gallery.querySelector('[data-gallery-primary]');
+            var previews = gallery.querySelector('[data-gallery-previews]');
+            var previousButton = gallery.querySelector('[data-gallery-prev]');
+            var nextButton = gallery.querySelector('[data-gallery-next]');
+            var status = gallery.querySelector('[data-gallery-status]');
+            var items = source ? Array.prototype.slice.call(source.querySelectorAll('[data-business-gallery-item]')) : [];
+
+            if (!source || !primary || !previews || !items.length) {
+                return;
+            }
+
+            var currentIndex = 0;
+
+            function getItem(index) {
+                return items[(index + items.length) % items.length];
+            }
+
+            function render(index) {
+                currentIndex = (index + items.length) % items.length;
+
+                items.forEach(function (item) {
+                    source.appendChild(item);
+                });
+
+                primary.appendChild(getItem(currentIndex));
+
+                for (var offset = 1; offset < Math.min(3, items.length); offset += 1) {
+                    previews.appendChild(getItem(currentIndex + offset));
+                }
+
+                if (status) {
+                    status.textContent = String(currentIndex + 1) + ' / ' + String(items.length);
+                }
+
+                if (previousButton) {
+                    previousButton.hidden = items.length < 2;
+                }
+                if (nextButton) {
+                    nextButton.hidden = items.length < 2;
+                }
+            }
+
+            gallery.classList.add('is-enhanced');
+            render(0);
+
+            if (previousButton) {
+                previousButton.addEventListener('click', function () {
+                    render(currentIndex - 1);
+                });
+            }
+
+            if (nextButton) {
+                nextButton.addEventListener('click', function () {
+                    render(currentIndex + 1);
+                });
+            }
+        });
+    }
+
+    initBusinessAreaGalleryCarousel();
     initBusinessAreaGalleryLightbox();
 
     function initIndicatorCounters() {

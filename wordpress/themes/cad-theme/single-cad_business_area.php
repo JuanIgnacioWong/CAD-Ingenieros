@@ -213,40 +213,61 @@ get_header();
                             <?php endif; ?>
                         </div>
 
-                        <div class="cad-business-area__gallery" data-business-gallery>
-                            <?php foreach ($business_area_data['gallery'] as $index => $gallery_item) : ?>
-                                <?php
-                                $gallery_alt = (string) $gallery_item['alt'];
-                                $gallery_caption = isset($gallery_item['caption']) ? trim((string) $gallery_item['caption']) : '';
-                                $gallery_label = sprintf(__('Ampliar imagen: %s', 'cad-theme'), $gallery_alt);
-                                ?>
-                                <figure class="cad-business-area__gallery-item" data-business-gallery-item>
-                                    <button
-                                        type="button"
-                                        class="cad-business-area__gallery-trigger"
-                                        aria-haspopup="dialog"
-                                        aria-label="<?php echo esc_attr($gallery_label); ?>"
-                                        data-business-gallery-trigger
-                                        data-full-src="<?php echo esc_url((string) $gallery_item['full_url']); ?>"
-                                        data-caption="<?php echo esc_attr($gallery_caption); ?>"
-                                    >
-                                        <?php
-                                        echo wp_get_attachment_image(
-                                            (int) $gallery_item['id'],
-                                            'medium_large',
-                                            false,
-                                            array(
-                                                'class'   => 'cad-business-area__gallery-image',
-                                                'loading' => 0 === (int) $index ? false : 'lazy',
-                                            )
-                                        );
-                                        ?>
-                                    </button>
-                                    <?php if ('' !== $gallery_caption) : ?>
-                                        <figcaption class="cad-business-area__gallery-caption"><?php echo esc_html($gallery_caption); ?></figcaption>
-                                    <?php endif; ?>
-                                </figure>
-                            <?php endforeach; ?>
+                        <?php
+                        $gallery_count = count($business_area_data['gallery']);
+                        $gallery_columns = $gallery_count <= 3 ? max(1, $gallery_count) : (int) ceil(sqrt($gallery_count));
+                        ?>
+                        <div
+                            class="cad-business-area__gallery cad-business-area__gallery--grid"
+                            data-business-gallery
+                            data-gallery-count="<?php echo esc_attr((string) $gallery_count); ?>"
+                            style="--cad-business-gallery-columns: <?php echo esc_attr((string) $gallery_columns); ?>;"
+                            aria-label="<?php esc_attr_e('Galeria de proyectos', 'cad-theme'); ?>"
+                        >
+                            <div class="cad-business-area__gallery-primary" data-gallery-primary></div>
+                            <div class="cad-business-area__gallery-previews" data-gallery-previews></div>
+
+                            <div class="cad-business-area__gallery-items" data-gallery-items>
+                                <?php foreach ($business_area_data['gallery'] as $index => $gallery_item) : ?>
+                                    <?php
+                                    $gallery_alt = (string) $gallery_item['alt'];
+                                    $gallery_caption = isset($gallery_item['caption']) ? trim((string) $gallery_item['caption']) : '';
+                                    $gallery_label = sprintf(__('Ampliar imagen: %s', 'cad-theme'), $gallery_alt);
+                                    ?>
+                                    <figure class="cad-business-area__gallery-item" data-business-gallery-item>
+                                        <button
+                                            type="button"
+                                            class="cad-business-area__gallery-trigger"
+                                            aria-haspopup="dialog"
+                                            aria-label="<?php echo esc_attr($gallery_label); ?>"
+                                            data-business-gallery-trigger
+                                            data-full-src="<?php echo esc_url((string) $gallery_item['full_url']); ?>"
+                                            data-caption="<?php echo esc_attr($gallery_caption); ?>"
+                                        >
+                                            <?php
+                                            echo wp_get_attachment_image(
+                                                (int) $gallery_item['id'],
+                                                'medium_large',
+                                                false,
+                                                array(
+                                                    'class'   => 'cad-business-area__gallery-image',
+                                                    'loading' => 0 === (int) $index ? false : 'lazy',
+                                                )
+                                            );
+                                            ?>
+                                        </button>
+                                        <?php if ('' !== $gallery_caption) : ?>
+                                            <figcaption class="cad-business-area__gallery-caption"><?php echo esc_html($gallery_caption); ?></figcaption>
+                                        <?php endif; ?>
+                                    </figure>
+                                <?php endforeach; ?>
+                            </div>
+
+                            <div class="cad-business-area__gallery-controls" data-gallery-controls>
+                                <button type="button" class="cad-business-area__gallery-nav" data-gallery-prev aria-label="<?php esc_attr_e('Imagen anterior', 'cad-theme'); ?>">&larr;</button>
+                                <span class="cad-business-area__gallery-status" data-gallery-status aria-live="polite">1 / <?php echo esc_html((string) $gallery_count); ?></span>
+                                <button type="button" class="cad-business-area__gallery-nav" data-gallery-next aria-label="<?php esc_attr_e('Imagen siguiente', 'cad-theme'); ?>">&rarr;</button>
+                            </div>
                         </div>
                     </div>
                 </section>
